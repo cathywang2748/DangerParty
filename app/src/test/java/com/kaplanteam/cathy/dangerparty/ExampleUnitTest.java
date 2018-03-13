@@ -1,4 +1,4 @@
-package com.example.cathy.dangerparty;
+package com.kaplanteam.cathy.dangerparty;
 
 import org.junit.Test;
 
