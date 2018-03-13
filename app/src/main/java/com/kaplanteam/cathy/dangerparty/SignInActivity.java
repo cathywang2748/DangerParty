@@ -82,6 +82,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.d("TAG", "signInResult:failed code=" + e.getStatusCode());
             updateUI(null);
+            //hello
         }
     }
 
