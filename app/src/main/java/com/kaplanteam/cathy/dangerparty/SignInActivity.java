@@ -49,7 +49,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private void updateUI(GoogleSignInAccount account) {
         //hide the sign-in button,
-        signInButton.setVisibility(View.GONE);
         // launch your main activity,
         Intent i = new Intent(SignInActivity.this, SetUpActivity.class);
         // or whatever is appropriate for your app.
