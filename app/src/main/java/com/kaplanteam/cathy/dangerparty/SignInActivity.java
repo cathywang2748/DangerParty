@@ -49,7 +49,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private void updateUI(GoogleSignInAccount account) {
         //hide the sign-in button,
+        signInButton.setVisibility(View.GONE);
         // launch your main activity,
+        Intent i = new Intent(SignInActivity.this, SetUpActivity.class);
         // or whatever is appropriate for your app.
     }
 
@@ -65,7 +67,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
-            // a listener.
+            // a listener
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
