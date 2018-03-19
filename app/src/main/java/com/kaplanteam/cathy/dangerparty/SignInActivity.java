@@ -43,7 +43,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        updateUI(account);
+        //updateUI(account);
 
     }
 
@@ -51,6 +51,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         //hide the sign-in button,
         // launch your main activity,
         Intent i = new Intent(SignInActivity.this, SetUpActivity.class);
+        startActivity(i);
         // or whatever is appropriate for your app.
     }
 
