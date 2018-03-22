@@ -12,7 +12,7 @@
         android:text="notch.png" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageView_cover"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -34,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView_cover" />
 
     <TextView
         android:id="@+id/textView"
@@ -45,7 +45,7 @@
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_cover"
         tools:text="Rub the Sphere" />
 
     <ImageView
@@ -72,15 +72,16 @@
         android:id="@+id/ConstraintLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/ConstraintLayout3"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/textBackground">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/ConstraintLayout_lips"
+        app:layout_constraintStart_toStartOf="@+id/ConstraintLayout_lips"
+        app:layout_constraintTop_toBottomOf="@+id/ConstraintLayout_lips">
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -100,29 +101,68 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/ConstraintLayout3"
-        android:layout_width="wrap_content"
+        android:layout_width="229dp"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="147dp"
-        tools:layout_editor_absoluteY="394dp">
+        app:layout_constraintBottom_toTopOf="@+id/ConstraintLayout_lips"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ConstraintLayout_buttons"
+        app:layout_constraintTop_toBottomOf="@+id/textBackground">
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Jump" />
+            tools:text="Monkey Face Orchid" />
 
         <Button
             android:id="@+id/button3"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="@+id/textView3"
-            app:layout_constraintStart_toStartOf="@+id/textView3"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintEnd_toStartOf="@+id/button4"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            tools:text="1" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/button5"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button3"
+            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            tools:text="2" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/button6"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button4"
+            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            tools:text="3" />
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button5"
+            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            tools:text="4" />
 
     </android.support.constraint.ConstraintLayout>
 
@@ -131,22 +171,115 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="24dp" />
+        app:layout_constraintGuide_begin="16dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="24dp" />
+        app:layout_constraintGuide_end="16dp" />
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="50dp"
-        android:layout_height="100dp"
-        app:srcCompat="@drawable/bottle_empty"
-        tools:layout_editor_absoluteX="294dp"
-        tools:layout_editor_absoluteY="282dp" />
+        android:layout_width="61dp"
+        android:layout_height="124dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ConstraintLayout_lips"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ConstraintLayout_buttons"
+        app:layout_constraintTop_toBottomOf="@+id/ConstraintLayout3"
+        app:srcCompat="@drawable/bottle_empty" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/ConstraintLayout_lips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/ConstraintLayout1"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/ConstraintLayout3">
+
+        <TextView
+            android:id="@+id/textView_lips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Hooker's Lips" />
+
+        <ImageView
+            android:id="@+id/imageView_lips"
+            android:layout_width="124dp"
+            android:layout_height="70dp"
+            app:layout_constraintEnd_toEndOf="@+id/textView_lips"
+            app:layout_constraintStart_toStartOf="@+id/textView_lips"
+            app:layout_constraintTop_toBottomOf="@+id/textView_lips"
+            app:srcCompat="@drawable/lips" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/ConstraintLayout_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="227dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ConstraintLayout3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/timer">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Dancing Girls" />
+
+        <Button
+            android:id="@+id/button2B"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/button2A"
+            app:layout_constraintStart_toStartOf="@+id/button2A"
+            app:layout_constraintTop_toBottomOf="@+id/button2A"
+            tools:text="Caress" />
+
+        <Button
+            android:id="@+id/button2C"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/button2B"
+            app:layout_constraintStart_toStartOf="@+id/button2B"
+            app:layout_constraintTop_toBottomOf="@+id/button2B"
+            tools:text="Burn" />
+
+        <Button
+            android:id="@+id/button2C2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button2C"
+            tools:text="Flick" />
+
+        <Button
+            android:id="@+id/button2A"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/textView2"
+            app:layout_constraintStart_toStartOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            tools:text="Pick" />
+
+    </android.support.constraint.ConstraintLayout>
 
 
 </android.support.constraint.ConstraintLayout>
