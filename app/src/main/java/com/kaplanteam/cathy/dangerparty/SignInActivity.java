@@ -45,7 +45,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(SignInActivity.this, GameActivity.class);
+                Intent i = new Intent(SignInActivity.this, BackgroundActivity.class);
                 startActivity(i);
             }
         });
