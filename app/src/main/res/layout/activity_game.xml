@@ -4,31 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wordBackground">
-
-    <ImageView
-        android:id="@+id/imageView_intro_island"
-        android:layout_width="0dp"
-        android:layout_height="301dp"
-        app:layout_constraintDimensionRatio="w,928:713"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/intro_island_screen" />
-
-    <TextView
-        android:id="@+id/textView_intro"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:fontFamily="monospace"
-        android:text="Welcome to Danger Island"
-        android:textColor="@color/introWords"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_intro_island" />
+    android:id="@+id/fragment_container">
 
 </android.support.constraint.ConstraintLayout>
