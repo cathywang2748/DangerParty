@@ -16,6 +16,7 @@ import android.widget.ImageView;
 public class FragmentLevel1B extends Fragment implements View.OnClickListener {
     private Button climb, pick, caress, burn, flick, mf1, mf2, mf3, mf4;
     private ImageView bottle;
+    private boolean full;
 
     @Nullable
     @Override
@@ -23,6 +24,7 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.level1b, container, false);
 
+        full = false;
         wireWidgetsB(rootView);
         setListenersB();
 
@@ -77,6 +79,13 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener {
             case R.id.button3D:
                 break;
             case R.id.imageView_bottle:
+                if(full){
+                    view.setBackgroundResource(R.drawable.bottle_empty);
+                }
+                else{
+                    view.setBackgroundResource(R.drawable.bottle_full);
+                }
+                full = !full;
                 break;
         }
     }

@@ -166,7 +166,7 @@
 
     <ImageView
         android:id="@+id/imageView_bottle"
-        android:layout_width="61dp"
+        android:layout_width="50dp"
         android:layout_height="124dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ConstraintLayout_lips"
