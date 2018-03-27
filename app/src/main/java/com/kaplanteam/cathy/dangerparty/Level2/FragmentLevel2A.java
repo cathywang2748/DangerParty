@@ -1,6 +1,7 @@
-package com.kaplanteam.cathy.dangerparty;
+package com.kaplanteam.cathy.dangerparty.Level2;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,9 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.Toast;
+
+import com.kaplanteam.cathy.dangerparty.R;
 
 import java.util.ArrayList;
 
@@ -20,7 +24,7 @@ import java.util.ArrayList;
  * Created by Cole on 3/24/18.
  */
 
-public class FragmentLevel1A extends Fragment implements View.OnTouchListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class FragmentLevel2A extends Fragment implements View.OnTouchListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private double angle;
     private Switch getLostSwitch, zzyxzSwitch;
     private Button rub, hug;
@@ -29,7 +33,7 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.level1a, container, false);
+        View rootView = inflater.inflate(R.layout.level2a, container, false);
 
         //wire any widgets -- must use rootView.findViewById
         angle = 0;
@@ -38,8 +42,8 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
         needle.setOnTouchListener(this);
         xMark.setOnTouchListener(this);
 
-        wireWidgetsA(rootView);
-        setListenersA();
+        wireWidgets(rootView);
+        setListeners();
 
         //get any other initial set up done
 
@@ -47,7 +51,7 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
         return rootView;
     }
 
-    private void wireWidgetsA(View rootView) {
+    private void wireWidgets(View rootView) {
         rub = rootView.findViewById(R.id.button_rub);
         hug = rootView.findViewById(R.id.button_hug);
         getLostSwitch = rootView.findViewById(R.id.switch1);
@@ -55,7 +59,7 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setListenersA() {
+    private void setListeners() {
         rub.setOnClickListener(this);
         hug.setOnClickListener(this);
         getLostSwitch.setOnCheckedChangeListener(this);
@@ -113,20 +117,20 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
                     y = motionEvent.getY();
                     currentX = view.getX();
                     currentY = view.getY();
-                    view.setX(x + currentX - 32);
-                    view.setY(y + currentY - 32);
+                    view.setX(x + currentX - dpToPx(9));
+                    view.setY(y + currentY - dpToPx(9));
                     return true;
                 case (MotionEvent.ACTION_UP):
-                    //snap to nearest 0 (71), 260, 496, 648
+                    //snap to nearest 0 (71), 260, 496, 648 /3.5
                     x = motionEvent.getX();
                     y = motionEvent.getY();
                     currentX = view.getX();
                     currentY = view.getY();
                     ArrayList<Float> locations = new ArrayList<>();
-                    locations.add((float)71);
-                    locations.add((float)260);
-                    locations.add((float)496);
-                    locations.add((float)648);
+                    locations.add((float)dpToPx(19));
+                    locations.add((float)dpToPx(74));
+                    locations.add((float)dpToPx(142));
+                    locations.add((float)dpToPx(185));
                     float minval = locations.get(0);
                     int min = 0;
                     for(int i = 1;i < locations.size();i++){
@@ -135,15 +139,16 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
                             min = i;
                         }
                     }
+                    Toast.makeText(getContext(), "" + Resources.getSystem().getDisplayMetrics().density, Toast.LENGTH_SHORT).show();
                     view.setX(minval);
                     if(min == 0)
-                        view.setY(192);
+                        view.setY(dpToPx(67)); //55
                     else if(min == 1)
-                        view.setY(114);
+                        view.setY(dpToPx(43));
                     else if(min == 2)
-                        view.setY(220);
+                        view.setY(dpToPx(73));
                     else
-                        view.setY(130);
+                        view.setY(dpToPx(49));
                     return true;
                 default:
                     return false;
@@ -161,5 +166,10 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
             case R.id.switch2:
                 break;
         }
+    }
+
+    public static int dpToPx(int dp)
+    {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 }

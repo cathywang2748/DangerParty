@@ -41,7 +41,7 @@ public class BackgroundActivity extends AppCompatActivity {
             }
         });*/
 
-        CountDownTimer timer = new CountDownTimer(15000, 1000) {
+        CountDownTimer timer = new CountDownTimer(2000, 1000) {
             @Override
             public void onTick(long l) {
                 //textSwTextView = (TextView) textSw.getChildAt(0);

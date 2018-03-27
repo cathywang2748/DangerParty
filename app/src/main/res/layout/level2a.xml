@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView_cover"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="2.5:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/forest" />
+
+    <View
+        android:id="@+id/textBackground"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/wordBackground"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_cover" />
+
+    <View
+        android:id="@+id/timer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/wordBackground"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/textBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_cover" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_cover"
+        tools:text="Rub the Sphere" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/ConstraintLayout_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView_compass_back"
+        app:layout_constraintTop_toBottomOf="@+id/ConstraintLayout_switch2">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Frustumsphere"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_hug"
+            android:layout_width="wrap_content"
+            android:layout_height="51dp"
+            android:text="Hug"
+            app:layout_constraintEnd_toEndOf="@+id/button_rub"
+            app:layout_constraintStart_toStartOf="@+id/button_rub"
+            app:layout_constraintTop_toBottomOf="@+id/button_rub" />
+
+        <Button
+            android:id="@+id/button_rub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rub"
+            app:layout_constraintEnd_toEndOf="@+id/textView2"
+            app:layout_constraintStart_toStartOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/ConstraintLayout_switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/ConstraintLayout_switch2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ConstraintLayout_map"
+        app:layout_constraintTop_toBottomOf="@+id/textBackground">
+
+        <TextView
+            android:id="@+id/TextView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get Lost"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/TextView4"
+            app:layout_constraintStart_toStartOf="@+id/TextView4"
+            app:layout_constraintTop_toBottomOf="@+id/TextView4" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/ConstraintLayout_switch2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/ConstraintLayout_buttons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ConstraintLayout_map"
+        app:layout_constraintTop_toBottomOf="@+id/ConstraintLayout_switch1">
+
+        <TextView
+            android:id="@+id/TextView_switch2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zzyzx"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Switch
+            android:id="@+id/switch2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/TextView_switch2"
+            app:layout_constraintStart_toStartOf="@+id/TextView_switch2"
+            app:layout_constraintTop_toBottomOf="@+id/TextView_switch2" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imageView_compass_back"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ConstraintLayout_buttons"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ConstraintLayout_map"
+        app:srcCompat="@drawable/compass_back" />
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView_compass_back"
+        app:layout_constraintEnd_toEndOf="@+id/imageView_compass_back"
+        app:layout_constraintStart_toStartOf="@+id/imageView_compass_back"
+        app:layout_constraintTop_toTopOf="@+id/imageView_compass_back">
+
+        <ImageView
+            android:id="@+id/imageView_compass_needle"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/compass_needle" />
+    </android.support.constraint.ConstraintLayout>
+
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/ConstraintLayout_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/imageView_compass_back"
+        app:layout_constraintEnd_toStartOf="@+id/ConstraintLayout_switch1"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textBackground">
+
+        <TextView
+            android:id="@+id/TextView_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Map"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView_map"
+            android:layout_width="240dp"
+            android:layout_height="80dp"
+            app:layout_constraintEnd_toEndOf="@+id/TextView_map"
+            app:layout_constraintStart_toStartOf="@+id/TextView_map"
+            app:layout_constraintTop_toBottomOf="@+id/TextView_map"
+            app:srcCompat="@drawable/map" />
+
+        <ImageView
+            android:id="@+id/imageView_x"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView_map"
+            app:layout_constraintEnd_toEndOf="@+id/imageView_map"
+            app:layout_constraintHorizontal_bias="0.09"
+            app:layout_constraintStart_toStartOf="@+id/imageView_map"
+            app:layout_constraintTop_toTopOf="@+id/imageView_map"
+            app:layout_constraintVertical_bias="0.6"
+            app:srcCompat="@drawable/x" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

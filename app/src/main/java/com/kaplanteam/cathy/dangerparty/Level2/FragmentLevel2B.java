@@ -1,4 +1,4 @@
-package com.kaplanteam.cathy.dangerparty;
+package com.kaplanteam.cathy.dangerparty.Level2;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.kaplanteam.cathy.dangerparty.R;
+
 /**
  * Created by Cole on 3/24/18.
  */
 
-public class FragmentLevel1B extends Fragment implements View.OnClickListener {
+public class FragmentLevel2B extends Fragment implements View.OnClickListener {
     private Button climb, pick, caress, burn, flick, mf1, mf2, mf3, mf4;
     private ImageView bottle;
     private boolean full;
@@ -22,16 +24,16 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.level1b, container, false);
+        View rootView = inflater.inflate(R.layout.level2b, container, false);
 
         full = false;
-        wireWidgetsB(rootView);
-        setListenersB();
+        wireWidgets(rootView);
+        setListeners();
 
         return rootView;
     }
 
-    private void wireWidgetsB(View rootView) {
+    private void wireWidgets(View rootView) {
         climb = rootView.findViewById(R.id.button1);
         pick = rootView.findViewById(R.id.button2A);
         caress = rootView.findViewById(R.id.button2B);
@@ -44,7 +46,7 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener {
         bottle = rootView.findViewById(R.id.imageView_bottle);
     }
 
-    private void setListenersB() {
+    private void setListeners() {
         climb.setOnClickListener(this);
         pick.setOnClickListener(this);
         caress.setOnClickListener(this);
