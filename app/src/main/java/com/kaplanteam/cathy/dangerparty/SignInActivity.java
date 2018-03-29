@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -13,12 +12,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
     private SignInButton signInButton;
     public static final int RC_SIGN_IN = 1;
+    private static final int RC_INVITATION_INBOX = 9008;
+
     private GoogleSignInClient c;
 
 
@@ -36,19 +39,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         signInButton.setOnClickListener(this);
         // Build a GoogleSignInClient with the options specified by gso.
         c = GoogleSignIn.getClient(this, gso);
-
-        skipToGame();
-    }
-
-    private void skipToGame() {
-        TextView title = findViewById(R.id.textView_title);
-        title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(SignInActivity.this, BackgroundActivity.class);
-                startActivity(i);
-            }
-        });
     }
 
     @Override
@@ -102,10 +92,24 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    private void showInvitationInbox() {
+        Games.getInvitationsClient(this, GoogleSignIn.getLastSignedInAccount(this))
+                .getInvitationInboxIntent()
+                .addOnSuccessListener(new OnSuccessListener<Intent>() {
+                    @Override
+                    public void onSuccess(Intent intent) {
+                        startActivityForResult(intent, RC_INVITATION_INBOX);
+                    }
+                });
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
+                signIn();
+                break;
+            case R.id.show_room_button:
                 signIn();
                 break;
         }
