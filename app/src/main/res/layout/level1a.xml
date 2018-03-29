@@ -5,6 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/ConstraintLayout_switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/ConstraintLayout_switch2"
+        app:layout_constraintEnd_toStartOf="@+id/ConstraintLayout_switch2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView_vortex"
+        app:layout_constraintTop_toTopOf="@+id/ConstraintLayout_switch2">
+
+        <TextView
+            android:id="@+id/TextView_drown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Drown"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Switch
+            android:id="@+id/switch_drown"
+            android:layout_width="45dp"
+            android:layout_height="28dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/TextView_drown" />
+
+    </android.support.constraint.ConstraintLayout>
+
     <ImageView
         android:id="@+id/imageView_cover"
         android:layout_width="0dp"
@@ -66,5 +96,156 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="16dp" />
+
+    <ImageView
+        android:id="@+id/imageView_vortex"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ConstraintLayout_switch1"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:srcCompat="@drawable/vortex" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/ConstraintLayout_switch2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ConstraintLayout_switch1"
+        app:layout_constraintTop_toBottomOf="@+id/ConstraintLayout_buttons">
+
+        <TextView
+            android:id="@+id/TextView_pressbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pressbutton"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Switch
+            android:id="@+id/switch_pressbutton"
+            android:layout_width="45dp"
+            android:layout_height="28dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/TextView_pressbutton" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/ConstraintLayout_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/ConstraintLayout_switch2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/textBackground">
+
+        <TextView
+            android:id="@+id/textView_swim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Swim"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_doggie_paddle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Doggy Paddle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button_octopus"
+            app:layout_constraintTop_toBottomOf="@+id/textView_swim" />
+
+        <Button
+            android:id="@+id/button_octopus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ocotpus"
+            app:layout_constraintEnd_toStartOf="@+id/button_hug"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_swim" />
+
+        <Button
+            android:id="@+id/button_elegant_undulations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Elegant Undulations"
+            app:layout_constraintEnd_toEndOf="@+id/textView_swim"
+            app:layout_constraintStart_toStartOf="@+id/textView_swim"
+            app:layout_constraintTop_toBottomOf="@+id/button_corkscrew" />
+
+        <Button
+            android:id="@+id/button_corkscrew"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Corkscrew"
+            app:layout_constraintEnd_toStartOf="@+id/button_dolphin"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_octopus" />
+
+        <Button
+            android:id="@+id/button_dolphin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dolphin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button_corkscrew"
+            app:layout_constraintTop_toBottomOf="@+id/button_octopus" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/imageView_vortex"
+        app:layout_constraintEnd_toStartOf="@+id/ConstraintLayout_buttons"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textBackground">
+
+        <ImageView
+            android:id="@+id/imageView_bubble_medium"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintEnd_toEndOf="@+id/imageView_bubble_large"
+            app:layout_constraintHorizontal_bias="0.516"
+            app:layout_constraintStart_toEndOf="@+id/imageView_bubble_large"
+            app:layout_constraintTop_toBottomOf="@+id/imageView_bubble_large"
+            app:srcCompat="@drawable/bubble" />
+
+        <ImageView
+            android:id="@+id/imageView_bubble_small"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintEnd_toEndOf="@+id/imageView_bubble_large"
+            app:layout_constraintHorizontal_bias="0.366"
+            app:layout_constraintStart_toStartOf="@+id/imageView_bubble_large"
+            app:layout_constraintTop_toBottomOf="@+id/imageView_bubble_medium"
+            app:srcCompat="@drawable/bubble" />
+
+        <ImageView
+            android:id="@+id/imageView_bubble_large"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:srcCompat="@drawable/bubble" />
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>
