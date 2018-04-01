@@ -123,9 +123,7 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
                 case (MotionEvent.ACTION_UP):
                     //snap to nearest 0 (71), 260, 496, 648 /3.5
                     x = motionEvent.getX();
-                    y = motionEvent.getY();
                     currentX = view.getX();
-                    currentY = view.getY();
                     ArrayList<Float> locations = new ArrayList<>();
                     locations.add((float)dpToPx(19));
                     locations.add((float)dpToPx(74));

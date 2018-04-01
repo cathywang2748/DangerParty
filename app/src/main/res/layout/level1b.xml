@@ -1,6 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView_cover"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="2.5:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/tornado" />
+
+    <View
+        android:id="@+id/textBackground"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/wordBackground"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_cover" />
+
+    <View
+        android:id="@+id/timer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/wordBackground"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/textBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_cover" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_cover"
+        tools:text="Rub the Sphere" />
+
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/textBackground">
+
+        <TextView
+            android:id="@+id/textView_flop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Flop"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_belly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Belly"
+            app:layout_constraintEnd_toEndOf="@+id/textView_flop"
+            app:layout_constraintStart_toStartOf="@+id/textView_flop"
+            app:layout_constraintTop_toBottomOf="@+id/textView_flop" />
+
+        <Button
+            android:id="@+id/button_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            app:layout_constraintEnd_toEndOf="@+id/button_belly"
+            app:layout_constraintStart_toStartOf="@+id/button_belly"
+            app:layout_constraintTop_toBottomOf="@+id/button_belly" />
+
+        <Button
+            android:id="@+id/button_front"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Front"
+            app:layout_constraintEnd_toEndOf="@+id/button_back"
+            app:layout_constraintStart_toStartOf="@+id/button_back"
+            app:layout_constraintTop_toBottomOf="@+id/button_back" />
+    </android.support.constraint.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imageView_wheel"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/wheel" />
+
+    <ImageView
+        android:id="@+id/imageView_sails"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView_wheel"
+        app:layout_constraintEnd_toEndOf="@+id/imageView_wheel"
+        app:layout_constraintStart_toStartOf="@+id/imageView_wheel"
+        app:layout_constraintTop_toBottomOf="@+id/timer"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/sail_closed" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+
+        <TextView
+            android:id="@+id/textView_hope"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hope"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_give_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Give Up"
+            app:layout_constraintEnd_toEndOf="@+id/textView_hope"
+            app:layout_constraintStart_toStartOf="@+id/textView_hope"
+            app:layout_constraintTop_toBottomOf="@+id/textView_hope" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/ConstraintLayout_spyglass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toEndOf="@+id/imageView_sails"
+        app:layout_constraintTop_toBottomOf="@+id/timer">
+
+        <ImageView
+            android:id="@+id/imageView_spyglass2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/imageView_spyglass1"
+            app:layout_constraintEnd_toEndOf="@+id/imageView_spyglass1"
+            app:layout_constraintStart_toStartOf="@+id/imageView_spyglass1"
+            app:srcCompat="@drawable/spyglass2" />
+
+        <ImageView
+            android:id="@+id/imageView_spyglass1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/spyglass1" />
+
+        <ImageView
+            android:id="@+id/imageView_spyglass3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/imageView_spyglass2"
+            app:layout_constraintEnd_toEndOf="@+id/imageView_spyglass2"
+            app:layout_constraintStart_toStartOf="@+id/imageView_spyglass2"
+            app:srcCompat="@drawable/spyglass3" />
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>
