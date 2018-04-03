@@ -20,7 +20,7 @@ import com.kaplanteam.cathy.dangerparty.R;
 public class FragmentLevel3A extends Fragment implements View.OnClickListener {
     private Button moistyTequila, backtrack;
     private ImageView sapphire, ruby, diamond, emerald, amethyst, topaz, left_cave, right_cave, flashlight,
-        bat1, bat2, bat3, bat4, bat5;
+        bat1, bat2, bat3, bat4, bat5, sglow, rglow, dglow, eglow, aglow, tglow;
     private ConstraintLayout background;
     private boolean lightOn;
 
@@ -60,6 +60,12 @@ public class FragmentLevel3A extends Fragment implements View.OnClickListener {
         bat3 = rootView.findViewById(R.id.imageView_bat3);
         bat4 = rootView.findViewById(R.id.imageView_bat4);
         bat5 = rootView.findViewById(R.id.imageView_bat5);
+        sglow = rootView.findViewById(R.id.imageView_sapp_glow);
+        rglow = rootView.findViewById(R.id.imageView_ruby_glow);
+        dglow = rootView.findViewById(R.id.imageView_dia_glow);
+        eglow = rootView.findViewById(R.id.imageView_emer_glow);
+        tglow = rootView.findViewById(R.id.imageView_top_glow);
+        aglow = rootView.findViewById(R.id.imageView_ame_glow);
     }
 
     private void setListeners() {
@@ -93,6 +99,18 @@ public class FragmentLevel3A extends Fragment implements View.OnClickListener {
                     bat3.setVisibility(View.VISIBLE);
                     bat4.setVisibility(View.VISIBLE);
                     bat5.setVisibility(View.VISIBLE);
+                    ruby.setImageResource(R.drawable.ruby_dark);
+                    sapphire.setImageResource(R.drawable.sapp_dark);
+                    emerald.setImageResource(R.drawable.emer_dark);
+                    diamond.setImageResource(R.drawable.dia_dark);
+                    topaz.setImageResource(R.drawable.top_dark);
+                    amethyst.setImageResource(R.drawable.ame_dark);
+                    sglow.setVisibility(View.VISIBLE);
+                    rglow.setVisibility(View.VISIBLE);
+                    eglow.setVisibility(View.VISIBLE);
+                    dglow.setVisibility(View.VISIBLE);
+                    tglow.setVisibility(View.VISIBLE);
+                    aglow.setVisibility(View.VISIBLE);
                 }
                 else{
                     flashlight.setImageResource(R.drawable.light_on);
@@ -102,6 +120,18 @@ public class FragmentLevel3A extends Fragment implements View.OnClickListener {
                     bat3.setVisibility(View.INVISIBLE);
                     bat4.setVisibility(View.INVISIBLE);
                     bat5.setVisibility(View.INVISIBLE);
+                    ruby.setImageResource(R.drawable.ruby);
+                    sapphire.setImageResource(R.drawable.sapphire);
+                    emerald.setImageResource(R.drawable.emerald);
+                    diamond.setImageResource(R.drawable.diamond);
+                    topaz.setImageResource(R.drawable.topaz);
+                    amethyst.setImageResource(R.drawable.amethyst);
+                    sglow.setVisibility(View.INVISIBLE);
+                    rglow.setVisibility(View.INVISIBLE);
+                    eglow.setVisibility(View.INVISIBLE);
+                    dglow.setVisibility(View.INVISIBLE);
+                    tglow.setVisibility(View.INVISIBLE);
+                    aglow.setVisibility(View.INVISIBLE);
                 }
                 lightOn = ! lightOn;
                 break;
