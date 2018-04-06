@@ -1,6 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/level3b_background"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView_cover"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="2.5:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/forest" />
+
+    <View
+        android:id="@+id/textBackground"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/wordBackground"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_cover" />
+
+    <View
+        android:id="@+id/timer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/wordBackground"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/textBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_cover" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_cover"
+        tools:text="Rub the Sphere" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_cave_drawings"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timer">
+
+        <TextView
+            android:id="@+id/textView_scream"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scream"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_woo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Woolloomooloo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_scream" />
+
+        <Button
+            android:id="@+id/button_bum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bumbadumbdum"
+            app:layout_constraintEnd_toEndOf="@+id/button_woo"
+            app:layout_constraintStart_toStartOf="@+id/button_woo"
+            app:layout_constraintTop_toBottomOf="@+id/button_woo" />
+
+        <Button
+            android:id="@+id/button_banana"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Banamanamum"
+            app:layout_constraintEnd_toEndOf="@+id/button_bum"
+            app:layout_constraintStart_toStartOf="@+id/button_bum"
+            app:layout_constraintTop_toBottomOf="@+id/button_bum" />
+
+        <Button
+            android:id="@+id/button_boom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Boomsicklepop"
+            app:layout_constraintEnd_toEndOf="@+id/button_banana"
+            app:layout_constraintStart_toStartOf="@+id/button_banana"
+            app:layout_constraintTop_toBottomOf="@+id/button_banana" />
+    </android.support.constraint.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imageView_fork_left"
+        android:layout_width="20dp"
+        android:layout_height="130dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_fork_right"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView_dynamite"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_cave_drawings"
+        app:srcCompat="@drawable/fork" />
+
+    <ImageView
+        android:id="@+id/imageView_fork_right"
+        android:layout_width="20dp"
+        android:layout_height="130dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView_fork_left"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView_fork_left"
+        app:layout_constraintTop_toTopOf="@+id/imageView_fork_left"
+        app:srcCompat="@drawable/fork" />
+
+    <ImageView
+        android:id="@+id/imageView_cave_drawings"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView_dynamite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout4"
+        app:layout_constraintTop_toBottomOf="@+id/textBackground"
+        app:srcCompat="@drawable/cave_drawings" />
+
+    <ImageView
+        android:id="@+id/imageView_dynamite"
+        android:layout_width="50dp"
+        android:layout_height="160dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_fork_left"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout4"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_cave_drawings"
+        app:srcCompat="@drawable/dynamite" />
+
+    <ImageView
+        android:id="@+id/imageView_spark"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/imageView_dynamite"
+        app:layout_constraintEnd_toEndOf="@+id/imageView_dynamite"
+        app:layout_constraintStart_toStartOf="@+id/imageView_dynamite"
+        app:layout_constraintTop_toTopOf="@+id/imageView_dynamite"
+        app:srcCompat="@drawable/spark" />
+
+    <ImageView
+        android:id="@+id/imageView_explosion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timer"
+        app:srcCompat="@drawable/explosion" />
 
 </android.support.constraint.ConstraintLayout>

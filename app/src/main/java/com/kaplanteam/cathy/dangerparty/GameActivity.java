@@ -6,8 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.kaplanteam.cathy.dangerparty.Level2.FragmentLevel2B;
 import com.kaplanteam.cathy.dangerparty.Level3.FragmentLevel3A;
+import com.kaplanteam.cathy.dangerparty.Level3.FragmentLevel3B;
 
 /**
  * Created by Cole on 3/22/18.
@@ -21,12 +21,12 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game); //later change to if statement or something
         Intent i = getIntent();
 
-        if(Math.random() < 1){//change later
+        if(Math.random() < 0){//change later
             currentFragment = new FragmentLevel3A();
             switchToNewScreen();
         }
         else{
-            currentFragment = new FragmentLevel2B();
+            currentFragment = new FragmentLevel3B();
             switchToNewScreen();
         }
     }
