@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -25,8 +24,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private GoogleSignInClient c;
 
-    private TextView title;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +39,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         signInButton.setOnClickListener(this);
         // Build a GoogleSignInClient with the options specified by gso.
         c = GoogleSignIn.getClient(this, gso);
-
-        title = findViewById(R.id.textView_title);
-        title.setOnClickListener(this);
     }
 
     @Override
@@ -115,10 +109,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.sign_in_button:
                 signIn();
                 break;
-            case R.id.textView_title:
-                Intent i = new Intent(SignInActivity.this, BackgroundActivity.class);
-                startActivity(i);
-                break;
+//            case R.id.show_room_button:
+//                signIn();
+//                break;
         }
     }
 }

@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/app_skull_icon_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.AppCompat.Light">
         <activity android:name="com.kaplanteam.cathy.dangerparty.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
