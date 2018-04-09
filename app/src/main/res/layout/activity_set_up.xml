@@ -23,37 +23,60 @@
 
 
     <!-- MAIN SCREEN -->
-    <LinearLayout android:id="@+id/screen_main" style="@style/LLScreen">
-        <TextView style="@style/GameTitle" />
-        <Button android:id="@+id/button_single_player_2"
-            style="@style/MainScreenButton"/>
+    <LinearLayout
+        android:id="@+id/screen_main"
+        style="@style/LLScreen"
+        android:visibility="visible">
 
-        <Button android:id="@+id/button_quick_game"
+        <TextView style="@style/GameTitle" />
+
+        <Button
+            android:id="@+id/button_single_player_2"
             style="@style/MainScreenButton" />
 
-        <Button android:id="@+id/button_invite_players"
+        <Button
+            android:id="@+id/button_quick_game"
+            style="@style/MainScreenButton" />
+
+        <Button
+            android:id="@+id/button_invite_players"
             style="@style/MainScreenButton"
             android:text="@string/invite_players" />
 
-        <Button android:id="@+id/button_see_invitations"
+        <Button
+            android:id="@+id/button_see_invitations"
             style="@style/MainScreenButton"
             android:text="@string/see_invitations" />
 
-        <Button android:id="@+id/button_sign_out"
+        <Button
+            android:id="@+id/button_sign_out"
             style="@style/SignOutButton" />
     </LinearLayout>
 
     <!-- INVITATION POPUP -->
-    <LinearLayout android:id="@+id/invitation_popup" style="@style/InvPopup">
-        <TextView android:id="@+id/incoming_invitation_text" style="@style/InvPopupText" />
-        <Button android:id="@+id/button_accept_popup_invitation"
+    <LinearLayout
+        android:id="@+id/invitation_popup"
+        style="@style/InvPopup"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/incoming_invitation_text"
+            style="@style/InvPopupText" />
+
+        <Button
+            android:id="@+id/button_accept_popup_invitation"
             style="@style/InvPopupButton"
             android:text="@string/accept_popup_invite" />
     </LinearLayout>
 
     <!-- "PLEASE WAIT" SCREEN -->
-    <LinearLayout android:id="@+id/screen_wait" style="@style/LLScreen">
-        <TextView style="@style/Blurb" android:text="@string/please_wait" />
+    <LinearLayout
+        android:id="@+id/screen_wait"
+        style="@style/LLScreen">
+
+        <TextView
+            style="@style/Blurb"
+            android:text="@string/please_wait" />
     </LinearLayout>
 
 

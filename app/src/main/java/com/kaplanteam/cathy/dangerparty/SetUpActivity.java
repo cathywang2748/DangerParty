@@ -92,9 +92,16 @@ public class SetUpActivity extends AppCompatActivity implements
 //        wireWidgets();
         for (int id : CLICKABLES) {
             findViewById(id).setOnClickListener(this);
+
         }
+        switchToMainScreen();
     }
 
+    private void switchToMainScreen() {
+        if (mRealTimeMultiplayerClient != null) {
+            switchToScreen(R.id.screen_main);
+        }
+    }
 
 
     private void showWaitingRoom(Room room, int maxPlayersToStartGame) {
@@ -358,9 +365,12 @@ public class SetUpActivity extends AppCompatActivity implements
                 @Override
                 public void onSuccess(String playerId) {
                     mMyParticipantId = mRoom.getParticipantId(playerId);
+                    switchToMainScreen();
                 }
             });
         }
+
+
 
         @Override
         public void onDisconnectedFromRoom(@Nullable Room room) {
@@ -414,13 +424,13 @@ public class SetUpActivity extends AppCompatActivity implements
     final static int[] CLICKABLES = {
             R.id.button_accept_popup_invitation,
             R.id.button_invite_players,
-            R.id.button_quick_game, R.id.button_see_invitations,
+            R.id.button_see_invitations,
             R.id.button_single_player_2
     };
 
     // This array lists all the individual screens our game has.
     final static int[] SCREENS = {
-            R.id.screen_main
+            R.id.screen_main, R.id.screen_wait
     };
     int mCurScreen = -1;
 
