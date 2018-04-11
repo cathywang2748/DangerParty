@@ -44,7 +44,7 @@ public class BackgroundActivity extends AppCompatActivity {
             }
         });
 
-        //sets button visible after text finishes typing
+        //sets button visible after text finishes typing itself
         CountDownTimer timer = new CountDownTimer(33000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
