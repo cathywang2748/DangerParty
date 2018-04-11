@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -15,6 +16,7 @@ import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 import com.google.android.gms.games.GamesCallbackStatusCodes;
 import com.google.android.gms.games.InvitationsClient;
+import com.google.android.gms.games.RealTimeMultiplayerClient;
 import com.google.android.gms.games.multiplayer.Invitation;
 import com.google.android.gms.games.multiplayer.Multiplayer;
 import com.google.android.gms.games.multiplayer.Participant;
@@ -32,7 +34,8 @@ import java.util.List;
  * Created by per6 on 3/15/18.
  */
 
-public class SetUpActivity extends AppCompatActivity {
+public class SetUpActivity extends AppCompatActivity implements
+        View.OnClickListener{
     private static final int RC_SELECT_PLAYERS = 9006;
     private static final int RC_INVITATION_INBOX = 9008;
 
@@ -45,28 +48,34 @@ public class SetUpActivity extends AppCompatActivity {
     final static int RC_WAITING_ROOM = 9007;
     final static String TAG = "Danger Parttay";
 
+    String mIncomingInvitationId = null;
     // Request code used to invoke sign in user interactions.
     private static final int RC_SIGN_IN = 9001;
 
     // Client used to sign in with Google APIs
     private GoogleSignInClient mGoogleSignInClient = null;
 
+    String mMyId = null;
     // Client used to interact with the real time multiplayer system.
-
+    private RealTimeMultiplayerClient mRealTimeMultiplayerClient = null;
 
     // Client used to interact with the Invitation system.
     private InvitationsClient mInvitationsClient = null;
 
+    String mRoomId = null;
 
     boolean mWaitingRoomFinishedFromCode = false;
     // Holds the configuration of the current room.
     RoomConfig mJoinedRoomConfig;
+
+    ArrayList<Participant> mParticipants = null;
 
 
     OnRealTimeMessageReceivedListener mMessageReceivedHandler;
 
     // My participant ID in the currently active game
     String mMyParticipantId = null;
+    private String mPlayerId;
 
 
 
@@ -80,7 +89,20 @@ public class SetUpActivity extends AppCompatActivity {
 //        RealTimeMultiplayerClient mRealTimeMultiplayerClient =
 //                Games.getRealTimeMultiplayerClient(this, account);
 //        mRealTimeMultiplayerClient.getWaitingRoomIntent();
+//        wireWidgets();
+        for (int id : CLICKABLES) {
+            findViewById(id).setOnClickListener(this);
+
+        }
+        switchToMainScreen();
     }
+
+    private void switchToMainScreen() {
+        if (mRealTimeMultiplayerClient != null) {
+            switchToScreen(R.id.screen_main);
+        }
+    }
+
 
     private void showWaitingRoom(Room room, int maxPlayersToStartGame) {
         Games.getRealTimeMultiplayerClient(this, GoogleSignIn.getLastSignedInAccount(this))
@@ -343,9 +365,12 @@ public class SetUpActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(String playerId) {
                     mMyParticipantId = mRoom.getParticipantId(playerId);
+                    switchToMainScreen();
                 }
             });
         }
+
+
 
         @Override
         public void onDisconnectedFromRoom(@Nullable Room room) {
@@ -393,9 +418,187 @@ public class SetUpActivity extends AppCompatActivity {
         }
     };
 
+    //UI section
 
 
+    final static int[] CLICKABLES = {
+            R.id.button_accept_popup_invitation,
+            R.id.button_invite_players,
+            R.id.button_see_invitations,
+            R.id.button_single_player_2
+    };
 
+    // This array lists all the individual screens our game has.
+    final static int[] SCREENS = {
+            R.id.screen_main, R.id.screen_wait
+    };
+    int mCurScreen = -1;
+
+    void switchToScreen(int screenId) {
+        // make the requested screen visible; hide all others.
+        for (int id : SCREENS) {
+            findViewById(id).setVisibility(screenId == id ? View.VISIBLE : View.GONE);
+        }
+        mCurScreen = screenId;
+
+
+    }
+
+    // Accept the given invitation.
+    void acceptInviteToRoom(String invitationId) {
+        // accept the invitation
+        Log.d(TAG, "Accepting invitation: " + invitationId);
+
+        mJoinedRoomConfig = RoomConfig.builder(mRoomUpdateCallback)
+                .setInvitationIdToAccept(invitationId)
+                .setRoomStatusUpdateCallback(mRoomStatusUpdateCallback)
+                .build();
+
+        switchToScreen(R.id.screen_wait);
+
+
+        mRealTimeMultiplayerClient.join(mJoinedRoomConfig)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Room Joined Successfully!");
+                    }
+                });
+    }
+
+    private RoomStatusUpdateCallback mRoomStatusUpdateCallback = new RoomStatusUpdateCallback() {
+        // Called when we are connected to the room. We're not ready to play yet! (maybe not everybody
+        // is connected yet).
+        @Override
+        public void onConnectedToRoom(Room room) {
+            Log.d(TAG, "onConnectedToRoom.");
+
+            //get participants and my ID:
+            mParticipants = room.getParticipants();
+            mMyId = room.getParticipantId(mPlayerId);
+
+            // save room ID if its not initialized in onRoomCreated() so we can leave cleanly before the game starts.
+            if (mRoomId == null) {
+                mRoomId = room.getRoomId();
+            }
+
+            // print out the list of participants (for debug purposes)
+            Log.d(TAG, "Room ID: " + mRoomId);
+            Log.d(TAG, "My ID " + mMyId);
+            Log.d(TAG, "<< CONNECTED TO ROOM>>");
+        }
+
+        // Called when we get disconnected from the room. We return to the main screen.
+        @Override
+        public void onDisconnectedFromRoom(Room room) {
+            mRoomId = null;
+            mJoinedRoomConfig = null;
+//            showGameError();
+        }
+
+
+        // We treat most of the room update callbacks in the same way: we update our list of
+        // participants and update the display. In a real game we would also have to check if that
+        // change requires some action like removing the corresponding player avatar from the screen,
+        // etc.
+        @Override
+        public void onPeerDeclined(Room room, @NonNull List<String> arg1) {
+            updateRoom(room);
+        }
+
+        @Override
+        public void onPeerInvitedToRoom(Room room, @NonNull List<String> arg1) {
+            updateRoom(room);
+        }
+
+        @Override
+        public void onP2PDisconnected(@NonNull String participant) {
+        }
+
+        @Override
+        public void onP2PConnected(@NonNull String participant) {
+        }
+
+        @Override
+        public void onPeerJoined(Room room, @NonNull List<String> arg1) {
+            updateRoom(room);
+        }
+
+        @Override
+        public void onPeerLeft(Room room, @NonNull List<String> peersWhoLeft) {
+            updateRoom(room);
+        }
+
+        @Override
+        public void onRoomAutoMatching(Room room) {
+            updateRoom(room);
+        }
+
+        @Override
+        public void onRoomConnecting(Room room) {
+            updateRoom(room);
+        }
+
+        @Override
+        public void onPeersConnected(Room room, @NonNull List<String> peers) {
+            updateRoom(room);
+        }
+
+        @Override
+        public void onPeersDisconnected(Room room, @NonNull List<String> peers) {
+            updateRoom(room);
+        }
+    };
+    void updateRoom(Room room) {
+        if (room != null) {
+            mParticipants = room.getParticipants();
+        }
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+
+            case R.id.button_invite_players:
+                switchToScreen(R.id.screen_wait);
+
+                // show list of invitable players
+                mRealTimeMultiplayerClient.getSelectOpponentsIntent(1, 3).addOnSuccessListener(
+                        new OnSuccessListener<Intent>() {
+                            @Override
+                            public void onSuccess(Intent intent) {
+                                startActivityForResult(intent, RC_SELECT_PLAYERS);
+                            }
+                        }
+                );
+                break;
+            case R.id.button_see_invitations:
+                switchToScreen(R.id.screen_wait);
+
+                // show list of pending invitations
+                mInvitationsClient.getInvitationInboxIntent().addOnSuccessListener(
+                        new OnSuccessListener<Intent>() {
+                            @Override
+                            public void onSuccess(Intent intent) {
+                                startActivityForResult(intent, RC_INVITATION_INBOX);
+                            }
+                        }
+                );
+                break;
+            case R.id.button_accept_popup_invitation:
+                // user wants to accept the invitation shown on the invitation popup
+                // (the one we got through the OnInvitationReceivedListener).
+                acceptInviteToRoom(mIncomingInvitationId);
+                mIncomingInvitationId = null;
+                break;
+        }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
 }
 
 

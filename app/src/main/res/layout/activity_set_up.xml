@@ -1,36 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<!--
+   Copyright (C) 2013 Google Inc.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" >
 
+
+
+    <!-- MAIN SCREEN -->
     <LinearLayout
-        android:layout_width="366dp"
-        android:layout_height="494dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:id="@+id/screen_main"
+        style="@style/LLScreen"
+        android:visibility="visible">
+
+        <TextView style="@style/GameTitle" />
+
+        <Button
+            android:id="@+id/button_single_player_2"
+            style="@style/MainScreenButton" />
+
+        <Button
+            android:id="@+id/button_quick_game"
+            style="@style/MainScreenButton" />
+
+        <Button
+            android:id="@+id/button_invite_players"
+            style="@style/MainScreenButton"
+            android:text="@string/invite_players" />
+
+        <Button
+            android:id="@+id/button_see_invitations"
+            style="@style/MainScreenButton"
+            android:text="@string/see_invitations" />
+
+        <Button
+            android:id="@+id/button_sign_out"
+            style="@style/SignOutButton" />
+    </LinearLayout>
+
+    <!-- INVITATION POPUP -->
+    <LinearLayout
+        android:id="@+id/invitation_popup"
+        style="@style/InvPopup"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/incoming_invitation_text"
+            style="@style/InvPopupText" />
 
         <Button
             android:id="@+id/button_accept_popup_invitation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Accept"
-            tools:text="Accept" />
-
-        <Button
-            android:id="@+id/button_play"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Play"
-            tools:text="Play" />
+            style="@style/InvPopupButton"
+            android:text="@string/accept_popup_invite" />
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+
+    <!-- "PLEASE WAIT" SCREEN -->
+    <LinearLayout
+        android:id="@+id/screen_wait"
+        style="@style/LLScreen">
+
+        <TextView
+            style="@style/Blurb"
+            android:text="@string/please_wait" />
+    </LinearLayout>
+
+
+</FrameLayout>
