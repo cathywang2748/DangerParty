@@ -1,14 +1,12 @@
 package com.kaplanteam.cathy.dangerparty;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 /**
  * Created by Cole on 3/24/18.
@@ -17,17 +15,51 @@ import java.util.ArrayList;
 public class BackgroundActivity extends AppCompatActivity {
     //private TextSwitcher textSw;
     private TextView introText, textSwTextView;
-    private int ii;
-    private ArrayList<String> intro;
+    private TypeWriter tw;
+    private Button ready;
 
-    @SuppressLint("ClickableViewAccessibility")
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.background);
         Intent i = getIntent();
-        ii=0;
 
-        setIntro();
+        ready = (Button) findViewById(R.id.button_ready);
+        tw = (TypeWriter) findViewById(R.id.tv);
+
+        tw.setText("");
+        tw.setCharacterDelay(150);
+        tw.animateText("Welcome to Danger Island. \n" +
+                "You came here for a party, and you \nwill get a party.\n" +
+                "Enter if you dare!\n" +
+                "There is one way to leave…\n" +
+                "But you must follow the directions \nand work as a team to get out.\n" +
+                "Are you ready?\n");
+
+        ready.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(BackgroundActivity.this, GameActivity.class);
+                startActivity(i);
+            }
+        });
+
+        CountDownTimer timer = new CountDownTimer(33000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+               ready.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFinish() {
+                ready.setVisibility(View.VISIBLE);
+
+            }
+         }.start();
+
+
+
+
         //textSw =  (TextSwitcher) findViewById(R.id.textSwitcher);
         /*textSw.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
@@ -41,32 +73,24 @@ public class BackgroundActivity extends AppCompatActivity {
             }
         });*/
 
-        CountDownTimer timer = new CountDownTimer(2000, 1000) {
-            @Override
-            public void onTick(long l) {
-                //textSwTextView = (TextView) textSw.getChildAt(0);
-                Log.d("CountDownTimer: ", "" + l);
-
-            }
-
-            @Override
-            public void onFinish() {
-                //textSwTextView.setText(intro.get(ii));
-                //ii++;
-                Intent i = new Intent(BackgroundActivity.this, GameActivity.class);
-                startActivity(i);
-            }
-        }.start();
+//        CountDownTimer timer = new CountDownTimer(2000, 1000) {
+//            @Override
+//            public void onTick(long l) {
+//                //textSwTextView = (TextView) textSw.getChildAt(0);
+//                Log.d("CountDownTimer: ", "" + l);
+//
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                //textSwTextView.setText(intro.get(ii));
+//                //ii++;
+//                Intent i = new Intent(BackgroundActivity.this, GameActivity.class);
+//                startActivity(i);
+//            }
+//        }.start();
 
     }
 
-    private void setIntro() {
-        intro = new ArrayList<>();
-        intro.add("Welcome to Danger Island");
-        intro.add("You came here for a party, and you will get a party...");
-        intro.add("Enter if you dare!");
-        intro.add("There is one way to leave...");
-        intro.add("But you must follow the directions and work as a team to survive.");
-        intro.add("Are you ready?");
-    }
+
 }
