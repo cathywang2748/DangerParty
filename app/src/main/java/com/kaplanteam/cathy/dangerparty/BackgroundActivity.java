@@ -6,18 +6,14 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 /**
  * Created by Cole on 3/24/18.
  */
 
 public class BackgroundActivity extends AppCompatActivity {
-    //private TextSwitcher textSw;
-    private TextView introText, textSwTextView;
     private TypeWriter tw;
     private Button ready;
-
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +23,7 @@ public class BackgroundActivity extends AppCompatActivity {
         ready = (Button) findViewById(R.id.button_ready);
         tw = (TypeWriter) findViewById(R.id.tv);
 
+        //sets typewriter
         tw.setText("");
         tw.setCharacterDelay(150);
         tw.animateText("Welcome to Danger Island. \n" +
@@ -36,6 +33,7 @@ public class BackgroundActivity extends AppCompatActivity {
                 "But you must follow the directions \nand work as a team to get out.\n" +
                 "Are you ready?\n");
 
+        //sets button
         ready.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,39 +55,6 @@ public class BackgroundActivity extends AppCompatActivity {
 
             }
          }.start();
-
-
-
-
-        //textSw =  (TextSwitcher) findViewById(R.id.textSwitcher);
-        /*textSw.setFactory(new ViewSwitcher.ViewFactory() {
-            @Override
-            public View makeView() {
-                introText = (TextView) findViewById(R.id.textView_intro);
-                introText.setLayoutParams(new TextSwitcher
-                        .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT));
-
-                return introText;
-            }
-        });*/
-
-//        CountDownTimer timer = new CountDownTimer(2000, 1000) {
-//            @Override
-//            public void onTick(long l) {
-//                //textSwTextView = (TextView) textSw.getChildAt(0);
-//                Log.d("CountDownTimer: ", "" + l);
-//
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                //textSwTextView.setText(intro.get(ii));
-//                //ii++;
-//                Intent i = new Intent(BackgroundActivity.this, GameActivity.class);
-//                startActivity(i);
-//            }
-//        }.start();
 
     }
 
