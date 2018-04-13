@@ -31,6 +31,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_in);
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -39,6 +40,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         signInButton.setOnClickListener(this);
         // Build a GoogleSignInClient with the options specified by gso.
         c = GoogleSignIn.getClient(this, gso);
+
+
     }
 
     @Override
