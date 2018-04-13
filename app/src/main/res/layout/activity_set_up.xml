@@ -31,14 +31,6 @@
         <TextView style="@style/GameTitle" />
 
         <Button
-            android:id="@+id/button_single_player_2"
-            style="@style/MainScreenButton" />
-
-        <Button
-            android:id="@+id/button_quick_game"
-            style="@style/MainScreenButton" />
-
-        <Button
             android:id="@+id/button_invite_players"
             style="@style/MainScreenButton"
             android:text="@string/invite_players" />
@@ -48,9 +40,6 @@
             style="@style/MainScreenButton"
             android:text="@string/see_invitations" />
 
-        <Button
-            android:id="@+id/button_sign_out"
-            style="@style/SignOutButton" />
     </LinearLayout>
 
     <!-- INVITATION POPUP -->

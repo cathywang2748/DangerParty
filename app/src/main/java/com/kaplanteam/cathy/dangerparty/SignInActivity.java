@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -23,7 +24,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private static final int RC_INVITATION_INBOX = 9008;
 
     private GoogleSignInClient c;
-
+    private GoogleSignInAccount signedInAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,17 +32,19 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_in);
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         signInButton = findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(this);
+
         // Build a GoogleSignInClient with the options specified by gso.
-        c = GoogleSignIn.getClient(this, gso);
+
+          c = GoogleSignIn.getClient(this, gso);
 
 
+        Toast.makeText(this, isSignedIn() + "", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -50,16 +53,21 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        //updateUI(account);
+        //updateUI();
 
     }
 
-    private void updateUI(GoogleSignInAccount account) {
+    private void updateUI() {
         //hide the sign-in button,
         // launch your main activity,
         Intent i = new Intent(SignInActivity.this, SetUpActivity.class);
+        //i.putExtra("signinthing",signedInAccount);
         startActivity(i);
         // or whatever is appropriate for your app.
+    }
+
+    private boolean isSignedIn() {
+        return GoogleSignIn.getLastSignedInAccount(this) != null;
     }
 
     private void signIn() {
@@ -82,15 +90,16 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            signedInAccount = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            updateUI(account);
+            updateUI();
+            Log.d(""+ signedInAccount, "Signed IN!");
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.d("TAG", "signInResult:failed code=" + e.getStatusCode());
-            updateUI(null);
+            updateUI();
             //hello
         }
     }

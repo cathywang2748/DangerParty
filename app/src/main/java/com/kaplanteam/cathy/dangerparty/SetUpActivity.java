@@ -59,6 +59,7 @@ public class SetUpActivity extends AppCompatActivity implements
     // Client used to interact with the real time multiplayer system.
     private RealTimeMultiplayerClient mRealTimeMultiplayerClient = null;
 
+
     // Client used to interact with the Invitation system.
     private InvitationsClient mInvitationsClient = null;
 
@@ -82,19 +83,22 @@ public class SetUpActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_up);
-        Intent i = getIntent();
-        // Create the client used to sign in.
-//        mGoogleSignInClient = GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN);
-//        GoogleSignInAccount account =getIntent().getParcelableExtra("ACCOUNT");
-//        RealTimeMultiplayerClient mRealTimeMultiplayerClient =
-//                Games.getRealTimeMultiplayerClient(this, account);
-//        mRealTimeMultiplayerClient.getWaitingRoomIntent();
-//        wireWidgets();
-        for (int id : CLICKABLES) {
-            findViewById(id).setOnClickListener(this);
-
-        }
-        switchToMainScreen();
+//        Intent i = getIntent();
+//        // Create the client used to sign in.
+//          mGoogleSignInClient = GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN);
+//
+////          GoogleSignInAccount account = getIntent().getParcelableExtra("ACCOUNT");
+//        Log.d(TAG,  GoogleSignIn.getLastSignedInAccount(this)+ "HELLO ");
+//        //GoogleSignInAccount account = getIntent().getParcelableExtra("signinthing");
+//
+//            mRealTimeMultiplayerClient =
+//                  Games.getRealTimeMultiplayerClient(this, account);
+////        wireWidgets();
+//        for (int id : CLICKABLES) {
+//            findViewById(id).setOnClickListener(this);
+//
+//        }
+//        switchToMainScreen();
     }
 
     private void switchToMainScreen() {
@@ -425,7 +429,6 @@ public class SetUpActivity extends AppCompatActivity implements
             R.id.button_accept_popup_invitation,
             R.id.button_invite_players,
             R.id.button_see_invitations,
-            R.id.button_single_player_2
     };
 
     // This array lists all the individual screens our game has.
