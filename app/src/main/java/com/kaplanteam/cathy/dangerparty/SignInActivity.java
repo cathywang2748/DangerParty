@@ -128,6 +128,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    //firebase
     private void firebaseAuthWithGoogle(final GoogleSignInAccount account) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
         AuthCredential credential = GoogleAuthProvider
