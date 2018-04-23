@@ -110,11 +110,7 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
                         angle = theta + angle;
                         view.setRotation((float) angle);
                     }
-                    if (angle < 180 + last) {
-                        wheelClockwise = true;
-                    } else {
-                        wheelClockwise = false;
-                    }
+                    wheelClockwise = angle < 180 + last;
                     last = angle;
                     return true;
                 case (MotionEvent.ACTION_UP):

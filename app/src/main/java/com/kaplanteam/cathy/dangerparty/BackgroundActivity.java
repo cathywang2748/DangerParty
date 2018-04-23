@@ -20,8 +20,8 @@ public class BackgroundActivity extends AppCompatActivity {
         setContentView(R.layout.background);
         Intent i = getIntent();
 
-        ready = (Button) findViewById(R.id.button_ready);
-        tw = (TypeWriter) findViewById(R.id.tv);
+        ready = findViewById(R.id.button_ready);
+        tw = findViewById(R.id.tv);
 
         //sets typewriter
         tw.setText("");
