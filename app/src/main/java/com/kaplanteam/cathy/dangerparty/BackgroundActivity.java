@@ -46,12 +46,12 @@ public class BackgroundActivity extends AppCompatActivity {
         CountDownTimer timer = new CountDownTimer(33000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-               ready.setVisibility(View.GONE);
+               //ready.setVisibility(View.GONE);
             }
 
             @Override
             public void onFinish() {
-                ready.setVisibility(View.VISIBLE);
+                //ready.setVisibility(View.VISIBLE);
 
             }
          }.start();

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "523371301222",
+    "firebase_url": "https://dangerparty-6ca33.firebaseio.com",
+    "project_id": "dangerparty-6ca33",
+    "storage_bucket": "dangerparty-6ca33.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523371301222:android:456ab01732343e8a",
+        "android_client_info": {
+          "package_name": "com.kaplanteam.cathy.dangerparty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "523371301222-l5o7pl3frcopv9kipmmims7b8ea4fkp0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kaplanteam.cathy.dangerparty",
+            "certificate_hash": "c0f2e86fb00726b549dca69282dd2a22f66f1926"
+          }
+        },
+        {
+          "client_id": "523371301222-oek2q7eo9v9oc85eoscvk9muqd7vbuks.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNofQoD28i6nY__AxHwGF4GJBG6JJKf98"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "523371301222-oek2q7eo9v9oc85eoscvk9muqd7vbuks.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

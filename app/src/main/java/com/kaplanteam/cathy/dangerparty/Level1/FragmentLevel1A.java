@@ -1,6 +1,7 @@
 package com.kaplanteam.cathy.dangerparty.Level1;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -28,6 +29,15 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
     private ImageView bubbleS, bubbleM, bubbleL, vortex;
     private double angle, initial, last, theta;
 
+    private View timerView;
+    private final int MILLIS_IN_FUTURE = 7000;
+    private final int COUNT_DOWN_INTERVAL = 100;
+    private final float SCREEN_WIDTH = Resources.getSystem().getDisplayMetrics().widthPixels;
+    private CountDownTimer t;
+
+    private String[] strings;
+    private String[] currentStrings;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,7 +53,37 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
         wireWidgets(rootView);
         setListeners();
 
+        strings = new String[10];
+        strings[0] = "Pop the bubbles";
+        strings[1] = "Swirl a clockwise vortex";
+        strings[2] = "Swirl a counterclockwise vortex";
+        strings[3] = "Swim the octopus";
+        strings[4] = "Swim the doggie paddle";
+        strings[5] = "Swim the corkscrew";
+        strings[6] = "Swim the dolphin";
+        strings[7] = "Swim the elegant undulations";
+        strings[8] = "Drown";
+        strings[9] = "Pressbutton";
+
+        currentStrings = new String[3];
+        currentStrings[0] = "Still the vortex";
+        currentStrings[1] = "Undrown";
+        currentStrings[2] = "Don't pressbutton";
+
         //get any other initial set up done
+        t = new CountDownTimer(MILLIS_IN_FUTURE, COUNT_DOWN_INTERVAL) {
+            @Override
+            public void onTick(long l) {
+                timerView.setX(l / (float) MILLIS_IN_FUTURE * SCREEN_WIDTH - SCREEN_WIDTH);
+            }
+
+            @Override
+            public void onFinish() {
+                timerView.setX(0 - SCREEN_WIDTH);
+
+            }
+        }.start();
+
 
         //return the view that we inflated
         return rootView;
@@ -61,6 +101,7 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
         bubbleM = rootView.findViewById(R.id.imageView_bubble_medium);
         bubbleL = rootView.findViewById(R.id.imageView_bubble_large);
         vortex = rootView.findViewById(R.id.imageView_vortex);
+        timerView = rootView.findViewById(R.id.timer);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -195,5 +236,10 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
             default:
                 return false;
         }
+    }
+
+    public static int dpToPx(int dp)
+    {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 }
