@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MotionEventCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,6 +19,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaplanteam.cathy.dangerparty.Level2.FragmentLevel2A;
 import com.kaplanteam.cathy.dangerparty.R;
 
 /**
@@ -49,6 +51,9 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
     private final int MOVE_ON_SUCCESSES = 10;
     private final int END_GAME_FAILURES = 5;
 
+    private Fragment currentFragment;
+    private boolean firstTime;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -67,6 +72,7 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
         swirl = 0;
         successScore = 0;
         failScore = 0;
+        firstTime = true;
 
         wireWidgets(rootView);
         setListeners();
@@ -88,8 +94,7 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
         currentStrings[1] = "Undrown";
         currentStrings[2] = "Don't pressbutton";
 
-        text.setText(strings[0]);
-        //text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+        text.setText("Get Ready");// could make ready set go or other animation type thing
 
         //get any other initial set up done
         t = new CountDownTimer(MILLIS_IN_FUTURE, COUNT_DOWN_INTERVAL) {
@@ -100,21 +105,26 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
 
             @Override
             public void onFinish() {
-                timerView.setX(0 - SCREEN_WIDTH);
-                //closer to death
-                failScore++;
-                if(failScore == END_GAME_FAILURES){
-                    //End Game
-                    Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                if(firstTime){
                     text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
                     t.start();
+                    firstTime = false;
                 }
-
+                else{
+                    timerView.setX(0 - SCREEN_WIDTH);
+                    //closer to death
+                    failScore++;
+                    if(failScore == END_GAME_FAILURES){
+                        //End Game
+                        Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                        t.start();
+                    }
+                }
             }
         }.start();
-
 
         //return the view that we inflated
         return rootView;
@@ -360,6 +370,8 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
         if(successScore == MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            currentFragment = new FragmentLevel2A(); //randomize?
+            switchToNewScreen();
         }
         else{
             text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
@@ -373,6 +385,8 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
         if(successScore == MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            currentFragment = new FragmentLevel2A(); //randomize?
+            switchToNewScreen();
         }
         else{
             String currentString = strings[string];
@@ -382,6 +396,16 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
 
             text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
             t.start();
+        }
+    }
+
+    private void switchToNewScreen() {
+        //tell the fragment manager that if our current fragment isn't null, to replace whatever is there with it
+        FragmentManager fm = getFragmentManager();
+        if (currentFragment != null) {
+            fm.beginTransaction()
+                    .replace(R.id.fragment_container, currentFragment)
+                    .commit();
         }
     }
 }
