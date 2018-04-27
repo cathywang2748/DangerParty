@@ -21,7 +21,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game); //later change to if statement or something
         Intent i = getIntent();
 
-        if(Math.random() < 0.5){//change later
+        if(Math.random() < 1){//change later
             currentFragment = new FragmentLevel1A();
             switchToNewScreen();
         }
