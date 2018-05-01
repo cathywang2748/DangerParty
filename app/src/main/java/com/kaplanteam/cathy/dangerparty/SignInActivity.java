@@ -55,9 +55,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        signOutButton = (Button) findViewById(R.id.sign_out_button);
+        signOutButton = findViewById(R.id.sign_out_button);
         signInButton = findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(this);
+        signOutButton.setOnClickListener(this);
         // Build a GoogleSignInClient with the options specified by gso.
         c = GoogleSignIn.getClient(this, gso);
 
@@ -134,11 +135,13 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         AuthCredential credential = GoogleAuthProvider
                 .getCredential(account.getIdToken(), null);
         auth.signInWithCredential(credential)
+
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     //Sign in success, update UI with the signed in user's information
+                    Log.d("on complete","success");
                     FirebaseUser user = auth.getCurrentUser();
                     updateUI(user);
                     Intent i = new Intent(SignInActivity.this, SetUpActivity.class);
@@ -194,14 +197,16 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private void signOut() {
         //Firebase sign out
+        // Firebase sign out
         auth.signOut();
 
-        //Google sign out
-        c.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                updateUI(null);
-            }
-        });
+        // Google sign out
+        c.signOut().addOnCompleteListener(this,
+                new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        updateUI(null);
+                    }
+                });
     }
 }
