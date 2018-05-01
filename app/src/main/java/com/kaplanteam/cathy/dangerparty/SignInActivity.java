@@ -30,6 +30,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
+    private TextView title;
 
     private SignInButton signInButton;
     private Button signOutButton;
@@ -46,6 +47,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        title = findViewById(R.id.textView_title);
+        title.setOnClickListener(this);
+
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
 
@@ -100,7 +105,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_button).setVisibility(View.GONE);
         }
-        
+
         //Intent i = new Intent(SignInActivity.this, SetUpActivity.class);
         //startActivity(i);
         // or whatever is appropriate for your app.
@@ -154,7 +159,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 }
             }
         });
-        
+
     }
 
 //    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
@@ -186,6 +191,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.textView_title:
+                Intent i = new Intent(SignInActivity.this, BackgroundActivity.class);
+                startActivity(i);
+                break;
             case R.id.sign_in_button:
                 signIn();
                 break;

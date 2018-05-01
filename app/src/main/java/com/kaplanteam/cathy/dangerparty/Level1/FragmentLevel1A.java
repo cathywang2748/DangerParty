@@ -1,12 +1,13 @@
 package com.kaplanteam.cathy.dangerparty.Level1;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MotionEventCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,7 +16,10 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.kaplanteam.cathy.dangerparty.Level2.FragmentLevel2A;
 import com.kaplanteam.cathy.dangerparty.R;
 
 /**
@@ -27,6 +31,28 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
     private Switch drown, pressbutton;
     private ImageView bubbleS, bubbleM, bubbleL, vortex;
     private double angle, initial, last, theta;
+
+    private View timerView;
+    private final int MILLIS_IN_FUTURE = 7000;
+    private final int COUNT_DOWN_INTERVAL = 100;
+    private final float SCREEN_WIDTH = Resources.getSystem().getDisplayMetrics().widthPixels;
+    private CountDownTimer t;
+
+    private final int NUMBER_OF_STRINGS = 10;
+    private String[] strings;
+    private String[] currentStrings;
+    private TextView text;
+
+    private boolean popS, popM, popL;
+    private int swirl;
+
+    private int successScore;
+    private int failScore;
+    private final int MOVE_ON_SUCCESSES = 10;
+    private final int END_GAME_FAILURES = 5;
+
+    private Fragment currentFragment;
+    private boolean firstTime;
 
     @Nullable
     @Override
@@ -40,10 +66,65 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
         initial = 0;
         last = 0;
         theta = 0;
+        popS = false;
+        popM = false;
+        popL = false;
+        swirl = 0;
+        successScore = 0;
+        failScore = 0;
+        firstTime = true;
+
         wireWidgets(rootView);
         setListeners();
 
+        strings = new String[NUMBER_OF_STRINGS];
+        strings[0] = "Pop the bubbles";
+        strings[1] = "Swirl a clockwise vortex";
+        strings[2] = "Swirl a counterclockwise vortex";
+        strings[3] = "Swim the octopus";
+        strings[4] = "Swim the doggie paddle";
+        strings[5] = "Swim the corkscrew";
+        strings[6] = "Swim the dolphin";
+        strings[7] = "Swim the elegant undulations";
+        strings[8] = "Drown";
+        strings[9] = "Pressbutton";
+
+        currentStrings = new String[3];
+        currentStrings[0] = "Still the vortex";
+        currentStrings[1] = "Undrown";
+        currentStrings[2] = "Don't pressbutton";
+
+        text.setText("Get Ready");// could make ready set go or other animation type thing
+
         //get any other initial set up done
+        t = new CountDownTimer(MILLIS_IN_FUTURE, COUNT_DOWN_INTERVAL) {
+            @Override
+            public void onTick(long l) {
+                timerView.setX(l / (float) MILLIS_IN_FUTURE * SCREEN_WIDTH - SCREEN_WIDTH);
+            }
+
+            @Override
+            public void onFinish() {
+                if(firstTime){
+                    text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                    t.start();
+                    firstTime = false;
+                }
+                else{
+                    timerView.setX(0 - SCREEN_WIDTH);
+                    //closer to death
+                    failScore++;
+                    if(failScore == END_GAME_FAILURES){
+                        //End Game
+                        Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                        t.start();
+                    }
+                }
+            }
+        }.start();
 
         //return the view that we inflated
         return rootView;
@@ -61,6 +142,8 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
         bubbleM = rootView.findViewById(R.id.imageView_bubble_medium);
         bubbleL = rootView.findViewById(R.id.imageView_bubble_large);
         vortex = rootView.findViewById(R.id.imageView_vortex);
+        timerView = rootView.findViewById(R.id.timer);
+        text = rootView.findViewById(R.id.textView);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -82,6 +165,13 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.imageView_bubble_small:
+                popS = true;
+                if(text.getText().equals(strings[0]) && popM && popL){ // will need to change later for 2 people -----------------------------------------------
+                    success();
+                }
+                else if (!text.getText().equals(strings[0])){
+                    successScore--;
+                }
                 final ImageView vs = (ImageView) view;
                 vs.setImageDrawable(getResources().getDrawable(R.drawable.pop));
                 CountDownTimer timers = new CountDownTimer(4000, 2000) {
@@ -94,10 +184,18 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
                     public void onFinish() {
                         vs.setImageDrawable(getResources().getDrawable(R.drawable.bubble));
                         vs.setVisibility(View.VISIBLE);
+                        popS = false;
                     }
                 }.start();
                 break;
             case R.id.imageView_bubble_medium:
+                popM = true;
+                if(text.getText().equals(strings[0]) && popS && popL){ // will need to change later for 2 people -----------------------------------------------
+                    success();
+                }
+                else if (!text.getText().equals(strings[0])){
+                    successScore--;
+                }
                 final ImageView vm = (ImageView) view;
                 vm.setImageDrawable(getResources().getDrawable(R.drawable.pop));
                 CountDownTimer timerm = new CountDownTimer(4000, 2000) {
@@ -110,10 +208,18 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
                     public void onFinish() {
                         vm.setImageDrawable(getResources().getDrawable(R.drawable.bubble));
                         vm.setVisibility(View.VISIBLE);
+                        popM = false;
                     }
                 }.start();
                 break;
             case R.id.imageView_bubble_large:
+                popL = true;
+                if(text.getText().equals(strings[0]) && popM && popS){ // will need to change later for 2 people -----------------------------------------------
+                    success();
+                }
+                else if (!text.getText().equals(strings[0])){
+                    successScore--;
+                }
                 final ImageView vl = (ImageView) view;
                 vl.setImageDrawable(getResources().getDrawable(R.drawable.pop));
                 CountDownTimer timerl = new CountDownTimer(4000, 2000) {
@@ -126,18 +232,49 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
                     public void onFinish() {
                         vl.setImageDrawable(getResources().getDrawable(R.drawable.bubble));
                         vl.setVisibility(View.VISIBLE);
+                        popL = false;
                     }
                 }.start();
                 break;
             case R.id.button_octopus:
+                if(text.getText().equals(strings[3])){ // will need to change later for 2 people -----------------------------------------------
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.button_doggie_paddle:
+                if(text.getText().equals(strings[4])){ // will need to change later for 2 people -----------------------------------------------
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.button_corkscrew:
+                if(text.getText().equals(strings[5])){ // will need to change later for 2 people -----------------------------------------------
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.button_dolphin:
+                if(text.getText().equals(strings[6])){ // will need to change later for 2 people -----------------------------------------------
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.button_elegant_undulations:
+                if(text.getText().equals(strings[7])){ // will need to change later for 2 people -----------------------------------------------
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
         }
     }
@@ -146,8 +283,20 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         switch(compoundButton.getId()){
             case R.id.switch_drown:
+                if(text.getText().equals(strings[8])){ // will need to change later for 2 people -----------------------------------------------
+                    success(8, 1);
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.switch_pressbutton:
+                if(text.getText().equals(strings[9])){ // will need to change later for 2 people -----------------------------------------------
+                    success(9, 2);
+                }
+                else{
+                    successScore--;
+                }
                 break;
         }
     }
@@ -173,16 +322,15 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
                     angle = theta + angle;
                     view.setRotation((float)angle);
                 }
-                Log.d("angle: ", "" + angle);
-                if(angle < 180 + last){
+                if(angle < 180 + last){ //clockwise
                     ImageView v = (ImageView) view;
                     v.setImageDrawable(getResources().getDrawable(R.drawable.clockwise));
-                    Log.d("CLOCKWISE", " Fired");
+                    swirl = 1;
                 }
-                else {
+                else { //counterclockwise
                     ImageView v = (ImageView) view;
                     v.setImageDrawable(getResources().getDrawable(R.drawable.counterclockwise));
-                    Log.d("COUNTERCLOCKWISE", " Fired");
+                    swirl = -1;
                 }
                 last = angle;
                 return true;
@@ -190,10 +338,74 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
                 if(angle - initial < 30 && angle - initial > -30 ){
                     ImageView v = (ImageView) view;
                     v.setImageDrawable(getResources().getDrawable(R.drawable.vortex));
+                    swirl = 0;
                 }
+
+                //"Swirl a clockwise vortex"
+                //"Swirl a counterclockwise vortex"
+                //"Still the vortex"
+                if(text.getText().equals("Swirl a clockwise vortex") && swirl == 1
+                        || text.getText().equals("Swirl a counterclockwise vortex") && swirl == -1
+                        || text.getText().equals("Still the vortex") && swirl == 0){
+                    if(strings[1].equals(text.getText())){
+                        success(1, 0);
+                    }
+                    else{
+                        success(2, 0);
+                    }
+                }
+                else{
+                    successScore--;
+                }
+
                 return true;
             default:
                 return false;
+        }
+    }
+
+    private void success(){
+        t.cancel();
+        successScore++;
+        if(successScore == MOVE_ON_SUCCESSES){
+            //move to next level
+            Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            currentFragment = new FragmentLevel2A(); //randomize?
+            switchToNewScreen();
+        }
+        else{
+            text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+            t.start();
+        }
+    }
+
+    private void success(int string, int current){
+        t.cancel();
+        successScore++;
+        if(successScore == MOVE_ON_SUCCESSES){
+            //move to next level
+            Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            currentFragment = new FragmentLevel2A(); //randomize?
+            switchToNewScreen();
+        }
+        else{
+            String currentString = strings[string];
+            strings[string] = currentStrings[current];
+            currentStrings[current] = currentString;
+
+
+            text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+            t.start();
+        }
+    }
+
+    private void switchToNewScreen() {
+        //tell the fragment manager that if our current fragment isn't null, to replace whatever is there with it
+        FragmentManager fm = getFragmentManager();
+        if (currentFragment != null) {
+            fm.beginTransaction()
+                    .replace(R.id.fragment_container, currentFragment)
+                    .commit();
         }
     }
 }
