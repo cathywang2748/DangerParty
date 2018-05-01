@@ -3,8 +3,10 @@ package com.kaplanteam.cathy.dangerparty.Level2;
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MotionEventCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaplanteam.cathy.dangerparty.R;
@@ -29,6 +32,25 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
     private Switch getLostSwitch, zzyxzSwitch;
     private Button rub, hug;
 
+    private View timerView;
+    private final int MILLIS_IN_FUTURE = 7000;
+    private final int COUNT_DOWN_INTERVAL = 100;
+    private final float SCREEN_WIDTH = Resources.getSystem().getDisplayMetrics().widthPixels;
+    private CountDownTimer t;
+
+    private final int NUMBER_OF_STRINGS = 14;
+    private String[] strings;
+    private String[] currentStrings;
+    private TextView text;
+
+    private int successScore;
+    private int failScore;
+    private final int MOVE_ON_SUCCESSES = 10;
+    private final int END_GAME_FAILURES = 5;
+
+    private Fragment currentFragment;
+    private boolean firstTime;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,10 +64,72 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
         needle.setOnTouchListener(this);
         xMark.setOnTouchListener(this);
 
+        successScore = 0;
+        failScore = 0;
+        firstTime = true;
+
         wireWidgets(rootView);
         setListeners();
 
+
+        strings = new String[NUMBER_OF_STRINGS];
+        strings[0] = "Squishishi";
+        strings[1] = "Voop";
+        strings[2] = "Bo";
+
+        strings[3] = "Get lost";
+        strings[4] = "Zzyzx";
+
+        strings[5] = "Rub the Frustumsphere";
+        strings[6] = "Hug the Frustumsphere";
+
+        strings[7] = "Northeast";
+        strings[8] = "East";
+        strings[9] = "Southeast";
+        strings[10] = "South";
+        strings[11] = "Southwest";
+        strings[12] = "West";
+        strings[13] = "Northwest";
+
+
+        currentStrings = new String[4];
+        currentStrings[0] = "Nuuvut";
+        currentStrings[1] = "North";
+        currentStrings[2] = "Don't get lost";
+        currentStrings[3] = "Unzzyzx";
+
+
+        text.setText("Get Ready");// could make ready set go or other animation type thing
+
         //get any other initial set up done
+        t = new CountDownTimer(MILLIS_IN_FUTURE, COUNT_DOWN_INTERVAL) {
+            @Override
+            public void onTick(long l) {
+                timerView.setX(l / (float) MILLIS_IN_FUTURE * SCREEN_WIDTH - SCREEN_WIDTH);
+            }
+
+            @Override
+            public void onFinish() {
+                if(firstTime){
+                    text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                    t.start();
+                    firstTime = false;
+                }
+                else{
+                    timerView.setX(0 - SCREEN_WIDTH);
+                    //closer to death
+                    failScore++;
+                    if(failScore >= END_GAME_FAILURES){
+                        //End Game
+                        Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                        t.start();
+                    }
+                }
+            }
+        }.start();
 
         //return the view that we inflated
         return rootView;
@@ -56,6 +140,8 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
         hug = rootView.findViewById(R.id.button_hug);
         getLostSwitch = rootView.findViewById(R.id.switch1);
         zzyxzSwitch = rootView.findViewById(R.id.switch2);
+        timerView = rootView.findViewById(R.id.timer);
+        text = rootView.findViewById(R.id.textView);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -70,8 +156,20 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.button_rub:
+                if(text.getText().equals(strings[5])){
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.button_hug:
+                if(text.getText().equals(strings[6])){
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
         }
     }
@@ -102,6 +200,7 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
                 case (MotionEvent.ACTION_UP) :
                     angle = Math.round(angle/45)*45;
                     view.setRotation((float)angle);
+                    Toast.makeText(getContext(), "" + angle, Toast.LENGTH_SHORT).show();
                     return true;
                 default :
                     return false;
@@ -137,16 +236,111 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
                             min = i;
                         }
                     }
-                    Toast.makeText(getContext(), "" + Resources.getSystem().getDisplayMetrics().density, Toast.LENGTH_SHORT).show();
                     view.setX(minval);
-                    if(min == 0)
+                    if(min == 0) {
                         view.setY(dpToPx(67)); //55
-                    else if(min == 1)
+                        if(text.getText().equals("Nuuvut")){
+                            if(strings[0].equals("Nuuvut")){
+                                success(0,0);
+                            }
+                            else if(strings[1].equals("Nuuvut")){
+                                success(1,0);
+                            }
+                            else{
+                                success(2,0);
+                            }
+                        }
+                        else{
+                            successScore--;
+                            if(strings[0].equals("Nuuvut")){
+                                swap(0,0);
+                            }
+                            else if(strings[1].equals("Nuuvut")){
+                                swap(1,0);
+                            }
+                            else{
+                                swap(2,0);
+                            }
+                        }
+                    }
+                    else if(min == 1) {
                         view.setY(dpToPx(43));
-                    else if(min == 2)
+                        if(text.getText().equals("Squishishi")){
+                            if(strings[0].equals("Squishishi")){
+                                success(0,0);
+                            }
+                            else if(strings[1].equals("Squishishi")){
+                                success(1,0);
+                            }
+                            else{
+                                success(2,0);
+                            }
+                        }
+                        else{
+                            successScore--;
+                            if(strings[0].equals("Squishishi")){
+                                swap(0,0);
+                            }
+                            else if(strings[1].equals("Squishishi")){
+                                swap(1,0);
+                            }
+                            else{
+                                swap(2,0);
+                            }
+                        }
+                    }
+                    else if(min == 2) {
                         view.setY(dpToPx(73));
-                    else
+                        if(text.getText().equals("Voop")){
+                            if(strings[0].equals("Voop")){
+                                success(0,0);
+                            }
+                            else if(strings[1].equals("Voop")){
+                                success(1,0);
+                            }
+                            else{
+                                success(2,0);
+                            }
+                        }
+                        else{
+                            successScore--;
+                            if(strings[0].equals("Voop")){
+                                swap(0,0);
+                            }
+                            else if(strings[1].equals("Voop")){
+                                swap(1,0);
+                            }
+                            else{
+                                swap(2,0);
+                            }
+                        }
+                    }
+                    else {
                         view.setY(dpToPx(49));
+                        if(text.getText().equals("Bo")){
+                            if(strings[0].equals("Bo")){
+                                success(0,0);
+                            }
+                            else if(strings[1].equals("Bo")){
+                                success(1,0);
+                            }
+                            else{
+                                success(2,0);
+                            }
+                        }
+                        else{
+                            successScore--;
+                            if(strings[0].equals("Bo")){
+                                swap(0,0);
+                            }
+                            else if(strings[1].equals("Bo")){
+                                swap(1,0);
+                            }
+                            else{
+                                swap(2,0);
+                            }
+                        }
+                    }
                     return true;
                 default:
                     return false;
@@ -160,14 +354,76 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         switch(compoundButton.getId()){
             case R.id.switch1:
+                if(text.getText().equals(strings[3])){
+                    success(3, 2);
+                }
+                else{
+                    successScore--;
+                    swap(3, 2);
+                }
                 break;
             case R.id.switch2:
-                break;
+                if(text.getText().equals(strings[4])){
+                    success(4, 3);
+                }
+                else{
+                    successScore--;
+                    swap(4, 3);
+                }
         }
     }
 
     public static int dpToPx(int dp)
     {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    private void success(){
+        t.cancel();
+        successScore++;
+        if(successScore == MOVE_ON_SUCCESSES){
+            //move to next level
+            Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            currentFragment = new FragmentLevel2A(); //randomize?
+            switchToNewScreen();
+        }
+        else{
+            text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+            t.start();
+        }
+    }
+
+    private void success(int string, int current){
+        t.cancel();
+        successScore++;
+        if(successScore >= MOVE_ON_SUCCESSES){
+            //move to next level
+            Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            currentFragment = new FragmentLevel2A(); //randomize?
+            switchToNewScreen();
+        }
+        else{
+            swap(string, current);
+
+
+            text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+            t.start();
+        }
+    }
+
+    private void swap(int string, int current){
+        String currentString = strings[string];
+        strings[string] = currentStrings[current];
+        currentStrings[current] = currentString;
+    }
+
+    private void switchToNewScreen() {
+        //tell the fragment manager that if our current fragment isn't null, to replace whatever is there with it
+        FragmentManager fm = getFragmentManager();
+        if (currentFragment != null) {
+            fm.beginTransaction()
+                    .replace(R.id.fragment_container, currentFragment)
+                    .commit();
+        }
     }
 }

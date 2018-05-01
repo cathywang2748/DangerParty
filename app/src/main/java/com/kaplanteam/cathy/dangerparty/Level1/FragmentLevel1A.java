@@ -114,7 +114,7 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
                     timerView.setX(0 - SCREEN_WIDTH);
                     //closer to death
                     failScore++;
-                    if(failScore == END_GAME_FAILURES){
+                    if(failScore >= END_GAME_FAILURES){
                         //End Game
                         Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
                     }
@@ -288,6 +288,7 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
                 }
                 else{
                     successScore--;
+                    swap(8, 1);
                 }
                 break;
             case R.id.switch_pressbutton:
@@ -296,6 +297,7 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
                 }
                 else{
                     successScore--;
+                    swap(9, 2);
                 }
                 break;
         }
@@ -356,6 +358,26 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
                 }
                 else{
                     successScore--;
+                    if(currentStrings[0].equals("Swirl a counterclockwise vortex") && swirl == 1
+                            || currentStrings[0].equals("Swirl a counterclockwise vortex") && swirl == -1
+                            || currentStrings[0].equals("Still the vortex") && swirl == 0){
+                    }
+                    else if (strings[1].equals("Swirl a counterclockwise vortex")){
+                        if(swirl == 1){
+                            swap(1, 0);
+                        }
+                        else {
+                            swap(2, 0);
+                        }
+                    }
+                    else{
+                        if(swirl == 1){
+                            swap(2, 0);
+                        }
+                        else {
+                            swap(1, 0);
+                        }
+                    }
                 }
 
                 return true;
@@ -382,21 +404,23 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
     private void success(int string, int current){
         t.cancel();
         successScore++;
-        if(successScore == MOVE_ON_SUCCESSES){
+        if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
             currentFragment = new FragmentLevel2A(); //randomize?
             switchToNewScreen();
         }
         else{
-            String currentString = strings[string];
-            strings[string] = currentStrings[current];
-            currentStrings[current] = currentString;
-
-
+            swap(string, current);
             text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
             t.start();
         }
+    }
+
+    private void swap(int string, int current){
+        String currentString = strings[string];
+        strings[string] = currentStrings[current];
+        currentStrings[current] = currentString;
     }
 
     private void switchToNewScreen() {

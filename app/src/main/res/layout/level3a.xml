@@ -34,7 +34,7 @@
         android:id="@+id/timer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/wordBackground"
+        android:background="@color/timer"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/textBackground"
         app:layout_constraintEnd_toEndOf="parent"
