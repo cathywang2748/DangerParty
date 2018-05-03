@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MotionEventCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -121,7 +122,7 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
                     failScore++;
                     if(failScore >= END_GAME_FAILURES){
                         //End Game
-                        Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+
                     }
                     else{
                         text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
@@ -193,6 +194,7 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
                         theta = theta * 180/Math.PI;
                         if(x < 0){theta -= 180;}
                         theta = 90 - theta;
+                        Log.d("Theta", "" + theta);
                         angle = theta + angle;
                         view.setRotation((float)angle);
                     }
@@ -200,7 +202,176 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
                 case (MotionEvent.ACTION_UP) :
                     angle = Math.round(angle/45)*45;
                     view.setRotation((float)angle);
-                    Toast.makeText(getContext(), "" + angle, Toast.LENGTH_SHORT).show();
+                    int pointerPosition = ((int)angle)/45%8;
+                    if(pointerPosition == 0){
+                        if(text.getText().equals("North")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("North")){
+                                    pos = i;
+                                }
+                            }
+                            success(pos, 1);
+                        }
+                        else{
+                            successScore--;
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("North")){
+                                    pos = i;
+                                }
+                            }
+                            swap(pos, 1);
+                        }
+                    }
+                    else if(pointerPosition == 1){
+                        if(text.getText().equals("Northeast")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("Northeast")){
+                                    pos = i;
+                                }
+                            }
+                            success(pos, 1);
+                        }
+                        else{
+                            successScore--;
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("Northeast")){
+                                    pos = i;
+                                }
+                            }
+                            swap(pos, 1);
+                        }
+                    }
+                    else if(pointerPosition == 2){
+                        if(text.getText().equals("East")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("East")){
+                                    pos = i;
+                                }
+                            }
+                            success(pos, 1);
+                        }
+                        else{
+                            successScore--;
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("East")){
+                                    pos = i;
+                                }
+                            }
+                            swap(pos, 1);
+                        }
+                    }
+                    else if(pointerPosition == 3){
+                        if(text.getText().equals("Southeast")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("Southeast")){
+                                    pos = i;
+                                }
+                            }
+                            success(pos, 1);
+                        }
+                        else{
+                            successScore--;
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("Southeast")){
+                                    pos = i;
+                                }
+                            }
+                            swap(pos, 1);
+                        }
+                    }
+                    else if(pointerPosition == 4){
+                        if(text.getText().equals("South")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("South")){
+                                    pos = i;
+                                }
+                            }
+                            success(pos, 1);
+                        }
+                        else{
+                            successScore--;
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("South")){
+                                    pos = i;
+                                }
+                            }
+                            swap(pos, 1);
+                        }
+                    }else if(pointerPosition == 5){
+                        if(text.getText().equals("Southwest")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("Southwest")){
+                                    pos = i;
+                                }
+                            }
+                            success(pos, 1);
+                        }
+                        else{
+                            successScore--;
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("Southwest")){
+                                    pos = i;
+                                }
+                            }
+                            swap(pos, 1);
+                        }
+
+                    }
+                    else if(pointerPosition == 6){
+                        if(text.getText().equals("West")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("West")){
+                                    pos = i;
+                                }
+                            }
+                            success(pos, 1);
+                        }
+                        else{
+                            successScore--;
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("West")){
+                                    pos = i;
+                                }
+                            }
+                            swap(pos, 1);
+                        }
+                    }
+                    else if(pointerPosition == 7){
+                        if(text.getText().equals("Northwest")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("Northwest")){
+                                    pos = i;
+                                }
+                            }
+                            success(pos, 1);
+                        }
+                        else{
+                            successScore--;
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("Northwest")){
+                                    pos = i;
+                                }
+                            }
+                            swap(pos, 1);
+                        }
+                    }
+
                     return true;
                 default :
                     return false;
@@ -399,8 +570,8 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
-            currentFragment = new FragmentLevel2A(); //randomize?
-            switchToNewScreen();
+            //currentFragment = new FragmentLevel2A(); //randomize?
+            //switchToNewScreen();
         }
         else{
             swap(string, current);
