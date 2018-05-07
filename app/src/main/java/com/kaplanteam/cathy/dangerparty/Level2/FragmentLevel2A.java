@@ -20,6 +20,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaplanteam.cathy.dangerparty.Level3.FragmentLevel3A;
 import com.kaplanteam.cathy.dangerparty.R;
 
 import java.util.ArrayList;
@@ -555,7 +556,7 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
         if(successScore == MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
-            currentFragment = new FragmentLevel2A(); //randomize?
+            currentFragment = new FragmentLevel3A(); //randomize?
             switchToNewScreen();
         }
         else{
@@ -570,8 +571,8 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
-            //currentFragment = new FragmentLevel2A(); //randomize?
-            //switchToNewScreen();
+            currentFragment = new FragmentLevel3A(); //randomize?
+            switchToNewScreen();
         }
         else{
             swap(string, current);
