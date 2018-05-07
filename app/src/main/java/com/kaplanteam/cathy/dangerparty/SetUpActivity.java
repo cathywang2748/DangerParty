@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.games.Games;
@@ -78,6 +79,7 @@ public class SetUpActivity extends AppCompatActivity implements
     // My participant ID in the currently active game
     String mMyParticipantId = null;
     private String mPlayerId;
+    private GoogleSignInAccount account;
 
 
 
@@ -87,13 +89,14 @@ public class SetUpActivity extends AppCompatActivity implements
 //        Intent i = getIntent();
         // Create the client used to sign in.
           mGoogleSignInClient = GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN);
-//
-//          GoogleSignInAccount account = getIntent().getParcelableExtra("ACCOUNT");
-//        Log.d(TAG,  GoogleSignIn.getLastSignedInAccount(this)+ "HELLO ");
-//
-//
-//            mRealTimeMultiplayerClient =
-//                  Games.getRealTimeMultiplayerClient(this, account);
+
+          //account = getIntent().getParcelableExtra("ACCOUNT");
+
+        account = GoogleSignIn.getLastSignedInAccount(this);
+
+
+            mRealTimeMultiplayerClient =
+                  Games.getRealTimeMultiplayerClient(this, account);
 //        for (int id : CLICKABLES) {
 //            findViewById(id).setOnClickListener(this);
 //
