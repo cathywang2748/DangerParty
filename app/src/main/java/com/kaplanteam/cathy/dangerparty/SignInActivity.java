@@ -7,11 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.games.Games;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 
 
@@ -186,16 +183,16 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 //        }
     //}
 
-    private void showInvitationInbox() {
-        Games.getInvitationsClient(this, GoogleSignIn.getLastSignedInAccount(this))
-                .getInvitationInboxIntent()
-                .addOnSuccessListener(new OnSuccessListener<Intent>() {
-                    @Override
-                    public void onSuccess(Intent intent) {
-                        startActivityForResult(intent, RC_INVITATION_INBOX);
-                    }
-                });
-    }
+//    private void showInvitationInbox() {
+//        Games.getInvitationsClient(this, GoogleSignIn.getLastSignedInAccount(this))
+//                .getInvitationInboxIntent()
+//                .addOnSuccessListener(new OnSuccessListener<Intent>() {
+//                    @Override
+//                    public void onSuccess(Intent intent) {
+//                        startActivityForResult(intent, RC_INVITATION_INBOX);
+//                    }
+//                });
+//    }
 
     @Override
     public void onClick(View v) {
