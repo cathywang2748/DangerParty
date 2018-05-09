@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.kaplanteam.cathy.dangerparty.Level1.FragmentLevel1B;
+import com.kaplanteam.cathy.dangerparty.Level1.FragmentLevel1A;
 import com.kaplanteam.cathy.dangerparty.Level3.FragmentLevel3A;
 
 /**
@@ -26,7 +26,7 @@ public class GameActivity extends AppCompatActivity {
             switchToNewScreen();
         }
         else{
-            currentFragment = new FragmentLevel1B();
+           currentFragment = new FragmentLevel1A();
             switchToNewScreen();
         }
     }

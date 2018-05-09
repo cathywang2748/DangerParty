@@ -1,6 +1,8 @@
 package com.kaplanteam.cathy.dangerparty.Level1;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -54,11 +56,19 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
     private Fragment currentFragment;
     private boolean firstTime;
 
+
+    private SharedPreferences counter;
+    private SharedPreferences.Editor editor;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.level1a, container, false);
+
+        counter = this.getActivity().getSharedPreferences("HELLO", Context.MODE_PRIVATE);
+        editor = counter.edit();
+
 
         //wire any widgets -- must use rootView.findViewById
 
@@ -388,12 +398,14 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
 
     private void success(){
         t.cancel();
-        successScore++;
+        successScore+=100;
         if(successScore == MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
             currentFragment = new FragmentLevel2A(); //randomize?
             switchToNewScreen();
+            editor.putInt("score", successScore);
+            editor.commit();
         }
         else{
             text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
@@ -407,8 +419,10 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
-            currentFragment = new FragmentLevel2A(); //randomize?
+           currentFragment = new FragmentLevel2A(); //randomize?
             switchToNewScreen();
+            //Intent i = new Intent(getActivity(), EndGameActivity.class);
+            //startActivity(i);
         }
         else{
             swap(string, current);
