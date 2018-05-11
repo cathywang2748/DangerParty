@@ -1,10 +1,13 @@
 package com.kaplanteam.cathy.dangerparty.Level1;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MotionEventCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -12,8 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaplanteam.cathy.dangerparty.Level2.FragmentLevel2B;
 import com.kaplanteam.cathy.dangerparty.R;
 
 /**
@@ -26,6 +31,31 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
     private boolean sailsOpen, spyglassOpen, wheelClockwise;
     private double angle, last, theta;
 
+    private View timerView;
+    private final int MILLIS_IN_FUTURE = 7000;
+    private final int COUNT_DOWN_INTERVAL = 100;
+    private final float SCREEN_WIDTH = Resources.getSystem().getDisplayMetrics().widthPixels;
+    private CountDownTimer t;
+
+    private final int NUMBER_OF_STRINGS = 8;
+    private String[] strings;
+    private String[] currentStrings;
+    private TextView text;
+
+    private boolean popS, popM, popL;
+    private int swirl;
+
+    private int successScore;
+    private int failScore;
+    private final int MOVE_ON_SUCCESSES = 10;
+    private final int END_GAME_FAILURES = 5;
+
+    private Fragment currentFragment;
+    private boolean firstTime;
+
+    private SharedPreferences counter;
+    private SharedPreferences.Editor editor;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -36,6 +66,52 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
         spyglassOpen = true;
         wireWidgets(rootView);
         setListeners();
+
+        strings = new String[NUMBER_OF_STRINGS];
+        strings[0] = "Belly flop";
+        strings[1] = "Front flop";
+        strings[2] = "Back flop";
+        strings[3] = "Give up hope";
+        strings[4] = "Turn to port";
+        strings[5] = "Turn to starboard";
+        strings[6] = "Open the sails";
+        strings[7] = "Close the spyglass";
+
+        currentStrings = new String[2];
+        currentStrings[0] = "CLose the sails";
+        currentStrings[1] = "Open the spyglass";
+
+        text.setText("Get Ready");// could make ready set go or other animation type thing
+
+        //get any other initial set up done
+        t = new CountDownTimer(MILLIS_IN_FUTURE, COUNT_DOWN_INTERVAL) {
+            @Override
+            public void onTick(long l) {
+                timerView.setX(l / (float) MILLIS_IN_FUTURE * SCREEN_WIDTH - SCREEN_WIDTH);
+            }
+
+            @Override
+            public void onFinish() {
+                if(firstTime){
+                    text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                    t.start();
+                    firstTime = false;
+                }
+                else{
+                    timerView.setX(0 - SCREEN_WIDTH);
+                    //closer to death
+                    failScore++;
+                    if(failScore >= END_GAME_FAILURES){
+                        //End Game
+                        Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                        t.start();
+                    }
+                }
+            }
+        }.start();
 
         return rootView;
     }
@@ -49,6 +125,8 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
         wheel = rootView.findViewById(R.id.imageView_wheel);
         spyglass2 = rootView.findViewById(R.id.imageView_spyglass2);
         spyglass3 = rootView.findViewById(R.id.imageView_spyglass3);
+        timerView = rootView.findViewById(R.id.timer);
+        text = rootView.findViewById(R.id.textView);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -66,21 +144,63 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.button_belly:
+                if(text.getText().equals(strings[0])){
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.button_front:
+                if(text.getText().equals(strings[1])){
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.button_back:
+                if(text.getText().equals(strings[2])){
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.button_give_up:
+                if(text.getText().equals(strings[3])){
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.imageView_sails:
                 if(sailsOpen){
-                    ImageView v = (ImageView) view;
-                    v.setImageResource(R.drawable.sail_closed);
+                    if(text.getText().equals("Close the sails")){
+                        success(6, 0);
+                        ImageView v = (ImageView) view;
+                        v.setImageResource(R.drawable.sail_closed);
+                    }
+                    else{
+                        successScore--;
+                        swap(6, 0);
+                        ImageView v = (ImageView) view;
+                        v.setImageResource(R.drawable.sail_open);
+                    }
                 }
                 else{
-                    ImageView v = (ImageView) view;
-                    v.setImageResource(R.drawable.sail_open);
+                    if(text.getText().equals("Open the sails")){
+                        success(6, 0);
+                        ImageView v = (ImageView) view;
+                        v.setImageResource(R.drawable.sail_open);
+                    }
+                    else{
+                        successScore--;
+                        swap(6, 0);
+                        ImageView v = (ImageView) view;
+                        v.setImageResource(R.drawable.sail_closed);
+                    }
                 }
                 sailsOpen = !sailsOpen;
                 break;
@@ -115,10 +235,20 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
                     return true;
                 case (MotionEvent.ACTION_UP):
                     if (wheelClockwise) { //starboard
-                        Toast.makeText(getContext(), "CLOCKWISE", Toast.LENGTH_SHORT).show();
+                        if(text.getText().equals("Turn to starboard")){
+                            success();
+                        }
+                        else{
+                            successScore--;
+                        }
                     }
                     else{ //port
-                        Toast.makeText(getContext(), "COUNTERCLOCKWISE", Toast.LENGTH_SHORT).show();
+                        if(text.getText().equals("Turn to port")){
+                            success();
+                        }
+                        else{
+                            successScore--;
+                        }
                     }
                     return true;
                 default:
@@ -142,11 +272,20 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
                     if(y > dpToPx(138)/2 + dpToPx(50)){
                         view.setY(dpToPx(138));
                         spyglass2.setY(dpToPx(155));
-                        spyglassOpen = true;//replace
+                        spyglassOpen = true;
                     } else {
                         view.setY(dpToPx(0));
                         spyglass2.setY(dpToPx(88));
                         spyglassOpen = false;
+                    }
+
+                    if(text.getText().equals("Close the spyglass") && spyglassOpen
+                            || text.getText().equals("Open the spyglass") && !spyglassOpen){
+                        success(7, 1);
+                    }
+                    else{
+                        swap(7, 1);
+                        successScore--;
                     }
                     return true;
                 default:
@@ -159,5 +298,58 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
     public static int dpToPx(int dp)
     {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    private void success(){
+        t.cancel();
+        successScore++;
+        if(successScore == MOVE_ON_SUCCESSES){
+            //move to next level
+            Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            currentFragment = new FragmentLevel2B(); //randomize?
+            switchToNewScreen();
+            editor.putInt("score", successScore*100);
+            editor.commit();
+        }
+        else{
+            text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+            t.start();
+        }
+    }
+
+    private void success(int string, int current){
+        t.cancel();
+        successScore++;
+        if(successScore >= MOVE_ON_SUCCESSES){
+            //move to next level
+            Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            currentFragment = new FragmentLevel2B(); //randomize?
+            switchToNewScreen();
+            //Intent i = new Intent(getActivity(), EndGameActivity.class);
+            //startActivity(i);
+            //editor.putInt("score", successScore*100);
+            //editor.commit();
+        }
+        else{
+            swap(string, current);
+            text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+            t.start();
+        }
+    }
+
+    private void swap(int string, int current){
+        String currentString = strings[string];
+        strings[string] = currentStrings[current];
+        currentStrings[current] = currentString;
+    }
+
+    private void switchToNewScreen() {
+        //tell the fragment manager that if our current fragment isn't null, to replace whatever is there with it
+        FragmentManager fm = getFragmentManager();
+        if (currentFragment != null) {
+            fm.beginTransaction()
+                    .replace(R.id.fragment_container, currentFragment)
+                    .commit();
+        }
     }
 }

@@ -56,7 +56,6 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
     private Fragment currentFragment;
     private boolean firstTime;
 
-
     private SharedPreferences counter;
     private SharedPreferences.Editor editor;
 
@@ -398,13 +397,13 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
 
     private void success(){
         t.cancel();
-        successScore+=100;
-        if(successScore == MOVE_ON_SUCCESSES){
+        successScore++;
+        if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
             currentFragment = new FragmentLevel2A(); //randomize?
             switchToNewScreen();
-            editor.putInt("score", successScore);
+            editor.putInt("score", successScore*100);
             editor.commit();
         }
         else{
@@ -423,6 +422,8 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
             switchToNewScreen();
             //Intent i = new Intent(getActivity(), EndGameActivity.class);
             //startActivity(i);
+            editor.putInt("score", successScore*100);
+            editor.commit();
         }
         else{
             swap(string, current);
