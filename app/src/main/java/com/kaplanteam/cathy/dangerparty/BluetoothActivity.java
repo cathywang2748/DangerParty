@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,8 +25,15 @@ import java.util.Set;
 public class BluetoothActivity extends AppCompatActivity implements View.OnClickListener{
     private BluetoothAdapter mBluetoothAdapter;
 
-    private static final int REQUEST_ENABLE = 0;
-    private static final int REQUEST_DISCOVERABLE = 1;
+    private static final int REQUEST_DISCOVERABLE = 10;
+
+    private static final int STATE_LISTENING = 1;
+    private static final int STATE_CONNECTING = 2;
+    private static final int STATE_CONNECTED = 3;
+    private static final int STATE_CONNECTION_FAILED = 4;
+    private static final int STATE_MESSAGE_RECIEVED = 5;
+
+    int REQUEST_ENABLE_BLUETOOTH = 1;
 
     private Button host;
     private Button join;
@@ -78,7 +86,8 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                 // Discovery has found a device. Get the BluetoothDevice
                 // object and its info from the Intent.
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                pairedDevices= mBluetoothAdapter.getBondedDevices();
+                pairedDevices = mBluetoothAdapter.getBondedDevices();
+                Log.d("DEVICES", "" + pairedDevices);
                 //String deviceHardwareAddress = device.getAddress(); // MAC address
                 if(device.getName() != null){
                     deviceNames.add(device.getName());
@@ -110,20 +119,6 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                 }
                 break;
             case R.id.button_join: //list paired devices
-//                pairedDevices = mBluetoothAdapter.getBondedDevices();
-//                Toast.makeText(this, "" + pairedDevices.size(), Toast.LENGTH_SHORT).show();
-//                deviceNames = new ArrayList<>();
-//                for(BluetoothDevice bt : pairedDevices){
-//                    deviceNames.add(bt.getName());
-//                }
-//                adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, deviceNames);
-//                bt_listView.setAdapter(adapter);
-//                boolean d = mBluetoothAdapter.startDiscovery();
-//                Log.d("discovery starts", "" + d);
-//                // Register for broadcasts when a device is discovered.
-//                IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-//                registerReceiver(mReceiver, filter);
-//                break;
                 mBluetoothAdapter.startDiscovery();
                 break;
         }
