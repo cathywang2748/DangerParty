@@ -25,15 +25,16 @@ import java.util.Set;
 public class BluetoothActivity extends AppCompatActivity implements View.OnClickListener{
     private BluetoothAdapter mBluetoothAdapter;
 
-    private static final int REQUEST_DISCOVERABLE = 10;
+    private static final int REQUEST_ENABLE = 0;
+    private static final int REQUEST_DISCOVERABLE = 1;
 
-    private static final int STATE_LISTENING = 1;
-    private static final int STATE_CONNECTING = 2;
-    private static final int STATE_CONNECTED = 3;
-    private static final int STATE_CONNECTION_FAILED = 4;
-    private static final int STATE_MESSAGE_RECIEVED = 5;
-
-    int REQUEST_ENABLE_BLUETOOTH = 1;
+//    private static final int STATE_LISTENING = 1;
+//    private static final int STATE_CONNECTING = 2;
+//    private static final int STATE_CONNECTED = 3;
+//    private static final int STATE_CONNECTION_FAILED = 4;
+//    private static final int STATE_MESSAGE_RECIEVED = 5;
+//
+//    int REQUEST_ENABLE_BLUETOOTH = 1;
 
     private Button host;
     private Button join;
@@ -82,21 +83,21 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // Discovery has found a device. Get the BluetoothDevice
-                // object and its info from the Intent.
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) { // Discovery has found a device. Get the BluetoothDevice object and its info from the Intent.
+
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 pairedDevices = mBluetoothAdapter.getBondedDevices();
-                Log.d("DEVICES", "" + pairedDevices);
-                //String deviceHardwareAddress = device.getAddress(); // MAC address
+
+                Log.d("DEVICES", "" + pairedDevices); //String deviceHardwareAddress = device.getAddress(); // MAC address
+
                 if(device.getName() != null){
                     deviceNames.add(device.getName());
                 }
                 else{
                     deviceNames.add("Unknown");
                 }
+
                 adapter.notifyDataSetChanged();
-                //Toast.makeText(context, "Device found: " + deviceName, Toast.LENGTH_SHORT).show();
             }
         }
     };
