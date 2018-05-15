@@ -178,7 +178,10 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
     {
-       //https://www.youtube.com/watch?v=gi-lQwO17Sg&list=PLFh8wpMiEi8_I3ujcYY3-OaaYyLudI_qi&index=11
+       ClientClass clientClass = new ClientClass(btDevices.get(i));
+       clientClass.start();
+
+        Toast.makeText(this, "Connecting", Toast.LENGTH_SHORT).show();
     }
 
     private class ServerClass extends Thread
@@ -233,9 +236,9 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
         private BluetoothDevice device;
         private BluetoothSocket socket;
 
-        public ClientClass(BluetoothDevice device)
+        public ClientClass(BluetoothDevice device1)
         {
-            this.device = device;
+            device = device1;
 
             try {
                 socket = device.createRfcommSocketToServiceRecord(MY_UUID);
