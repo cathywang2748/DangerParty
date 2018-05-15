@@ -1,5 +1,6 @@
 package com.kaplanteam.cathy.dangerparty.Level2;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaplanteam.cathy.dangerparty.EndGameActivity;
 import com.kaplanteam.cathy.dangerparty.R;
 
 /**
@@ -95,7 +97,8 @@ public class FragmentLevel2B extends Fragment implements View.OnClickListener {
                     //closer to death
                     failScore++;
                     if(failScore >= END_GAME_FAILURES){
-                        //End Game
+                        Intent i = new Intent(getActivity(), EndGameActivity.class);
+                        startActivity(i);//End Game
                         Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
                     }
                     else{
@@ -254,6 +257,8 @@ public class FragmentLevel2B extends Fragment implements View.OnClickListener {
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            editor.putInt("score", successScore*100);
+            editor.commit();
             currentFragment = new FragmentLevel2A(); //randomize?
             switchToNewScreen();
             //editor.putInt("score", successScore*100);

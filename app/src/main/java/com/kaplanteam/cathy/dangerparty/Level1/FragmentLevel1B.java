@@ -1,6 +1,8 @@
 package com.kaplanteam.cathy.dangerparty.Level1;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaplanteam.cathy.dangerparty.EndGameActivity;
 import com.kaplanteam.cathy.dangerparty.Level2.FragmentLevel2B;
 import com.kaplanteam.cathy.dangerparty.R;
 
@@ -62,6 +65,9 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.level1b, container, false);
 
+        counter = this.getActivity().getSharedPreferences("HELLO", Context.MODE_PRIVATE);
+        editor = counter.edit();
+
         sailsOpen = false;
         spyglassOpen = true;
         wireWidgets(rootView);
@@ -104,6 +110,8 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
                     if(failScore >= END_GAME_FAILURES){
                         //End Game
                         Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(getActivity(), EndGameActivity.class);
+                        startActivity(i);
                     }
                     else{
                         text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
@@ -306,10 +314,9 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
         if(successScore == MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            editor.putInt("score", successScore*100);
             currentFragment = new FragmentLevel2B(); //randomize?
             switchToNewScreen();
-            editor.putInt("score", successScore*100);
-            editor.commit();
         }
         else{
             text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
@@ -323,6 +330,8 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            editor.putInt("score", successScore*100);
+            editor.commit();
             currentFragment = new FragmentLevel2B(); //randomize?
             switchToNewScreen();
             //Intent i = new Intent(getActivity(), EndGameActivity.class);

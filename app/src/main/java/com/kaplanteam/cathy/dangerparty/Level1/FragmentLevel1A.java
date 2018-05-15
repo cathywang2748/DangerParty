@@ -2,6 +2,7 @@ package com.kaplanteam.cathy.dangerparty.Level1;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaplanteam.cathy.dangerparty.EndGameActivity;
 import com.kaplanteam.cathy.dangerparty.Level2.FragmentLevel2A;
 import com.kaplanteam.cathy.dangerparty.R;
 
@@ -126,6 +128,8 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
                     if(failScore >= END_GAME_FAILURES){
                         //End Game
                         Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(getActivity(), EndGameActivity.class);
+                        startActivity(i);
                     }
                     else{
                         text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
@@ -401,10 +405,11 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
-            currentFragment = new FragmentLevel2A(); //randomize?
-            switchToNewScreen();
             editor.putInt("score", successScore*100);
             editor.commit();
+            currentFragment = new FragmentLevel2A();//randomize?
+            switchToNewScreen();
+
         }
         else{
             text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
