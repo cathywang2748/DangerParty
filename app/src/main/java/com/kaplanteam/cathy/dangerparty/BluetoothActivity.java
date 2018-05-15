@@ -52,7 +52,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
     private ArrayAdapter adapter;
     private ArrayList<String> deviceNames;
     private Set<BluetoothDevice> pairedDevices;
-    private BluetoothDevice[] btDevices;
+    private ArrayList<BluetoothDevice> btDevices;
 
     //UUID uuid = UUID.fromString("e141d643-1f16-443f-9da7-c5fbc7081397");
 
@@ -75,6 +75,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
         registerReceiver(mReceiver, filter);
 
         deviceNames = new ArrayList<>();
+        btDevices = new ArrayList<>();
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, deviceNames);
         bt_listView.setAdapter(adapter);
     }
@@ -104,11 +105,14 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
 
                 Log.d("DEVICES", "" + pairedDevices); //String deviceHardwareAddress = device.getAddress(); // MAC address
 
-                if(device.getName() != null){
-                    deviceNames.add(device.getName());
-                }
-                else{
-                    deviceNames.add("Unknown");
+                if(device != null){
+                    btDevices.add(device);
+                    if(device.getName() != null){
+                        deviceNames.add(device.getName());
+                    }
+                    else{
+                        deviceNames.add("Unknown");
+                    }
                 }
 
                 adapter.notifyDataSetChanged();
