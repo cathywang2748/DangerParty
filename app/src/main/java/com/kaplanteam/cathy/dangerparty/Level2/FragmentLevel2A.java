@@ -1,6 +1,9 @@
 package com.kaplanteam.cathy.dangerparty.Level2;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -20,6 +23,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaplanteam.cathy.dangerparty.EndGameActivity;
 import com.kaplanteam.cathy.dangerparty.Level3.FragmentLevel3A;
 import com.kaplanteam.cathy.dangerparty.R;
 
@@ -53,11 +57,17 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
     private Fragment currentFragment;
     private boolean firstTime;
 
+    private SharedPreferences counter;
+    private SharedPreferences.Editor editor;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.level2a, container, false);
+
+        counter = this.getActivity().getSharedPreferences("HELLO", Context.MODE_PRIVATE);
+        editor = counter.edit();
 
         //wire any widgets -- must use rootView.findViewById
         angle = 0;
@@ -122,6 +132,8 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
                     //closer to death
                     failScore++;
                     if(failScore >= END_GAME_FAILURES){
+                        Intent i = new Intent(getActivity(), EndGameActivity.class);
+                        startActivity(i);
                         //End Game
 
                     }
@@ -556,6 +568,8 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
         if(successScore == MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            editor.putInt("score", successScore*100);
+            editor.commit();
             currentFragment = new FragmentLevel3A(); //randomize?
             switchToNewScreen();
         }
@@ -571,6 +585,8 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            editor.putInt("score", successScore*100);
+            editor.commit();
             currentFragment = new FragmentLevel3A(); //randomize?
             switchToNewScreen();
         }

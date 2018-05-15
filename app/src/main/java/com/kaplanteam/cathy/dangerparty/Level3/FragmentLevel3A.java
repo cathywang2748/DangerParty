@@ -1,5 +1,7 @@
 package com.kaplanteam.cathy.dangerparty.Level3;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,12 +26,18 @@ public class FragmentLevel3A extends Fragment implements View.OnClickListener {
     private ConstraintLayout background;
     private boolean lightOn;
 
+    private SharedPreferences counter;
+    private SharedPreferences.Editor editor;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.level3a, container, false);
+
+        counter = getActivity().getSharedPreferences("HELLO", Context.MODE_PRIVATE);
+        editor = counter.edit();
 
         //wire any widgets -- must use rootView.findViewById
         lightOn = true;
