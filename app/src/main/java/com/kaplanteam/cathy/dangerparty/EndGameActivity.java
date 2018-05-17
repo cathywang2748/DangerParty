@@ -17,10 +17,9 @@ import java.util.ArrayList;
 
 public class EndGameActivity extends AppCompatActivity {
 
-    private TextView scoreText, highScore,prizeDesc;
-    private SharedPreferences counter;
+    private TextView scoreText, highScoreText, prizeDesc;
+    private SharedPreferences counter, highScore;
     private SharedPreferences.Editor editor;
-    private int highScoreValue;
     private ImageView prizeImg;
     private Button playAgain;
 
@@ -51,6 +50,9 @@ public class EndGameActivity extends AppCompatActivity {
         prizeImg.setImageResource(fruit.get(rand).getFruitPic());
 
         counter = this.getSharedPreferences("HELLO", MODE_PRIVATE);
+        highScore = this.getSharedPreferences("SCORE", MODE_PRIVATE);
+        editor = highScore.edit();
+
 
         playAgain = (Button) findViewById(R.id.button_play_again);
         playAgain.setOnClickListener(new View.OnClickListener() {
@@ -62,17 +64,19 @@ public class EndGameActivity extends AppCompatActivity {
         });
 
         scoreText = (TextView) findViewById(R.id.textview_score);
-        highScore = (TextView) findViewById(R.id.textView_highScore);
+        highScoreText = (TextView) findViewById(R.id.textView_highScore);
 
 
         scoreText.setText("Score: " + counter.getInt("score", -1));
 
-        if(counter.getInt("score", -1) > highScoreValue) {
-            highScoreValue = counter.getInt("score", -1);
-            highScore.setText("High Score: " + highScoreValue);
+        if(counter.getInt("score", -1) > highScore.getInt("highScore", -1))
+        {
+            editor.putInt("highScore", counter.getInt("score", -1));
+            editor.commit();
+            highScoreText.setText("High Score: " + highScore.getInt("highScore", -1));
         }
         else {
-            highScore.setText("High Score:" + highScoreValue);
+            highScoreText.setText("High Score: " + highScore.getInt("highScore", -1));
         }
 
         //fruits for game

@@ -52,6 +52,8 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
     private int failScore;
     private final int MOVE_ON_SUCCESSES = 10;
     private final int END_GAME_FAILURES = 5;
+    private ImageView liveOne, liveTwo, liveThree, liveFour, liveFive;
+    private ImageView[] img;
 
     private Fragment currentFragment;
     private boolean firstTime;
@@ -72,6 +74,13 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
         spyglassOpen = true;
         wireWidgets(rootView);
         setListeners();
+
+        img = new ImageView[5];
+        img[0] = liveFive;
+        img[1] = liveFour;
+        img[2] = liveThree;
+        img[3] = liveTwo;
+        img[4] = liveOne;
 
         strings = new String[NUMBER_OF_STRINGS];
         strings[0] = "Belly flop";
@@ -110,11 +119,14 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
                     if(failScore >= END_GAME_FAILURES){
                         //End Game
                         Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+                        editor.putInt("score", successScore*100);
+                        editor.commit();
                         Intent i = new Intent(getActivity(), EndGameActivity.class);
                         startActivity(i);
                     }
                     else{
                         text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                        img[END_GAME_FAILURES- failScore].setVisibility(View.INVISIBLE);
                         t.start();
                     }
                 }
@@ -135,6 +147,11 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
         spyglass3 = rootView.findViewById(R.id.imageView_spyglass3);
         timerView = rootView.findViewById(R.id.timer);
         text = rootView.findViewById(R.id.textView);
+        liveOne = rootView.findViewById(R.id.imageView_live_one);
+        liveTwo = rootView.findViewById(R.id.imageView_live_two);
+        liveThree = rootView.findViewById(R.id.imageView_live_three);
+        liveFour = rootView.findViewById(R.id.imageView_live_four);
+        liveFive = rootView.findViewById(R.id.imageView_live_five);
     }
 
     @SuppressLint("ClickableViewAccessibility")
