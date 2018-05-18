@@ -15,6 +15,7 @@ public class BackgroundActivity extends AppCompatActivity {
     private TypeWriter tw;
     private Button ready;
 
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.background);

@@ -17,10 +17,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
@@ -53,6 +57,10 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<String> deviceNames;
     private Set<BluetoothDevice> pairedDevices;
     private ArrayList<BluetoothDevice> btDevices;
+    private TextView btStatus;
+    private EditText msg;
+    private Button send;
+    private SendReceive sendReceive;
 
     //UUID uuid = UUID.fromString("e141d643-1f16-443f-9da7-c5fbc7081397");
 
@@ -85,6 +93,9 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
         join = findViewById(R.id.button_join);
         listen = findViewById(R.id.button_listen);
         bt_listView = findViewById(R.id.listView);
+        btStatus = findViewById(R.id.textView_status);
+        msg = findViewById(R.id.editText_msg);
+        send = findViewById(R.id.button_send);
     }
 
     private void setOnClickListeners(){
@@ -92,6 +103,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
         join.setOnClickListener(this);
         listen.setOnClickListener(this);
         bt_listView.setOnItemClickListener(this);
+        send.setOnClickListener(this);
     }
 
     // Create a BroadcastReceiver for ACTION_FOUND.
@@ -107,8 +119,8 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
 
                 if(device != null){
                     btDevices.add(device);
-                    if(device.getName() != null){
-                        deviceNames.add(device.getName());
+                    if(device.getAddress() != null){
+                        deviceNames.add(device.getAddress());
                     }
                     else{
                         deviceNames.add("Unknown");
@@ -144,6 +156,10 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                 ServerClass serverClass = new ServerClass();
                 serverClass.start();
                 break;
+            case R.id.button_send:
+                String string = String.valueOf(msg.getText().toString());
+                sendReceive.write(string.getBytes());
+                break;
 
 
         }
@@ -168,7 +184,9 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                     Toast.makeText(BluetoothActivity.this, "Connection Failed", Toast.LENGTH_SHORT).show();
                     break;
                 case STATE_MESSAGE_RECIEVED:
-                    //saving for later
+                    byte[] readBuffer = (byte[])message.obj;
+                    String tempMessage = new String(readBuffer, 0, message.arg1);
+                    btStatus.setText("" + tempMessage);
                     break;
             }
             return false;
@@ -181,7 +199,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
        ClientClass clientClass = new ClientClass(btDevices.get(i));
        clientClass.start();
 
-        Toast.makeText(this, "Connecting", Toast.LENGTH_SHORT).show();
+        btStatus.setText("Connecting");
     }
 
     private class ServerClass extends Thread
@@ -222,7 +240,9 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                     msg.what = STATE_CONNECTED;
                     handler.sendMessage(msg);
 
-                    //write some code for send / receive
+                    //code for send / receive
+                    sendReceive = new SendReceive(socket);
+                    sendReceive.start();
                     break;
                 }
 
@@ -256,11 +276,66 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                 Message msg = Message.obtain();
                 msg.what = STATE_CONNECTED;
                 handler.sendMessage(msg);
+
+                //code for send/receive
+                sendReceive = new SendReceive(socket);
+                sendReceive.start();
+
             } catch (IOException e) {
                 e.printStackTrace();
                 Message msg = Message.obtain();
                 msg.what = STATE_CONNECTION_FAILED;
                 handler.sendMessage(msg);
+            }
+        }
+    }
+
+    private class SendReceive extends Thread
+    {
+        private final BluetoothSocket bluetoothSocket;
+        private final InputStream inputStream;
+        private final OutputStream outputStream;
+
+        private SendReceive(BluetoothSocket socket)
+        {
+            bluetoothSocket = socket;
+            InputStream tempIn = null;
+            OutputStream tempOut = null;
+
+            try {
+                tempIn = bluetoothSocket.getInputStream();
+                tempOut = bluetoothSocket.getOutputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            inputStream = tempIn;
+            outputStream =tempOut;
+        }
+
+        public void run()
+        {
+            byte[] buffer = new byte[1024];
+            int bytes;
+
+            while (true)
+            {
+                try {
+                    bytes = inputStream.read(buffer);
+                    handler.obtainMessage(STATE_MESSAGE_RECIEVED, bytes, -1, buffer).sendToTarget();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        public void write(byte[] bytes)
+        {
+            try {
+                outputStream.write(bytes);
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
