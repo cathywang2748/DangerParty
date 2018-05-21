@@ -1,20 +1,25 @@
 package com.kaplanteam.cathy.dangerparty.Level3;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.kaplanteam.cathy.dangerparty.EndGameActivity;
 import com.kaplanteam.cathy.dangerparty.R;
 
 /**
@@ -27,6 +32,29 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
     private boolean lightOn;
     private ConstraintLayout background;
     private TextView scream;
+
+    private View timerView;
+    private final int MILLIS_IN_FUTURE = 7000;
+    private final int COUNT_DOWN_INTERVAL = 100;
+    private final float SCREEN_WIDTH = Resources.getSystem().getDisplayMetrics().widthPixels;
+    private CountDownTimer t;
+
+    private final int NUMBER_OF_STRINGS = 8;
+    private String[] strings;
+    private final int NUMBER_OF_STRINGS_DARK = 8;
+    private String[] stringsDark;
+    private TextView text;
+
+    private boolean popS, popM, popL;
+    private int swirl;
+
+    private int successScore;
+    private int failScore;
+    private final int MOVE_ON_SUCCESSES = 10;
+    private final int END_GAME_FAILURES = 5;
+
+    private Fragment currentFragment;
+    private boolean firstTime;
 
     private SharedPreferences counter;
     private SharedPreferences.Editor editor;
@@ -47,7 +75,58 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
         wireWidgets(rootView);
         setListeners();
 
+        strings = new String[NUMBER_OF_STRINGS];
+        strings[0] = "Holler woolloomooloo";
+        strings[1] = "Humm bumbadumbdum";
+        strings[2] = "Sing banamanamum";
+        strings[3] = "Screetch boomsicklepop";
+        strings[4] = "Interpret the cave drawings";
+        strings[5] = "Light the dynamite";
+        strings[6] = "Lick the left fork";
+        strings[7] = "Bite the right fork";
+
+        stringsDark = new String[NUMBER_OF_STRINGS_DARK];
+        stringsDark[0] = "Holler woolloomooloo";
+        stringsDark[1] = "Humm bumbadumbdum";
+        stringsDark[2] = "Sing banamanamum";
+        stringsDark[3] = "Screetch boomsicklepop";
+        stringsDark[4] = "Eat some glow worms";
+        stringsDark[5] = "Light the dynamite";
+        stringsDark[6] = "Lick the left fork";
+        stringsDark[7] = "Bite the right fork";
+
+        text.setText("Get Ready");// could make ready set go or other animation type thing
+
         //get any other initial set up done
+        t = new CountDownTimer(MILLIS_IN_FUTURE, COUNT_DOWN_INTERVAL) {
+            @Override
+            public void onTick(long l) {
+                timerView.setX(l / (float) MILLIS_IN_FUTURE * SCREEN_WIDTH - SCREEN_WIDTH);
+            }
+
+            @Override
+            public void onFinish() {
+                if(firstTime){
+                    text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                    t.start();
+                    firstTime = false;
+                }
+                else{
+                    timerView.setX(0 - SCREEN_WIDTH);
+                    //closer to death
+                    failScore++;
+                    if(failScore >= END_GAME_FAILURES){
+                        //End Game
+                        Intent i = new Intent(getActivity(), EndGameActivity.class);
+                        startActivity(i);
+                    }
+                    else{
+                        text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                        t.start();
+                    }
+                }
+            }
+        }.start();
 
         //return the view that we inflated
         return rootView;
@@ -66,6 +145,8 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
         caveWall = rootView.findViewById(R.id.imageView_cave_drawings);
         background = rootView.findViewById(R.id.level3b_background);
         scream = rootView.findViewById(R.id.textView_scream);
+        timerView = rootView.findViewById(R.id.timer);
+        text = rootView.findViewById(R.id.textView);
     }
 
     private void setListeners() {
@@ -83,15 +164,45 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.button_woo:
+                if(text.getText().equals(strings[0])){
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.button_banana:
+                if(text.getText().equals(strings[2])){
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.button_bum:
+                if(text.getText().equals(strings[1])){
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.button_boom:
+                if(text.getText().equals(strings[3])){
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.imageView_dynamite:
                 spark.setVisibility(View.VISIBLE);
+                if(text.getText().equals(strings[5])){
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 CountDownTimer timers = new CountDownTimer(6000, 1000) {
                     @Override
                     public void onTick(long l) {
@@ -117,12 +228,28 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
                 }.start();
                 break;
             case R.id.imageView_cave_drawings:
-                lightOn = !lightOn;
-                lightChange();
+                if(lightOn && text.getText().equals(strings[4]) || !lightOn && text.getText().equals(stringsDark[4])){
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.imageView_fork_left:
+                if(text.getText().equals(strings[6])){
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
             case R.id.imageView_fork_right:
+                if(text.getText().equals(strings[7])){
+                    success();
+                }
+                else{
+                    successScore--;
+                }
                 break;
         }
     }
@@ -140,4 +267,43 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void success(){
+        t.cancel();
+        successScore++;
+        if(successScore >= MOVE_ON_SUCCESSES){
+            //move to next level
+            Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            editor.putInt("score", successScore*100);
+            editor.commit();
+            //currentFragment = new FragmentLevel2A();//randomize?
+            //switchToNewScreen();
+            Toast.makeText(getContext(), "You Win!", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            if(lightOn){
+                text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                t.start();
+            }
+            else{
+                text.setText(stringsDark[(int)(Math.random()*NUMBER_OF_STRINGS_DARK)]);
+                t.start();
+            }
+        }
+    }
+
+    private void switchToNewScreen() {
+        //tell the fragment manager that if our current fragment isn't null, to replace whatever is there with it
+        FragmentManager fm = getFragmentManager();
+        if (currentFragment != null) {
+            fm.beginTransaction()
+                    .replace(R.id.fragment_container, currentFragment)
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        t.cancel();
+    }
 }

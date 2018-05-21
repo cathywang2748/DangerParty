@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaplanteam.cathy.dangerparty.EndGameActivity;
+import com.kaplanteam.cathy.dangerparty.Level3.FragmentLevel3B;
 import com.kaplanteam.cathy.dangerparty.R;
 
 /**
@@ -273,9 +274,7 @@ public class FragmentLevel2B extends Fragment implements View.OnClickListener {
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
-            editor.putInt("score", successScore*100);
-            editor.commit();
-            currentFragment = new FragmentLevel2A(); //randomize?
+            currentFragment = new FragmentLevel3B(); //randomize?
             switchToNewScreen();
             //editor.putInt("score", successScore*100);
             //editor.commit();
@@ -292,7 +291,7 @@ public class FragmentLevel2B extends Fragment implements View.OnClickListener {
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
-            currentFragment = new FragmentLevel2A(); //randomize?
+            currentFragment = new FragmentLevel3B(); //randomize?
             switchToNewScreen();
             //Intent i = new Intent(getActivity(), EndGameActivity.class);
             //startActivity(i);
@@ -320,5 +319,11 @@ public class FragmentLevel2B extends Fragment implements View.OnClickListener {
                     .replace(R.id.fragment_container, currentFragment)
                     .commit();
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        t.cancel();
     }
 }

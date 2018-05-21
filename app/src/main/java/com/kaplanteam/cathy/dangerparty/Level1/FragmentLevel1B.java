@@ -93,7 +93,7 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
         strings[7] = "Close the spyglass";
 
         currentStrings = new String[2];
-        currentStrings[0] = "CLose the sails";
+        currentStrings[0] = "Close the sails";
         currentStrings[1] = "Open the spyglass";
 
         text.setText("Get Ready");// could make ready set go or other animation type thing
@@ -377,5 +377,11 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
                     .replace(R.id.fragment_container, currentFragment)
                     .commit();
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        t.cancel();
     }
 }

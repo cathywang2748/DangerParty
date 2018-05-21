@@ -5,100 +5,93 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="368dp"
-        android:layout_height="358dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+    <Button
+        android:id="@+id/button_discoverable"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_marginTop="8dp"
+        android:text="Discoverable"
+        app:layout_constraintEnd_toStartOf="@+id/button_host"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_host" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_host"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_marginTop="16dp"
-        android:text="HOST"
-        app:layout_constraintEnd_toStartOf="@+id/button_join"
+        android:layout_height="38dp"
+        android:layout_marginTop="8dp"
+        android:text="Host"
+        app:layout_constraintEnd_toStartOf="@+id/textView_status"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/button_listen"
+        app:layout_constraintStart_toEndOf="@+id/button_discoverable"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button_join"
+    <TextView
+        android:id="@+id/textView_status"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
-        android:text="JOIN"
+        android:layout_height="24dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Connection Status"
+        app:layout_constraintBottom_toBottomOf="@+id/button_host"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button_host"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_listen"
-        android:layout_width="wrap_content"
-        android:layout_height="33dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:text="Listen"
-        app:layout_constraintEnd_toStartOf="@+id/button_host"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView_status"
-        android:layout_width="wrap_content"
-        android:layout_height="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="Connection Status"
-        app:layout_constraintBottom_toTopOf="@+id/textView_received_msg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listView" />
-
-    <Button
         android:id="@+id/button_send"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
+        android:layout_height="38dp"
+        android:text="Send"
+        app:layout_constraintBottom_toBottomOf="@+id/editText_msg"
+        app:layout_constraintEnd_toEndOf="@+id/button_listen"
+        app:layout_constraintTop_toTopOf="@+id/editText_msg" />
+
+    <TextView
+        android:id="@+id/textView_received_msg"
+        android:layout_width="0dp"
+        android:layout_height="23dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="Send"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_msg" />
+        android:layout_marginTop="8dp"
+        android:text="Message"
+        app:layout_constraintEnd_toStartOf="@+id/button_listen"
+        app:layout_constraintStart_toStartOf="@+id/button_discoverable"
+        app:layout_constraintTop_toBottomOf="@+id/button_discoverable" />
 
     <EditText
         android:id="@+id/editText_msg"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_marginEnd="8dp"
+        android:layout_height="45dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/button_send"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_received_msg" />
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@+id/button_discoverable"
+        app:layout_constraintTop_toBottomOf="@+id/button_listen" />
 
-    <TextView
-        android:id="@+id/textView_received_msg"
-        android:layout_width="wrap_content"
-        android:layout_height="23dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="Message"
-        app:layout_constraintBottom_toTopOf="@+id/editText_msg"
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="368dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_status" />
+        app:layout_constraintTop_toBottomOf="@+id/button_send"
+        app:layout_constraintVertical_bias="0.471" />
+
+    <Button
+        android:id="@+id/button_listen"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:text="Listen"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_received_msg"
+        app:layout_constraintEnd_toEndOf="@+id/textView_status"
+        app:layout_constraintTop_toTopOf="@+id/textView_received_msg" />
 
 </android.support.constraint.ConstraintLayout>

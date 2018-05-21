@@ -629,4 +629,10 @@ public class FragmentLevel2A extends Fragment implements View.OnTouchListener, V
                     .commit();
         }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        t.cancel();
+    }
 }

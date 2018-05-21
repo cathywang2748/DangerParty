@@ -472,4 +472,10 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
                     .commit();
         }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        t.cancel();
+    }
 }
