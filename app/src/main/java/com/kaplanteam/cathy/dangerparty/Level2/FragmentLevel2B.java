@@ -1,5 +1,6 @@
 package com.kaplanteam.cathy.dangerparty.Level2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -62,6 +63,9 @@ public class FragmentLevel2B extends Fragment implements View.OnClickListener {
         full = false;
         wireWidgets(rootView);
         setListeners();
+
+        counter = this.getActivity().getSharedPreferences("HELLO", Context.MODE_PRIVATE);
+        editor = counter.edit();
 
         img = new ImageView[5];
         img[0] = liveFive;
@@ -273,6 +277,8 @@ public class FragmentLevel2B extends Fragment implements View.OnClickListener {
         successScore++;
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
+            editor.putInt("score", successScore*100);
+            editor.commit();
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
             currentFragment = new FragmentLevel3B(); //randomize?
             switchToNewScreen();
@@ -291,6 +297,8 @@ public class FragmentLevel2B extends Fragment implements View.OnClickListener {
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            editor.putInt("score", successScore*100);
+            editor.commit();
             currentFragment = new FragmentLevel3B(); //randomize?
             switchToNewScreen();
             //Intent i = new Intent(getActivity(), EndGameActivity.class);
