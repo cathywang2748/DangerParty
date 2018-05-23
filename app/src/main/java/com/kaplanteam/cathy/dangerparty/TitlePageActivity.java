@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 
-public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
+public class TitlePageActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button bluetooth, singlePlayer;
 
@@ -27,11 +27,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_single_player:
-                Intent i = new Intent(SignInActivity.this, GameActivity.class);
+                Intent i = new Intent(TitlePageActivity.this, GameActivity.class);
                 startActivity(i);
                 break;
             case R.id.button_bluetooth:
-                Intent b = new Intent(SignInActivity.this, BluetoothActivity.class);
+                Intent b = new Intent(TitlePageActivity.this, BluetoothActivity.class);
                 startActivity(b);
                 break;
         }

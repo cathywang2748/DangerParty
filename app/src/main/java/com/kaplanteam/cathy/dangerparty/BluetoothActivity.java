@@ -174,10 +174,10 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
             }
                 break;
             case R.id.button_bt_off:
-
+                if (mBluetoothAdapter.isEnabled()) {
+                    mBluetoothAdapter.disable();
+                }
                 break;
-
-
 
         }
     }
