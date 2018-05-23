@@ -56,6 +56,7 @@ public class FragmentBackground extends Fragment {
             }
         });
 
+        //
         //sets button visible after text finishes typing
         CountDownTimer timer = new CountDownTimer(33000,1000) {
             @Override
