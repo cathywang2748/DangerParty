@@ -154,7 +154,8 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.button_host: //list paired devices
                 Log.d("HOST", "clicked");
-                mBluetoothAdapter.startDiscovery();///PROBLEM HERE-------------------------------------------------
+                mBluetoothAdapter.cancelDiscovery();//NEW------------------------------------------------------------
+                mBluetoothAdapter.startDiscovery();///PROBLEM HERE - restart tablet
                 Log.d("BLUETOOTH", "" + mBluetoothAdapter.isDiscovering());
                 break;
             case R.id.button_listen: //list paired devices
@@ -206,9 +207,8 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
     {
-       ClientClass clientClass = new ClientClass(btDevices.get(i));
-       clientClass.start();
-
+        ClientClass clientClass = new ClientClass(btDevices.get(i));
+        clientClass.start();
         btStatus.setText("Connecting");
     }
 
@@ -232,7 +232,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
 
             while(socket == null)
             {
-                try {
+                try { //PROBLEM COULD BE HERE-------------------------------------------------------------------------------
                     Message msg = Message.obtain();
                     msg.what = STATE_CONNECTING;
                     handler.sendMessage(msg);
@@ -283,7 +283,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
 
         public void run()
         {
-            try {
+            try { //PROBLEM COULD BE HERE-------------------------------------------------------------------------------
                 socket.connect();
                 Message msg = Message.obtain();
                 msg.what = STATE_CONNECTED;
