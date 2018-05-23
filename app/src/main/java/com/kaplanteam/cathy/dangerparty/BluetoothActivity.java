@@ -48,8 +48,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
     private static final int STATE_MESSAGE_RECIEVED = 5;
 
     private Button discoverable;
-    private Button host;
-    private Button listen;
+    private Button list;
     private ListView bt_listView;
     private ArrayAdapter adapter;
     private ArrayList<String> deviceNames;
@@ -60,6 +59,8 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
     private EditText msg;
     private Button send;
     private SendReceive sendReceive;
+    private Button btOn;
+    private Button btOff;
 
     //UUID uuid = UUID.fromString("e141d643-1f16-443f-9da7-c5fbc7081397");
 
@@ -90,21 +91,23 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
 
     private void wireWidgets() {
         discoverable = findViewById(R.id.button_discoverable);
-        host = findViewById(R.id.button_host);
-        listen = findViewById(R.id.button_listen);
+        list = findViewById(R.id.button_list);
         bt_listView = findViewById(R.id.listView);
         btStatus = findViewById(R.id.textView_status);
         msgReceived = findViewById(R.id.textView_received_msg);
         msg = findViewById(R.id.editText_msg);
         send = findViewById(R.id.button_send);
+        btOn = findViewById(R.id.button_bt_on);
+        btOff = findViewById(R.id.button_bt_off);
     }
 
     private void setOnClickListeners(){
         discoverable.setOnClickListener(this);
-        host.setOnClickListener(this);
-        listen.setOnClickListener(this);
+        list.setOnClickListener(this);
         bt_listView.setOnItemClickListener(this);
         send.setOnClickListener(this);
+        btOn.setOnClickListener(this);
+        btOff.setOnClickListener(this);
     }
 
     // Create a BroadcastReceiver for ACTION_FOUND.
@@ -150,23 +153,30 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                     Intent intentDisc = new Intent(mBluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
                     startActivityForResult(intentDisc, REQUEST_DISCOVERABLE);
                     Log.d("isDISCOVERABLE", "true");
+                    ServerClass serverClass = new ServerClass();
+                    serverClass.start();
                 }
                 break;
-            case R.id.button_host: //list paired devices
+            case R.id.button_list: //list paired devices
                 Log.d("HOST", "clicked");
                 mBluetoothAdapter.cancelDiscovery();//NEW------------------------------------------------------------
                 mBluetoothAdapter.startDiscovery();///PROBLEM HERE - restart tablet
                 Log.d("BLUETOOTH", "" + mBluetoothAdapter.isDiscovering());
                 break;
-            case R.id.button_listen: //list paired devices
-                Log.d("LISTEN", "clicked");
-                ServerClass serverClass = new ServerClass();
-                serverClass.start();
-                break;
             case R.id.button_send:
                 String string = String.valueOf(msg.getText().toString());
                 sendReceive.write(string.getBytes());
                 break;
+            case R.id.button_bt_on:
+                if (!mBluetoothAdapter.isEnabled()) {
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, 1);
+            }
+                break;
+            case R.id.button_bt_off:
+
+                break;
+
 
 
         }
