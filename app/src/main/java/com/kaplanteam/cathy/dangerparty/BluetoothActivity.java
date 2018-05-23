@@ -74,7 +74,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
 
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, "Device does not support Bluetooth :(", Toast.LENGTH_LONG).show();
-            //finish();
+            finish();
         }
 
         wireWidgets();

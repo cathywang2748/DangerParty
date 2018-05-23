@@ -27,7 +27,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_single_player:
-                Intent i = new Intent(SignInActivity.this, BackgroundActivity.class);
+                Intent i = new Intent(SignInActivity.this, GameActivity.class);
                 startActivity(i);
                 break;
             case R.id.button_bluetooth:
