@@ -33,7 +33,7 @@ public class FragmentBackground extends Fragment {
 
         //sets typewriter
         tw.setText("");
-        tw.setCharacterDelay(150);
+        tw.setCharacterDelay(70);
         tw.animateText("Welcome to Danger Island. \n" +
                 "You came here for a party, and you \nwill get a party.\n" +
                 "Enter if you dare!\n" +
