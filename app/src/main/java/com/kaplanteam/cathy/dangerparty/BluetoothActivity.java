@@ -11,6 +11,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -62,7 +64,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
     private Button btOn;
     private Button btOff;
 
-    //UUID uuid = UUID.fromString("e141d643-1f16-443f-9da7-c5fbc7081397");
+    private Fragment currentFragment;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,6 +201,8 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                 case STATE_CONNECTED:
                     Toast.makeText(BluetoothActivity.this, "Connected", Toast.LENGTH_SHORT).show();
                     btStatus.setText("Connected");
+                    currentFragment = new FragmentBackground();
+                    switchToNewScreen();
                     break;
                 case STATE_CONNECTION_FAILED:
                     Toast.makeText(BluetoothActivity.this, "Connection Failed", Toast.LENGTH_SHORT).show();
@@ -359,6 +363,16 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void switchToNewScreen() {
+        //tell the fragment manager that if our current fragment isn't null, to replace whatever is there with it
+        FragmentManager fm = getSupportFragmentManager();
+        if (currentFragment != null) {
+            fm.beginTransaction()
+                    .replace(R.id.fragment_container, currentFragment)
+                    .commit();
         }
     }
 
