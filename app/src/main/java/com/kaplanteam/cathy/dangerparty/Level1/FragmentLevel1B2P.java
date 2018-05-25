@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MotionEventCompat;
 import android.view.LayoutInflater;
@@ -20,15 +19,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaplanteam.cathy.dangerparty.BluetoothActivity;
 import com.kaplanteam.cathy.dangerparty.EndGameActivity;
-import com.kaplanteam.cathy.dangerparty.Level2.FragmentLevel2B;
+import com.kaplanteam.cathy.dangerparty.Level2.FragmentLevel2B2P;
 import com.kaplanteam.cathy.dangerparty.R;
 
 /**
- * Created by Cole on 3/24/18.
+ * Created by Cole on 5/23/18.
  */
 
-public class FragmentLevel1B extends Fragment implements View.OnClickListener, View.OnTouchListener {
+public class FragmentLevel1B2P extends android.support.v4.app.Fragment implements View.OnClickListener, View.OnTouchListener {
     private Button belly, back, front, giveUp;
     private ImageView sails, wheel, spyglass2, spyglass3;
     private boolean sailsOpen, spyglassOpen, wheelClockwise;
@@ -40,7 +40,7 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
     private final float SCREEN_WIDTH = Resources.getSystem().getDisplayMetrics().widthPixels;
     private CountDownTimer t;
 
-    private final int NUMBER_OF_STRINGS = 8;
+    private final int NUMBER_OF_STRINGS = 18;
     private String[] strings;
     private String[] currentStrings;
     private TextView text;
@@ -52,11 +52,13 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
     private ImageView liveOne, liveTwo, liveThree, liveFour, liveFive;
     private ImageView[] img;
 
-    private Fragment currentFragment;
+    private android.support.v4.app.Fragment currentFragment;
     private boolean firstTime;
 
     private SharedPreferences counter;
     private SharedPreferences.Editor editor;
+
+    private BluetoothActivity a;
 
     @Nullable
     @Override
@@ -66,6 +68,8 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
 
         counter = this.getActivity().getSharedPreferences("HELLO", Context.MODE_PRIVATE);
         editor = counter.edit();
+
+        a = (BluetoothActivity) getActivity();
 
         sailsOpen = false;
         spyglassOpen = true;
@@ -80,18 +84,33 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
         img[4] = liveOne;
 
         strings = new String[NUMBER_OF_STRINGS];
-        strings[0] = "Belly flop";
-        strings[1] = "Front flop";
-        strings[2] = "Back flop";
-        strings[3] = "Give up hope";
-        strings[4] = "Turn to port";
-        strings[5] = "Turn to starboard";
-        strings[6] = "Open the sails";
-        strings[7] = "Close the spyglass";
+        strings[0] = "Pop the bubbles";
+        strings[1] = "Swirl a clockwise vortex";
+        strings[2] = "Swirl a counterclockwise vortex";
+        strings[3] = "Swim the octopus";
+        strings[4] = "Swim the doggie paddle";
+        strings[5] = "Swim the corkscrew";
+        strings[6] = "Swim the dolphin";
+        strings[7] = "Swim the elegant undulations";
+        strings[8] = "Drown";
+        strings[9] = "Pressbutton";
+        //1B layout strings
+        strings[10] = "Belly flop";
+        strings[11] = "Front flop";
+        strings[12] = "Back flop";
+        strings[13] = "Give up hope";
+        strings[14] = "Turn to port";
+        strings[15] = "Turn to starboard";
+        strings[16] = "Open the sails";
+        strings[17] = "Close the spyglass";
 
-        currentStrings = new String[2];
-        currentStrings[0] = "Close the sails";
-        currentStrings[1] = "Open the spyglass";
+        currentStrings = new String[5];
+        currentStrings[0] = "Still the vortex";
+        currentStrings[1] = "Undrown";
+        currentStrings[2] = "Don't pressbutton";
+        //1B layout strings
+        currentStrings[3] = "Close the sails";
+        currentStrings[4] = "Open the spyglass";
 
         text.setText("Get Ready");// could make ready set go or other animation type thing
 
@@ -106,12 +125,13 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
             public void onFinish() {
                 if(firstTime){
                     text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                    a.sendReceive.write(text.getText().toString().getBytes());
                     t.start();
                     firstTime = false;
                 }
                 else{
                     timerView.setX(0 - SCREEN_WIDTH);
-                    //closer to death
+                    //closer to death for both screens --------------------------------------------------------------------
                     failScore++;
                     if(failScore >= END_GAME_FAILURES){
                         //End Game
@@ -123,6 +143,7 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
                     }
                     else{
                         text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                        a.sendReceive.write(text.getText().toString().getBytes());
                         img[END_GAME_FAILURES- failScore].setVisibility(View.INVISIBLE);
                         t.start();
                     }
@@ -329,11 +350,13 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
             //move to next level
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
             editor.putInt("score", successScore*100);
-            currentFragment = new FragmentLevel2B(); //randomize?
+            currentFragment = new FragmentLevel2B2P(); //randomize?
             switchToNewScreen();
         }
         else{
+            //send message-----------------------------------------------------------------------------------------
             text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+            a.sendReceive.write(text.getText().toString().getBytes());
             t.start();
         }
     }
@@ -346,16 +369,14 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
             Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
             editor.putInt("score", successScore*100);
             editor.commit();
-            currentFragment = new FragmentLevel2B(); //randomize?
+            currentFragment = new FragmentLevel2B2P(); //randomize?
             switchToNewScreen();
-            //Intent i = new Intent(getActivity(), EndGameActivity.class);
-            //startActivity(i);
-            //editor.putInt("score", successScore*100);
-            //editor.commit();
         }
         else{
+            //send message and swap on other-----------------------------------------------------------------------------------------
             swap(string, current);
             text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+            a.sendReceive.write(text.getText().toString().getBytes());
             t.start();
         }
     }

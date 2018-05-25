@@ -20,10 +20,12 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +38,7 @@ import java.util.UUID;
  * Created by per6 on 5/7/18.
  */
 
-public class BluetoothActivity extends AppCompatActivity implements View.OnClickListener,AdapterView.OnItemClickListener {
+public class BluetoothActivity extends AppCompatActivity implements View.OnClickListener,AdapterView.OnItemClickListener, CompoundButton.OnCheckedChangeListener {
     private BluetoothAdapter mBluetoothAdapter;
 
     private static final int REQUEST_DISCOVERABLE = 10;
@@ -60,11 +62,17 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
     private TextView msgReceived;
     private EditText msg;
     private Button send;
-    private SendReceive sendReceive;
-    private Button btOn;
-    private Button btOff;
+    public SendReceive sendReceive;
+    private ToggleButton btOn;
 
     private Fragment currentFragment;
+
+    private String localNum;
+    public boolean layoutA;
+
+    public String commandForeign;
+    public int successes;
+    public int failure;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +89,8 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
 
         wireWidgets();
         setOnClickListeners();
+
+        btOn.setChecked(mBluetoothAdapter.isEnabled());
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, filter);
@@ -99,8 +109,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
         msgReceived = findViewById(R.id.textView_received_msg);
         msg = findViewById(R.id.editText_msg);
         send = findViewById(R.id.button_send);
-        btOn = findViewById(R.id.button_bt_on);
-        btOff = findViewById(R.id.button_bt_off);
+        btOn = findViewById(R.id.toggleButton_bluetooth);
     }
 
     private void setOnClickListeners(){
@@ -108,8 +117,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
         list.setOnClickListener(this);
         bt_listView.setOnItemClickListener(this);
         send.setOnClickListener(this);
-        btOn.setOnClickListener(this);
-        btOff.setOnClickListener(this);
+        btOn.setOnCheckedChangeListener(this);
     }
 
     // Create a BroadcastReceiver for ACTION_FOUND.
@@ -155,7 +163,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                     Intent intentDisc = new Intent(mBluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
                     startActivityForResult(intentDisc, REQUEST_DISCOVERABLE);
                     Log.d("isDISCOVERABLE", "true");
-                    ServerClass serverClass = new ServerClass();
+                    ServerClass serverClass = new ServerClass(); //used to be for listen button
                     serverClass.start();
                 }
                 break;
@@ -169,18 +177,6 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                 String string = String.valueOf(msg.getText().toString());
                 sendReceive.write(string.getBytes());
                 break;
-            case R.id.button_bt_on:
-                if (!mBluetoothAdapter.isEnabled()) {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, 1);
-            }
-                break;
-            case R.id.button_bt_off:
-                if (mBluetoothAdapter.isEnabled()) {
-                    mBluetoothAdapter.disable();
-                }
-                break;
-
         }
     }
 
@@ -201,17 +197,34 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                 case STATE_CONNECTED:
                     Toast.makeText(BluetoothActivity.this, "Connected", Toast.LENGTH_SHORT).show();
                     btStatus.setText("Connected");
-                    currentFragment = new FragmentBackground();
+                    mBluetoothAdapter.cancelDiscovery();
+                    currentFragment = new FragmentBackground2P();
                     switchToNewScreen();
+                    list.setVisibility(View.GONE);
+                    btOn.setVisibility(View.GONE);
+                    discoverable.setVisibility(View.GONE);
+                    btStatus.setVisibility(View.GONE);
+                    bt_listView.setVisibility(View.GONE);
+
+                    localNum = "" + Math.random();
+                    sendReceive.write(localNum.getBytes());
                     break;
                 case STATE_CONNECTION_FAILED:
                     Toast.makeText(BluetoothActivity.this, "Connection Failed", Toast.LENGTH_SHORT).show();
                     btStatus.setText("Connection Failed");
                     break;
-                case STATE_MESSAGE_RECIEVED:
+                case STATE_MESSAGE_RECIEVED: //-----------------------------------------------OOOOOOOOOOOOOOOO
                     byte[] readBuffer = (byte[])message.obj;
                     String tempMessage = new String(readBuffer, 0, message.arg1);
                     msgReceived.setText("" + tempMessage);
+                    Toast.makeText(BluetoothActivity.this, "" + tempMessage, Toast.LENGTH_SHORT).show();
+
+                    if(tempMessage.substring(0,2).equals("0.")) {
+                        layoutA = Double.parseDouble(tempMessage) > Double.parseDouble(localNum);
+                    }
+                    else{
+                        commandForeign = tempMessage;
+                    }
                     break;
             }
             return false;
@@ -224,6 +237,23 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
         ClientClass clientClass = new ClientClass(btDevices.get(i));
         clientClass.start();
         btStatus.setText("Connecting");
+
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        switch(compoundButton.getId()) {
+            case R.id.toggleButton_bluetooth:
+                if (b) {
+                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(enableBtIntent, 1);
+                } else {
+                    if (mBluetoothAdapter.isEnabled()) {
+                        mBluetoothAdapter.disable();
+                    }
+                }
+                break;
+        }
     }
 
     private class ServerClass extends Thread
@@ -316,7 +346,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    private class SendReceive extends Thread
+    public class SendReceive extends Thread
     {
         private final BluetoothSocket bluetoothSocket;
         private final InputStream inputStream;
@@ -355,7 +385,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
             }
         }
 
-        public void write(byte[] bytes)
+        public void write(byte[] bytes) //-----------------------------------------------OOOOOOOOOOOOOOOO
         {
             try {
                 outputStream.write(bytes);
@@ -372,7 +402,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
         if (currentFragment != null) {
             fm.beginTransaction()
                     .replace(R.id.fragment_container, currentFragment)
-                    .commit();
+                    .commitAllowingStateLoss();
         }
     }
 

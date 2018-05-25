@@ -2,9 +2,9 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/fragment_container">
+    android:layout_height="match_parent">
 
     <Button
         android:id="@+id/button_discoverable"
@@ -15,41 +15,38 @@
         app:layout_constraintEnd_toStartOf="@+id/button_list"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_bt_on" />
+        app:layout_constraintTop_toBottomOf="@+id/toggleButton_bluetooth" />
 
     <Button
         android:id="@+id/button_list"
         android:layout_width="wrap_content"
         android:layout_height="38dp"
-        android:text="Host"
+        android:text="List Nearby Devices"
         app:layout_constraintBottom_toBottomOf="@+id/button_discoverable"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button_discoverable"
-        app:layout_constraintTop_toTopOf="@+id/button_discoverable"
-        tools:text="List Nearby Devices" />
+        app:layout_constraintTop_toTopOf="@+id/button_discoverable" />
 
     <TextView
         android:id="@+id/textView_status"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
         android:text="Connection Status"
-        app:layout_constraintBottom_toBottomOf="@+id/button_bt_off"
+        app:layout_constraintBottom_toBottomOf="@+id/toggleButton_bluetooth"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/button_bt_off"
-        app:layout_constraintTop_toTopOf="@+id/button_bt_off" />
+        app:layout_constraintStart_toEndOf="@+id/toggleButton_bluetooth"
+        app:layout_constraintTop_toTopOf="@+id/toggleButton_bluetooth" />
 
     <Button
         android:id="@+id/button_send"
         android:layout_width="wrap_content"
         android:layout_height="38dp"
+        android:layout_marginTop="8dp"
         android:text="Send"
-        app:layout_constraintBottom_toBottomOf="@+id/editText_msg"
         app:layout_constraintEnd_toEndOf="@+id/textView_received_msg"
-        app:layout_constraintTop_toTopOf="@+id/editText_msg" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_received_msg" />
 
     <TextView
         android:id="@+id/textView_received_msg"
@@ -73,28 +70,6 @@
         app:layout_constraintStart_toStartOf="@+id/textView_received_msg"
         app:layout_constraintTop_toBottomOf="@+id/textView_received_msg" />
 
-    <Button
-        android:id="@+id/button_bt_on"
-        android:layout_width="wrap_content"
-        android:layout_height="38dp"
-        android:layout_marginTop="8dp"
-        android:text="BT ON"
-        app:layout_constraintEnd_toStartOf="@+id/button_bt_off"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_bt_off"
-        android:layout_width="wrap_content"
-        android:layout_height="38dp"
-        android:text="BT OFF"
-        app:layout_constraintBottom_toBottomOf="@+id/button_bt_on"
-        app:layout_constraintEnd_toStartOf="@+id/textView_status"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/button_bt_on"
-        app:layout_constraintTop_toTopOf="@+id/button_bt_on" />
-
     <ListView
         android:id="@+id/listView"
         android:layout_width="368dp"
@@ -105,5 +80,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText_msg" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton_bluetooth"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_marginTop="8dp"
+        android:checked="false"
+        android:text="Bluetooth"
+        android:textOff="BT On"
+        android:textOn="BT Off"
+        app:layout_constraintEnd_toStartOf="@+id/textView_status"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
