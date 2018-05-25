@@ -82,8 +82,8 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
         img[0] = liveFive;
         img[1] = liveFour;
         img[2] = liveThree;
-        img[3] = liveFour;
-        img[4] = liveFive;
+        img[3] = liveTwo;
+        img[4] = liveOne;
 
         strings = new String[NUMBER_OF_STRINGS];
         strings[0] = "Holler woolloomooloo";
