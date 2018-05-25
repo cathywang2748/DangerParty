@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.kaplanteam.cathy.dangerparty.Level1.FragmentLevel1A;
 import com.kaplanteam.cathy.dangerparty.Level1.FragmentLevel1B;
@@ -19,16 +18,14 @@ import com.kaplanteam.cathy.dangerparty.Level1.FragmentLevel1B;
 
 public class FragmentBackground extends Fragment {
     private TypeWriter tw;
-    private Button ready;
     private Fragment currentFragment;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.background, container, false);
+        final View rootView = inflater.inflate(R.layout.background, container, false);
 
-        ready = rootView.findViewById(R.id.button_ready);
         tw = rootView.findViewById(R.id.tv);
 
         //sets typewriter
@@ -41,38 +38,30 @@ public class FragmentBackground extends Fragment {
                 "But you must follow the directions \nand work as a team to get out.\n" +
                 "Are you ready?\n");
 
-        //sets button
-        ready.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(Math.random() < 0.5){//change later----------------------------------------------------
-                    currentFragment = new FragmentLevel1A();
-                    switchToNewScreen();
-                }
-                else{
-                    currentFragment = new FragmentLevel1B();
-                    switchToNewScreen();
-                }
-            }
-        });
 
-        //
-        //sets button visible after text finishes typing
-        CountDownTimer timer = new CountDownTimer(33000,1000) {
+        CountDownTimer timer = new CountDownTimer(15500, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-               //ready.setVisibility(View.GONE);
+                //ready.setVisibility(View.GONE);
             }
 
             @Override
             public void onFinish() {
                 //ready.setVisibility(View.VISIBLE);
+                if (Math.random() < 0.5) {//change later----------------------------------------------------
+                    currentFragment = new FragmentLevel1A();
+                    switchToNewScreen();
+                } else {
+                    currentFragment = new FragmentLevel1B();
+                    switchToNewScreen();
 
+                }
             }
-         }.start();
+        }.start();
 
         return rootView;
-    }
+        
+        }
 
     private void switchToNewScreen() {
         //tell the fragment manager that if our current fragment isn't null, to replace whatever is there with it

@@ -52,6 +52,8 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
     private int failScore;
     private final int MOVE_ON_SUCCESSES = 10;
     private final int END_GAME_FAILURES = 5;
+    private ImageView liveOne, liveTwo, liveThree, liveFour, liveFive;
+    private ImageView[] img;
 
     private Fragment currentFragment;
     private boolean firstTime;
@@ -74,6 +76,13 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
         lightOn = true;
         wireWidgets(rootView);
         setListeners();
+
+        img = new ImageView[5];
+        img[0] = liveFive;
+        img[1] = liveFour;
+        img[2] = liveThree;
+        img[3] = liveFour;
+        img[4] = liveFive;
 
         strings = new String[NUMBER_OF_STRINGS];
         strings[0] = "Holler woolloomooloo";
@@ -121,6 +130,7 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
                         startActivity(i);
                     }
                     else{
+                        img[END_GAME_FAILURES - failScore].setVisibility(View.INVISIBLE);
                         text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
                         t.start();
                     }
@@ -147,6 +157,11 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
         scream = rootView.findViewById(R.id.textView_scream);
         timerView = rootView.findViewById(R.id.timer);
         text = rootView.findViewById(R.id.textView);
+        liveOne = rootView.findViewById(R.id.imageView_live_one);
+        liveTwo = rootView.findViewById(R.id.imageView_live_two);
+        liveThree = rootView.findViewById(R.id.imageView_live_three);
+        liveFour = rootView.findViewById(R.id.imageView_live_four);
+        liveFive = rootView.findViewById(R.id.imageView_live_five);
     }
 
     private void setListeners() {
