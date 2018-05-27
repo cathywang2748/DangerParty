@@ -72,7 +72,11 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
 
     public String commandForeign;
     public int successes;
-    public int failure;
+    public int failures;
+    public int swapString;
+    public int swapCurrent;
+    public boolean domesticSuccess;
+    public boolean swapReady;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +90,9 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
             Toast.makeText(this, "Device does not support Bluetooth :(", Toast.LENGTH_LONG).show();
             finish();
         }
+
+        successes = 0;
+        failures = 0;
 
         wireWidgets();
         setOnClickListeners();
@@ -219,8 +226,25 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                     msgReceived.setText("" + tempMessage);
                     Toast.makeText(BluetoothActivity.this, "" + tempMessage, Toast.LENGTH_SHORT).show();
 
+                    //check swap, success, fail
                     if(tempMessage.substring(0,2).equals("0.")) {
                         layoutA = Double.parseDouble(tempMessage) > Double.parseDouble(localNum);
+                    }
+                    else if(tempMessage.equals("success")){ //listener of some sort?-------------------------------
+                        domesticSuccess = false;
+                        successes++;
+                    }
+                    else if(tempMessage.equals("domestic success")){
+                        domesticSuccess = true;
+                        successes++;
+                    }
+                    else if(tempMessage.equals("fail")){ //listener of some sort?-------------------------------
+                        failures++;
+                    }
+                    else if(tempMessage.substring(0,4).equals("swap")){
+                        swapString = Integer.parseInt(tempMessage.substring(4, 5));
+                        swapCurrent = Integer.parseInt(tempMessage.substring(5, 6));
+                        swapReady = true;
                     }
                     else{
                         commandForeign = tempMessage;
@@ -406,6 +430,10 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    public void resetSandF(){
+        successes = 0;
+        failures = 0;
+    }
 }
 
 

@@ -120,7 +120,7 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
         currentStrings[3] = "Unzzyzx";
 
 
-        text.setText("Get Ready");// could make ready set go or other animation type thing
+        text.setText("Level 2: Mystic Party Forest");// could make ready set go or other animation type thing
 
         //get any other initial set up done
         t = new CountDownTimer(MILLIS_IN_FUTURE, COUNT_DOWN_INTERVAL) {

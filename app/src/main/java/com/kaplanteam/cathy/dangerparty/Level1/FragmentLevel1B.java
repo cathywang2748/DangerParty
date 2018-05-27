@@ -93,7 +93,7 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
         currentStrings[0] = "Close the sails";
         currentStrings[1] = "Open the spyglass";
 
-        text.setText("Get Ready");// could make ready set go or other animation type thing
+        text.setText("Level 1: Danger Beach");// could make ready set go or other animation type thing
 
         //get any other initial set up done
         t = new CountDownTimer(MILLIS_IN_FUTURE, COUNT_DOWN_INTERVAL) {
@@ -115,7 +115,6 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
                     failScore++;
                     if(failScore >= END_GAME_FAILURES){
                         //End Game
-                        Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
                         editor.putInt("score", successScore*100);
                         editor.commit();
                         Intent i = new Intent(getActivity(), EndGameActivity.class);
@@ -201,27 +200,23 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
                 if(sailsOpen){
                     if(text.getText().equals("Close the sails")){
                         success(6, 0);
-                        ImageView v = (ImageView) view;
-                        v.setImageResource(R.drawable.sail_closed);
+                        sails.setImageResource(R.drawable.sail_closed);
                     }
                     else{
                         successScore--;
                         swap(6, 0);
-                        ImageView v = (ImageView) view;
-                        v.setImageResource(R.drawable.sail_open);
+                        sails.setImageResource(R.drawable.sail_closed);
                     }
                 }
                 else{
                     if(text.getText().equals("Open the sails")){
                         success(6, 0);
-                        ImageView v = (ImageView) view;
-                        v.setImageResource(R.drawable.sail_open);
+                        sails.setImageResource(R.drawable.sail_open);
                     }
                     else{
                         successScore--;
                         swap(6, 0);
-                        ImageView v = (ImageView) view;
-                        v.setImageResource(R.drawable.sail_closed);
+                        sails.setImageResource(R.drawable.sail_open);
                     }
                 }
                 sailsOpen = !sailsOpen;

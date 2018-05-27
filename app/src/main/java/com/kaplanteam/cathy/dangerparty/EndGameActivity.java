@@ -23,7 +23,7 @@ public class EndGameActivity extends AppCompatActivity {
     private ImageView prizeImg;
     private Button playAgain;
 
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { // Game over or You win
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_game);
         Intent i = getIntent();
@@ -37,8 +37,7 @@ public class EndGameActivity extends AppCompatActivity {
         fruit.add(new FruitPrize("pomelo for your juiciness", R.drawable.pomelo));
         fruit.add(new FruitPrize("mango for your colorful language", R.drawable.mango));
         fruit.add(new FruitPrize("rambutan for your prickly skin", R.drawable.rambutan));
-        fruit.add(new FruitPrize("pineapple for your lack of vitamin C",
-                R.drawable.pineapple));
+        fruit.add(new FruitPrize("pineapple for your lack of vitamin C", R.drawable.pineapple));
         fruit.add(new FruitPrize("kiwi for your bird-like qualities", R.drawable.kiwi));
         fruit.add(new FruitPrize("coconut for your meaty guts", R.drawable.coconut));
         fruit.add(new FruitPrize("star fruit for your awesomeness", R.drawable.starfruit));
@@ -57,7 +56,7 @@ public class EndGameActivity extends AppCompatActivity {
         playAgain = (Button) findViewById(R.id.button_play_again);
         playAgain.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {// change for two players --------------------------------------------
                 Intent i = new Intent(EndGameActivity.this, GameActivity.class);
                 startActivity(i);
             }

@@ -17,10 +17,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kaplanteam.cathy.dangerparty.BluetoothActivity;
 import com.kaplanteam.cathy.dangerparty.EndGameActivity;
+import com.kaplanteam.cathy.dangerparty.Level2.FragmentLevel2A2P;
 import com.kaplanteam.cathy.dangerparty.Level2.FragmentLevel2B2P;
 import com.kaplanteam.cathy.dangerparty.R;
 
@@ -112,13 +112,41 @@ public class FragmentLevel1B2P extends android.support.v4.app.Fragment implement
         currentStrings[3] = "Close the sails";
         currentStrings[4] = "Open the spyglass";
 
-        text.setText("Get Ready");// could make ready set go or other animation type thing
+        text.setText("Level 1: Danger Beach");// could make ready set go or other animation type thing
 
         //get any other initial set up done
         t = new CountDownTimer(MILLIS_IN_FUTURE, COUNT_DOWN_INTERVAL) {
             @Override
             public void onTick(long l) {
                 timerView.setX(l / (float) MILLIS_IN_FUTURE * SCREEN_WIDTH - SCREEN_WIDTH);
+                if(a.failures > failScore){ //failure
+                    failScore++;
+                    if(failScore >= END_GAME_FAILURES){
+                        //End Game
+                        editor.putInt("score", successScore*100);
+                        editor.commit();
+                        Intent i = new Intent(getActivity(), EndGameActivity.class);
+                        startActivity(i);
+                    }
+                    else{
+                        img[END_GAME_FAILURES - failScore].setVisibility(View.INVISIBLE);
+                        text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                        a.sendReceive.write(text.getText().toString().getBytes());
+                        t.start();
+
+                    }
+                }
+                if(a.successes > successScore){ //success
+                    if(!a.domesticSuccess){
+                        successDomestic();
+                    }
+                    else{
+                        successSilent();
+                    }
+                }
+                if(a.swapReady){//swap
+                    swapFromForeign(a.swapString, a.swapCurrent);
+                }
             }
 
             @Override
@@ -133,19 +161,20 @@ public class FragmentLevel1B2P extends android.support.v4.app.Fragment implement
                     timerView.setX(0 - SCREEN_WIDTH);
                     //closer to death for both screens --------------------------------------------------------------------
                     failScore++;
+                    a.sendReceive.write("fail".toString().getBytes());
                     if(failScore >= END_GAME_FAILURES){
                         //End Game
-                        Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
                         editor.putInt("score", successScore*100);
                         editor.commit();
                         Intent i = new Intent(getActivity(), EndGameActivity.class);
                         startActivity(i);
                     }
                     else{
+                        img[END_GAME_FAILURES - failScore].setVisibility(View.INVISIBLE);
                         text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
                         a.sendReceive.write(text.getText().toString().getBytes());
-                        img[END_GAME_FAILURES- failScore].setVisibility(View.INVISIBLE);
                         t.start();
+
                     }
                 }
             }
@@ -187,32 +216,44 @@ public class FragmentLevel1B2P extends android.support.v4.app.Fragment implement
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.button_belly:
-                if(text.getText().equals(strings[0])){
+                if(text.getText().equals(strings[10])){
                     success();
+                }
+                else if(a.commandForeign.equals(strings[10])){
+                    successForeign();
                 }
                 else{
                     successScore--;
                 }
                 break;
             case R.id.button_front:
-                if(text.getText().equals(strings[1])){
+                if(text.getText().equals(strings[11])){
                     success();
+                }
+                else if(a.commandForeign.equals(strings[11])){
+                    successForeign();
                 }
                 else{
                     successScore--;
                 }
                 break;
             case R.id.button_back:
-                if(text.getText().equals(strings[2])){
+                if(text.getText().equals(strings[12])){
                     success();
+                }
+                else if(a.commandForeign.equals(strings[12])){
+                    successForeign();
                 }
                 else{
                     successScore--;
                 }
                 break;
             case R.id.button_give_up:
-                if(text.getText().equals(strings[3])){
+                if(text.getText().equals(strings[13])){
                     success();
+                }
+                else if(a.commandForeign.equals(strings[13])){
+                    successForeign();
                 }
                 else{
                     successScore--;
@@ -221,30 +262,37 @@ public class FragmentLevel1B2P extends android.support.v4.app.Fragment implement
             case R.id.imageView_sails:
                 if(sailsOpen){
                     if(text.getText().equals("Close the sails")){
-                        success(6, 0);
-                        ImageView v = (ImageView) view;
-                        v.setImageResource(R.drawable.sail_closed);
+                        success(16, 3);
+                        sails.setImageResource(R.drawable.sail_closed);
+                    }
+                    else if(a.commandForeign.equals("Close the sails")){
+                        successForeign();
+                        swap(16, 3);
+                        sails.setImageResource(R.drawable.sail_closed);
                     }
                     else{
                         successScore--;
-                        swap(6, 0);
-                        ImageView v = (ImageView) view;
-                        v.setImageResource(R.drawable.sail_open);
+                        swap(16, 3);
+                        sails.setImageResource(R.drawable.sail_closed);
                     }
                 }
                 else{
                     if(text.getText().equals("Open the sails")){
-                        success(6, 0);
-                        ImageView v = (ImageView) view;
-                        v.setImageResource(R.drawable.sail_open);
+                        success(16, 3);
+                        sails.setImageResource(R.drawable.sail_open);
+                    }
+                    else if(a.commandForeign.equals("Open the sails")) {
+                        successForeign();
+                        swap(16, 3);
+                        sails.setImageResource(R.drawable.sail_open);
                     }
                     else{
                         successScore--;
-                        swap(6, 0);
-                        ImageView v = (ImageView) view;
-                        v.setImageResource(R.drawable.sail_closed);
+                        swap(16, 3);
+                        sails.setImageResource(R.drawable.sail_open);
                     }
                 }
+                //swap foreign 16 for 3 -----------------------------------------------------------------
                 sailsOpen = !sailsOpen;
                 break;
         }
@@ -281,6 +329,9 @@ public class FragmentLevel1B2P extends android.support.v4.app.Fragment implement
                         if(text.getText().equals("Turn to starboard")){
                             success();
                         }
+                        else if (a.commandForeign.equals("Turn to starboard")){
+                            successForeign();
+                        }
                         else{
                             successScore--;
                         }
@@ -288,6 +339,9 @@ public class FragmentLevel1B2P extends android.support.v4.app.Fragment implement
                     else{ //port
                         if(text.getText().equals("Turn to port")){
                             success();
+                        }
+                        else if (a.commandForeign.equals("Turn to port")){
+                            successForeign();
                         }
                         else{
                             successScore--;
@@ -324,12 +378,18 @@ public class FragmentLevel1B2P extends android.support.v4.app.Fragment implement
 
                     if(text.getText().equals("Close the spyglass") && spyglassOpen
                             || text.getText().equals("Open the spyglass") && !spyglassOpen){
-                        success(7, 1);
+                        success(17, 4);
+                    }
+                    else if (a.commandForeign.equals("Close the spyglass") && spyglassOpen
+                            || a.commandForeign.equals("Open the spyglass") && !spyglassOpen){
+                        successForeign();
+                        swap(17,4);
                     }
                     else{
-                        swap(7, 1);
+                        swap(17, 4);
                         successScore--;
                     }
+                    //swap foreign -----------------------------------------------------------------------------
                     return true;
                 default:
                     return false;
@@ -346,9 +406,10 @@ public class FragmentLevel1B2P extends android.support.v4.app.Fragment implement
     private void success(){
         t.cancel();
         successScore++;
+        a.sendReceive.write("domestic success".getBytes());
         if(successScore == MOVE_ON_SUCCESSES){
             //move to next level
-            Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            a.resetSandF();
             editor.putInt("score", successScore*100);
             currentFragment = new FragmentLevel2B2P(); //randomize?
             switchToNewScreen();
@@ -364,9 +425,10 @@ public class FragmentLevel1B2P extends android.support.v4.app.Fragment implement
     private void success(int string, int current){
         t.cancel();
         successScore++;
+        a.sendReceive.write("domestic success".getBytes());
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
-            Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            a.resetSandF();
             editor.putInt("score", successScore*100);
             editor.commit();
             currentFragment = new FragmentLevel2B2P(); //randomize?
@@ -382,6 +444,13 @@ public class FragmentLevel1B2P extends android.support.v4.app.Fragment implement
     }
 
     private void swap(int string, int current){
+        a.sendReceive.write(("swap" + string + current).getBytes());
+        String currentString = strings[string];
+        strings[string] = currentStrings[current];
+        currentStrings[current] = currentString;
+    }
+
+    private void swapFromForeign(int string, int current){
         String currentString = strings[string];
         strings[string] = currentStrings[current];
         currentStrings[current] = currentString;
@@ -401,5 +470,42 @@ public class FragmentLevel1B2P extends android.support.v4.app.Fragment implement
     public void onPause() {
         super.onPause();
         t.cancel();
+    }
+
+    private void successForeign(){
+        successScore++;
+        a.sendReceive.write("success".getBytes());
+        if(successScore >= MOVE_ON_SUCCESSES){
+            //move to next level
+            a.resetSandF();
+            editor.putInt("score", successScore*100);
+            editor.commit();
+            currentFragment = new FragmentLevel2B2P();//randomize?
+            switchToNewScreen();
+        }
+    }
+
+    private void successDomestic(){
+        successScore++;
+        if(successScore >= MOVE_ON_SUCCESSES){
+            //move to next level
+            a.resetSandF();
+            editor.putInt("score", successScore*100);
+            editor.commit();
+            currentFragment = new FragmentLevel2A2P();//randomize?
+            switchToNewScreen();
+        }
+    }
+
+    private void successSilent(){
+        successScore++;
+        if(successScore >= MOVE_ON_SUCCESSES){
+            //move to next level
+            a.resetSandF();
+            editor.putInt("score", successScore*100);
+            editor.commit();
+            currentFragment = new FragmentLevel2A2P();//randomize?
+            switchToNewScreen();
+        }
     }
 }

@@ -101,7 +101,7 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
         stringsDark[10] = "Turn on the light";
         stringsDark[11] = "Put the bats to sleep";
 
-        text.setText("Get Ready");// could make ready set go or other animation type thing
+        text.setText("Level 3: Cave of Nightmares");// could make ready set go or other animation type thing
 
         //get any other initial set up done
         t = new CountDownTimer(MILLIS_IN_FUTURE, COUNT_DOWN_INTERVAL) {

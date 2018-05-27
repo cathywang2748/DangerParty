@@ -91,7 +91,7 @@ public class FragmentLevel2B extends Fragment implements View.OnClickListener {
         currentStrings = new String[1];
         currentStrings[0] = "Empty the water bottle of unicorn juice";
 
-        text.setText("Get Ready");// could make ready set go or other animation type thing
+        text.setText("Level 2: Mystic Party Forest");// could make ready set go or other animation type thing
 
         //get any other initial set up done
         t = new CountDownTimer(MILLIS_IN_FUTURE, COUNT_DOWN_INTERVAL) {

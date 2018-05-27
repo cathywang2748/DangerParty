@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MotionEventCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -115,7 +116,7 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
         currentStrings[1] = "Undrown";
         currentStrings[2] = "Don't pressbutton";
 
-        text.setText("Get Ready");// could make ready set go or other animation type thing
+        text.setText("Level 1: Danger Beach");// could make ready set go or other animation type thing
 
         //get any other initial set up done
         t = new CountDownTimer(MILLIS_IN_FUTURE, COUNT_DOWN_INTERVAL) {
@@ -137,7 +138,6 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
                     failScore++;
                     if(failScore >= END_GAME_FAILURES){
                         //End Game
-                        Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
                         editor.putInt("score", successScore*100);
                         editor.commit();
                         Intent i = new Intent(getActivity(), EndGameActivity.class);
@@ -370,7 +370,9 @@ public class FragmentLevel1A extends Fragment implements View.OnTouchListener, V
                 last = angle;
                 return true;
             case (MotionEvent.ACTION_UP):
-                if(angle - initial < 30 && angle - initial > -30 ){
+                Log.d("Angle", "" + angle);
+                Log.d("Initial", "" + initial);
+                if(angle - initial < 200 && angle - initial > -200 ){
                     ImageView v = (ImageView) view;
                     v.setImageDrawable(getResources().getDrawable(R.drawable.vortex));
                     swirl = 0;
