@@ -164,6 +164,7 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
                 }
                 if(a.swapReady){//swap
                     swapFromForeign(a.swapString, a.swapCurrent);
+                    a.swapNotReady();
                 }
             }
 
@@ -584,7 +585,7 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
 
     private void successForeign(){
         successScore++;
-        a.sendReceive.write("success".getBytes());
+        a.sendReceive.write("foreign success".getBytes());
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             a.resetSandF();

@@ -21,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,9 +58,6 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
     private Set<BluetoothDevice> pairedDevices;
     private ArrayList<BluetoothDevice> btDevices;
     private TextView btStatus;
-    private TextView msgReceived;
-    private EditText msg;
-    private Button send;
     public SendReceive sendReceive;
     private ToggleButton btOn;
 
@@ -93,6 +89,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
 
         successes = 0;
         failures = 0;
+        commandForeign = "";
 
         wireWidgets();
         setOnClickListeners();
@@ -113,9 +110,6 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
         list = findViewById(R.id.button_list);
         bt_listView = findViewById(R.id.listView);
         btStatus = findViewById(R.id.textView_status);
-        msgReceived = findViewById(R.id.textView_received_msg);
-        msg = findViewById(R.id.editText_msg);
-        send = findViewById(R.id.button_send);
         btOn = findViewById(R.id.toggleButton_bluetooth);
     }
 
@@ -123,7 +117,6 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
         discoverable.setOnClickListener(this);
         list.setOnClickListener(this);
         bt_listView.setOnItemClickListener(this);
-        send.setOnClickListener(this);
         btOn.setOnCheckedChangeListener(this);
     }
 
@@ -180,10 +173,6 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                 mBluetoothAdapter.startDiscovery();///PROBLEM HERE - restart tablet
                 Log.d("BLUETOOTH", "" + mBluetoothAdapter.isDiscovering());
                 break;
-            case R.id.button_send:
-                String string = String.valueOf(msg.getText().toString());
-                sendReceive.write(string.getBytes());
-                break;
         }
     }
 
@@ -223,30 +212,36 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                 case STATE_MESSAGE_RECIEVED: //-----------------------------------------------OOOOOOOOOOOOOOOO
                     byte[] readBuffer = (byte[])message.obj;
                     String tempMessage = new String(readBuffer, 0, message.arg1);
-                    msgReceived.setText("" + tempMessage);
-                    Toast.makeText(BluetoothActivity.this, "" + tempMessage, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(BluetoothActivity.this, "" + tempMessage, Toast.LENGTH_SHORT).show();
 
+                    boolean noneOfTheAbove = true;
                     //check swap, success, fail
                     if(tempMessage.substring(0,2).equals("0.")) {
                         layoutA = Double.parseDouble(tempMessage) > Double.parseDouble(localNum);
+                        noneOfTheAbove = false;
                     }
-                    else if(tempMessage.equals("success")){ //listener of some sort?-------------------------------
+                    if(tempMessage.contains("foreign success")){ //listener of some sort?-------------------------------
                         domesticSuccess = false;
                         successes++;
+                        noneOfTheAbove = false;
                     }
-                    else if(tempMessage.equals("domestic success")){
+                    if(tempMessage.contains("domestic success")){
                         domesticSuccess = true;
                         successes++;
+                        noneOfTheAbove = false;
                     }
-                    else if(tempMessage.equals("fail")){ //listener of some sort?-------------------------------
+                    if(tempMessage.contains("fail")){ //listener of some sort?-------------------------------
                         failures++;
+                        noneOfTheAbove = false;
                     }
-                    else if(tempMessage.substring(0,4).equals("swap")){
-                        swapString = Integer.parseInt(tempMessage.substring(4, 5));
-                        swapCurrent = Integer.parseInt(tempMessage.substring(5, 6));
+                    if(tempMessage.contains("swap")){
+                        int i = tempMessage.indexOf("swap");
+                        swapString = Integer.parseInt(tempMessage.substring(i+4, i+5));
+                        swapCurrent = Integer.parseInt(tempMessage.substring(i+5, i+6));
                         swapReady = true;
+                        noneOfTheAbove = false;
                     }
-                    else{
+                    if(noneOfTheAbove){
                         commandForeign = tempMessage;
                     }
                     break;
@@ -433,6 +428,10 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
     public void resetSandF(){
         successes = 0;
         failures = 0;
+    }
+
+    public void swapNotReady(){
+        swapReady = false;
     }
 }
 

@@ -21,10 +21,9 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.kaplanteam.cathy.dangerparty.BluetoothActivity;
 import com.kaplanteam.cathy.dangerparty.EndGameActivity;
-import com.kaplanteam.cathy.dangerparty.Level3.FragmentLevel3A2P;
 import com.kaplanteam.cathy.dangerparty.R;
 
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
     private final float SCREEN_WIDTH = Resources.getSystem().getDisplayMetrics().widthPixels;
     private CountDownTimer t;
 
-    private final int NUMBER_OF_STRINGS = 14;
+    private final int NUMBER_OF_STRINGS = 25;
     private String[] strings;
     private String[] currentStrings;
     private TextView text;
@@ -62,6 +61,8 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
     private SharedPreferences counter;
     private SharedPreferences.Editor editor;
 
+    private BluetoothActivity a;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -70,6 +71,8 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
 
         counter = this.getActivity().getSharedPreferences("HELLO", Context.MODE_PRIVATE);
         editor = counter.edit();
+
+        a = (BluetoothActivity) getActivity();
 
         //wire any widgets -- must use rootView.findViewById
         angle = 0;
@@ -94,16 +97,14 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
 
 
         strings = new String[NUMBER_OF_STRINGS];
+        //layoutA
         strings[0] = "Squishishi";
         strings[1] = "Voop";
         strings[2] = "Bo";
-
         strings[3] = "Get lost";
         strings[4] = "Zzyzx";
-
         strings[5] = "Rub the Frustumsphere";
         strings[6] = "Hug the Frustumsphere";
-
         strings[7] = "Northeast";
         strings[8] = "East";
         strings[9] = "Southeast";
@@ -111,14 +112,27 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
         strings[11] = "Southwest";
         strings[12] = "West";
         strings[13] = "Northwest";
+        //layoutB
+        strings[14] = "Climb the tree";
+        strings[15] = "Pick the dancing girl flowers";
+        strings[16] = "Caress the dancing girl flowers";
+        strings[17] = "Burn the dancing girl flowers";
+        strings[18] = "Flick the dancing girl flowers";
+        strings[19] = "Count 1 monkey face orchid";
+        strings[20] = "Count 2 monkey face orchid";
+        strings[21] = "Count 3 monkey face orchid";
+        strings[22] = "Count 4 monkey face orchid";
+        strings[23] = "Fill the water bottle with unicorn juice";
+        strings[24] = "Kiss the hooker's lips flower";
 
-
-        currentStrings = new String[4];
+        currentStrings = new String[5];
+        //layoutA
         currentStrings[0] = "Nuuvut";
         currentStrings[1] = "North";
         currentStrings[2] = "Don't get lost";
         currentStrings[3] = "Unzzyzx";
-
+        //layoutB
+        currentStrings[4] = "Empty the water bottle of unicorn juice";
 
         text.setText("Level 2: Mystic Party Forest");// could make ready set go or other animation type thing
 
@@ -127,29 +141,63 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
             @Override
             public void onTick(long l) {
                 timerView.setX(l / (float) MILLIS_IN_FUTURE * SCREEN_WIDTH - SCREEN_WIDTH);
+                if(a.failures > failScore){ //failure
+                    failScore++;
+                    if(failScore >= END_GAME_FAILURES){
+                        //End Game
+                        editor.putInt("score", successScore*100);
+                        editor.commit();
+                        Intent i = new Intent(getActivity(), EndGameActivity.class);
+                        startActivity(i);
+                    }
+                    else{
+                        img[END_GAME_FAILURES - failScore].setVisibility(View.INVISIBLE);
+                        text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                        a.sendReceive.write(text.getText().toString().getBytes());
+                        t.start();
+
+                    }
+                }
+                if(a.successes > successScore){ //success
+                    if(!a.domesticSuccess){
+                        successDomestic();
+                    }
+                    else{
+                        successSilent();
+                    }
+                }
+                if(a.swapReady){//swap
+                    swapFromForeign(a.swapString, a.swapCurrent);
+                    a.swapNotReady();
+                }
             }
 
             @Override
             public void onFinish() {
                 if(firstTime){
                     text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                    a.sendReceive.write(text.getText().toString().getBytes());
                     t.start();
                     firstTime = false;
                 }
                 else{
                     timerView.setX(0 - SCREEN_WIDTH);
-                    //closer to death
+                    //closer to death for both screens --------------------------------------------------------------------
                     failScore++;
+                    a.sendReceive.write("fail".toString().getBytes());
                     if(failScore >= END_GAME_FAILURES){
+                        //End Game
+                        editor.putInt("score", successScore*100);
+                        editor.commit();
                         Intent i = new Intent(getActivity(), EndGameActivity.class);
                         startActivity(i);
-                        //End Game
-
                     }
                     else{
                         img[END_GAME_FAILURES - failScore].setVisibility(View.INVISIBLE);
                         text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                        a.sendReceive.write(text.getText().toString().getBytes());
                         t.start();
+
                     }
                 }
             }
@@ -188,6 +236,9 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
                 if(text.getText().equals(strings[5])){
                     success();
                 }
+                else if(a.commandForeign.equals(strings[5])){
+                    successForeign();
+                }
                 else{
                     successScore--;
                 }
@@ -195,6 +246,9 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
             case R.id.button_hug:
                 if(text.getText().equals(strings[6])){
                     success();
+                }
+                else if(a.commandForeign.equals(strings[6])){
+                    successForeign();
                 }
                 else{
                     successScore--;
@@ -241,6 +295,16 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
                             }
                             success(pos, 1);
                         }
+                        else if(a.commandForeign.equals("North")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("North")){
+                                    pos = i;
+                                }
+                            }
+                            successForeign();
+                            swap(pos, 1);
+                        }
                         else{
                             successScore--;
                             int pos = 0;
@@ -261,6 +325,16 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
                                 }
                             }
                             success(pos, 1);
+                        }
+                        else if(a.commandForeign.equals("Northeast")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("Northeast")){
+                                    pos = i;
+                                }
+                            }
+                            successForeign();
+                            swap(pos, 1);
                         }
                         else{
                             successScore--;
@@ -283,6 +357,16 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
                             }
                             success(pos, 1);
                         }
+                        else if(a.commandForeign.equals("East")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("East")){
+                                    pos = i;
+                                }
+                            }
+                            successForeign();
+                            swap(pos, 1);
+                        }
                         else{
                             successScore--;
                             int pos = 0;
@@ -303,6 +387,16 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
                                 }
                             }
                             success(pos, 1);
+                        }
+                        else if(a.commandForeign.equals("Southeast")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("Southeast")){
+                                    pos = i;
+                                }
+                            }
+                            successForeign();
+                            swap(pos, 1);
                         }
                         else{
                             successScore--;
@@ -325,6 +419,16 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
                             }
                             success(pos, 1);
                         }
+                        else if(a.commandForeign.equals("South")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("South")){
+                                    pos = i;
+                                }
+                            }
+                            successForeign();
+                            swap(pos, 1);
+                        }
                         else{
                             successScore--;
                             int pos = 0;
@@ -344,6 +448,16 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
                                 }
                             }
                             success(pos, 1);
+                        }
+                        else if(a.commandForeign.equals("Southwest")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("Southwest")){
+                                    pos = i;
+                                }
+                            }
+                            successForeign();
+                            swap(pos, 1);
                         }
                         else{
                             successScore--;
@@ -367,6 +481,16 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
                             }
                             success(pos, 1);
                         }
+                        else if(a.commandForeign.equals("West")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("West")){
+                                    pos = i;
+                                }
+                            }
+                            successForeign();
+                            swap(pos, 1);
+                        }
                         else{
                             successScore--;
                             int pos = 0;
@@ -387,6 +511,16 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
                                 }
                             }
                             success(pos, 1);
+                        }
+                        else if(a.commandForeign.equals("Northwest")){
+                            int pos = 0;
+                            for(int i = 0;i< strings.length; i++){
+                                if(strings[i].equals("Northwest")){
+                                    pos = i;
+                                }
+                            }
+                            successForeign();
+                            swap(pos, 1);
                         }
                         else{
                             successScore--;
@@ -449,6 +583,20 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
                                 success(2,0);
                             }
                         }
+                        else if(a.commandForeign.equals("Nuuvut")){
+                            if(strings[0].equals("Nuuvut")){
+                                successForeign();
+                                swap(0,0);
+                            }
+                            else if(strings[1].equals("Nuuvut")){
+                                successForeign();
+                                swap(1,0);
+                            }
+                            else{
+                                successForeign();
+                                swap(2,0);
+                            }
+                        }
                         else{
                             successScore--;
                             if(strings[0].equals("Nuuvut")){
@@ -473,6 +621,20 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
                             }
                             else{
                                 success(2,0);
+                            }
+                        }
+                        else if(a.commandForeign.equals("Squishishi")){
+                            if(strings[0].equals("Squishishi")){
+                                successForeign();
+                                swap(0,0);
+                            }
+                            else if(strings[1].equals("Squishishi")){
+                                successForeign();
+                                swap(1,0);
+                            }
+                            else{
+                                successForeign();
+                                swap(2,0);
                             }
                         }
                         else{
@@ -501,6 +663,20 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
                                 success(2,0);
                             }
                         }
+                        else if(a.commandForeign.equals("Voop")){
+                            if(strings[0].equals("Voop")){
+                                successForeign();
+                                swap(0,0);
+                            }
+                            else if(strings[1].equals("Voop")){
+                                successForeign();
+                                swap(1,0);
+                            }
+                            else{
+                                successForeign();
+                                swap(2,0);
+                            }
+                        }
                         else{
                             successScore--;
                             if(strings[0].equals("Voop")){
@@ -525,6 +701,20 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
                             }
                             else{
                                 success(2,0);
+                            }
+                        }
+                        else if(a.commandForeign.equals("Bo")){
+                            if(strings[0].equals("Bo")){
+                                successForeign();
+                                swap(0,0);
+                            }
+                            else if(strings[1].equals("Bo")){
+                                successForeign();
+                                swap(1,0);
+                            }
+                            else{
+                                successForeign();
+                                swap(2,0);
                             }
                         }
                         else{
@@ -556,6 +746,10 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
                 if(text.getText().equals(strings[3])){
                     success(3, 2);
                 }
+                else if(a.commandForeign.equals(strings[3])){
+                    successForeign();
+                    swap(3, 2);
+                }
                 else{
                     successScore--;
                     swap(3, 2);
@@ -564,6 +758,10 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
             case R.id.switch2:
                 if(text.getText().equals(strings[4])){
                     success(4, 3);
+                }
+                else if(a.commandForeign.equals(strings[4])){
+                    successForeign();
+                    swap(4, 3);
                 }
                 else{
                     successScore--;
@@ -580,16 +778,20 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
     private void success(){
         t.cancel();
         successScore++;
-        if(successScore == MOVE_ON_SUCCESSES){
+        a.sendReceive.write("domestic success".getBytes());
+        if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
-            Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            a.resetSandF();
             editor.putInt("score", successScore*100);
             editor.commit();
-            currentFragment = new FragmentLevel3A2P(); //randomize?
+            currentFragment = new FragmentLevel2A2P();//randomize?
             switchToNewScreen();
+
         }
         else{
+            //send message-----------------------------------------------------------------------------------------
             text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+            a.sendReceive.write(text.getText().toString().getBytes());
             t.start();
         }
     }
@@ -597,24 +799,32 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
     private void success(int string, int current){
         t.cancel();
         successScore++;
+        a.sendReceive.write("domestic success".getBytes());
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
-            Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            a.resetSandF();
+            currentFragment = new FragmentLevel2A2P(); //randomize?
+            switchToNewScreen();
             editor.putInt("score", successScore*100);
             editor.commit();
-            currentFragment = new FragmentLevel3A2P(); //randomize?
-            switchToNewScreen();
         }
         else{
+            //send message (other will need to swap)-------------------------------------------------------------------------------
             swap(string, current);
-
-
             text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+            a.sendReceive.write(text.getText().toString().getBytes());
             t.start();
         }
     }
 
     private void swap(int string, int current){
+        a.sendReceive.write(("swap" + string + current).getBytes());
+        String currentString = strings[string];
+        strings[string] = currentStrings[current];
+        currentStrings[current] = currentString;
+    }
+
+    private void swapFromForeign(int string, int current){
         String currentString = strings[string];
         strings[string] = currentStrings[current];
         currentStrings[current] = currentString;
@@ -634,5 +844,42 @@ public class FragmentLevel2A2P extends Fragment implements View.OnTouchListener,
     public void onPause() {
         super.onPause();
         t.cancel();
+    }
+
+    private void successForeign(){
+        successScore++;
+        a.sendReceive.write("foreign success".getBytes());
+        if(successScore >= MOVE_ON_SUCCESSES){
+            //move to next level
+            a.resetSandF();
+            editor.putInt("score", successScore*100);
+            editor.commit();
+            currentFragment = new FragmentLevel2A2P();//randomize?
+            switchToNewScreen();
+        }
+    }
+
+    private void successDomestic(){
+        successScore++;
+        if(successScore >= MOVE_ON_SUCCESSES){
+            //move to next level
+            a.resetSandF();
+            editor.putInt("score", successScore*100);
+            editor.commit();
+            currentFragment = new FragmentLevel2A2P();//randomize?
+            switchToNewScreen();
+        }
+    }
+
+    private void successSilent(){
+        successScore++;
+        if(successScore >= MOVE_ON_SUCCESSES){
+            //move to next level
+            a.resetSandF();
+            editor.putInt("score", successScore*100);
+            editor.commit();
+            currentFragment = new FragmentLevel2A2P();//randomize?
+            switchToNewScreen();
+        }
     }
 }

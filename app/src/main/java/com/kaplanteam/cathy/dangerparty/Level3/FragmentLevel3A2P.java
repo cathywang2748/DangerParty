@@ -17,9 +17,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.kaplanteam.cathy.dangerparty.BluetoothActivity;
 import com.kaplanteam.cathy.dangerparty.EndGameActivity;
+import com.kaplanteam.cathy.dangerparty.Level2.FragmentLevel2A2P;
 import com.kaplanteam.cathy.dangerparty.R;
 
 /**
@@ -39,9 +40,9 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
     private final float SCREEN_WIDTH = Resources.getSystem().getDisplayMetrics().widthPixels;
     private CountDownTimer t;
 
-    private final int NUMBER_OF_STRINGS = 11;
+    private final int NUMBER_OF_STRINGS = 19;
     private String[] strings;
-    private final int NUMBER_OF_STRINGS_DARK = 12;
+    private final int NUMBER_OF_STRINGS_DARK = 20;
     private String[] stringsDark;
     private TextView text;
 
@@ -52,6 +53,8 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
     private int failScore;
     private final int MOVE_ON_SUCCESSES = 10;
     private final int END_GAME_FAILURES = 5;
+    private ImageView liveOne, liveTwo, liveThree, liveFour, liveFive;
+    private ImageView[] img;
 
     private Fragment currentFragment;
     private boolean firstTime;
@@ -59,6 +62,7 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
     private SharedPreferences counter;
     private SharedPreferences.Editor editor;
 
+    private BluetoothActivity a;
 
     @Nullable
     @Override
@@ -69,37 +73,68 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
         counter = getActivity().getSharedPreferences("HELLO", Context.MODE_PRIVATE);
         editor = counter.edit();
 
+        a = (BluetoothActivity) getActivity();
         //wire any widgets -- must use rootView.findViewById
+
+
         lightOn = true;
         wireWidgets(rootView);
         setListeners();
 
+        img = new ImageView[5];
+        img[0] = liveFive;
+        img[1] = liveFour;
+        img[2] = liveThree;
+        img[3] = liveTwo;
+        img[4] = liveOne;
+
         strings = new String[NUMBER_OF_STRINGS];
-        strings[0] = "Snatch the sapphire";
-        strings[1] = "Rub the ruby";
-        strings[2] = "Abduct the diamond";
-        strings[3] = "Extract the emerald";
-        strings[4] = "Palpate the amethyst";
-        strings[5] = "Tap the topaz";
-        strings[6] = "Moisty Tequila";
-        strings[7] = "Take the left fork of the cave path";
-        strings[8] = "Take the right fork of the cave path";
-        strings[9] = "Backtrack";
-        strings[10] = "Turn off the light";
+        //layoutB strings
+        strings[0] = "Holler woolloomooloo";
+        strings[1] = "Humm bumbadumbdum";
+        strings[2] = "Sing banamanamum";
+        strings[3] = "Screetch boomsicklepop";
+        strings[4] = "Interpret the cave drawings";
+        strings[5] = "Light the dynamite";
+        strings[6] = "Lick the left fork";
+        strings[7] = "Bite the right fork";
+        //layoutA strings
+        strings[8] = "Snatch the sapphire";
+        strings[9] = "Rub the ruby";
+        strings[10] = "Abduct the diamond";
+        strings[11] = "Extract the emerald";
+        strings[12] = "Palpate the amethyst";
+        strings[13] = "Tap the topaz";
+        strings[14] = "Moisty Tequila";
+        strings[15] = "Take the left fork of the cave path";
+        strings[16] = "Take the right fork of the cave path";
+        strings[17] = "Backtrack";
+        strings[18] = "Turn off the light";
 
         stringsDark = new String[NUMBER_OF_STRINGS_DARK];
-        stringsDark[0] = "Snatch the sapphire";
-        stringsDark[1] = "Rub the ruby";
-        stringsDark[2] = "Abduct the diamond";
-        stringsDark[3] = "Extract the emerald";
-        stringsDark[4] = "Palpate the amethyst";
-        stringsDark[5] = "Tap the topaz";
-        stringsDark[6] = "Moisty Tequila";
-        stringsDark[7] = "Take the left fork of the cave path";
-        stringsDark[8] = "Take the right fork of the cave path";
-        stringsDark[9] = "Backtrack";
-        stringsDark[10] = "Turn on the light";
-        stringsDark[11] = "Put the bats to sleep";
+        //layoutB strings
+        stringsDark[0] = "Holler woolloomooloo";
+        stringsDark[1] = "Humm bumbadumbdum";
+        stringsDark[2] = "Sing banamanamum";
+        stringsDark[3] = "Screetch boomsicklepop";
+        stringsDark[4] = "Eat some glow worms";
+        stringsDark[5] = "Light the dynamite";
+        stringsDark[6] = "Lick the left fork";
+        stringsDark[7] = "Bite the right fork";
+        //layoutA strings
+        stringsDark[8] = "Snatch the sapphire";
+        stringsDark[9] = "Rub the ruby";
+        stringsDark[10] = "Abduct the diamond";
+        stringsDark[11] = "Extract the emerald";
+        stringsDark[12] = "Palpate the amethyst";
+        stringsDark[13] = "Tap the topaz";
+        stringsDark[14] = "Moisty Tequila";
+        stringsDark[15] = "Take the left fork of the cave path";
+        stringsDark[16] = "Take the right fork of the cave path";
+        stringsDark[17] = "Backtrack";
+        stringsDark[18] = "Turn on the light";
+        stringsDark[19] = "Put the bats to sleep";
+
 
         text.setText("Level 3: Cave of Nightmares");// could make ready set go or other animation type thing
 
@@ -108,27 +143,59 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
             @Override
             public void onTick(long l) {
                 timerView.setX(l / (float) MILLIS_IN_FUTURE * SCREEN_WIDTH - SCREEN_WIDTH);
+                if(a.failures > failScore){ //failure
+                    failScore++;
+                    if(failScore >= END_GAME_FAILURES){
+                        //End Game
+                        editor.putInt("score", successScore*100);
+                        editor.commit();
+                        Intent i = new Intent(getActivity(), EndGameActivity.class);
+                        startActivity(i);
+                    }
+                    else{
+                        img[END_GAME_FAILURES - failScore].setVisibility(View.INVISIBLE);
+                        text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                        a.sendReceive.write(text.getText().toString().getBytes());
+                        t.start();
+
+                    }
+                }
+                if(a.successes > successScore){ //success
+                    if(!a.domesticSuccess){
+                        successDomestic();
+                    }
+                    else{
+                        successSilent();
+                    }
+                }
             }
 
             @Override
             public void onFinish() {
                 if(firstTime){
                     text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                    a.sendReceive.write(text.getText().toString().getBytes());
                     t.start();
                     firstTime = false;
                 }
                 else{
                     timerView.setX(0 - SCREEN_WIDTH);
-                    //closer to death
+                    //closer to death for both screens --------------------------------------------------------------------
                     failScore++;
+                    a.sendReceive.write("fail".toString().getBytes());
                     if(failScore >= END_GAME_FAILURES){
                         //End Game
+                        editor.putInt("score", successScore*100);
+                        editor.commit();
                         Intent i = new Intent(getActivity(), EndGameActivity.class);
                         startActivity(i);
                     }
                     else{
+                        img[END_GAME_FAILURES - failScore].setVisibility(View.INVISIBLE);
                         text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+                        a.sendReceive.write(text.getText().toString().getBytes());
                         t.start();
+
                     }
                 }
             }
@@ -164,6 +231,11 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
         aglow = rootView.findViewById(R.id.imageView_ame_glow);
         timerView = rootView.findViewById(R.id.timer);
         text = rootView.findViewById(R.id.textView);
+        liveOne = rootView.findViewById(R.id.imageView_live_one);
+        liveTwo = rootView.findViewById(R.id.imageView_live_two);
+        liveThree = rootView.findViewById(R.id.imageView_live_three);
+        liveFour = rootView.findViewById(R.id.imageView_live_four);
+        liveFive = rootView.findViewById(R.id.imageView_live_five);
     }
 
     private void setListeners() {
@@ -189,6 +261,7 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.imageView_flashlight:
+                a.sendReceive.write("swap00".getBytes());
                 if(lightOn){
                     lightOn = false;
                     flashlight.setImageResource(R.drawable.light_off);
@@ -213,6 +286,9 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
 
                     if(text.getText().equals("Turn off the light")){
                         success();
+                    }
+                    else if(a.commandForeign.equals("Turn off the light")){
+                        successForeign();
                     }
                     else{
                         successScore--;
@@ -243,100 +319,140 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
                     if(text.getText().equals("Turn on the light")){
                         success();
                     }
+                    else if(a.commandForeign.equals("Turn on the light")){
+                        successForeign();
+                    }
                     else{
                         successScore--;
                     }
                 }
                 break;
             case R.id.imageView_sapphire:
-                if(text.getText().equals(strings[0])){
+                if(text.getText().equals(strings[8])){
                     success();
+                }
+                else if(a.commandForeign.equals(strings[8])){
+                    successForeign();
                 }
                 else {
                     successScore--;
                 }
                 break;
             case R.id.imageView_ruby:
-                if(text.getText().equals(strings[1])){
+                if(text.getText().equals(strings[9])){
                     success();
+                }
+                else if(a.commandForeign.equals(strings[9])){
+                    successForeign();
                 }
                 else {
                     successScore--;
                 }
                 break;
             case R.id.imageView_diamond:
-                if(text.getText().equals(strings[2])){
+                if(text.getText().equals(strings[10])){
                     success();
+                }
+                else if(a.commandForeign.equals(strings[10])){
+                    successForeign();
                 }
                 else {
                     successScore--;
                 }
                 break;
             case R.id.imageView_emerald:
-                if(text.getText().equals(strings[3])){
+                if(text.getText().equals(strings[11])){
                     success();
+                }
+                else if(a.commandForeign.equals(strings[11])){
+                    successForeign();
                 }
                 else {
                     successScore--;
                 }
                 break;
             case R.id.imageView_amethyst:
-                if(text.getText().equals(strings[4])){
+                if(text.getText().equals(strings[12])){
                     success();
+                }
+                else if(a.commandForeign.equals(strings[12])){
+                    successForeign();
                 }
                 else {
                     successScore--;
                 }
                 break;
             case R.id.imageView_topaz:
-                if(text.getText().equals(strings[5])){
+                if(text.getText().equals(strings[13])){
                     success();
+                }
+                else if(a.commandForeign.equals(strings[13])){
+                    successForeign();
                 }
                 else {
                     successScore--;
                 }
                 break;
             case R.id.button_moisty_tequila:
-                if(text.getText().equals(strings[6])){
+                if(text.getText().equals(strings[14])){
                     success();
+                }
+                else if(a.commandForeign.equals(strings[14])){
+                    successForeign();
                 }
                 else {
                     successScore--;
                 }
                 break;
             case R.id.imageView_left_cave:
-                if(text.getText().equals(strings[7])){
+                if(text.getText().equals(strings[15])){
                     success();
+                }
+                else if(a.commandForeign.equals(strings[15])){
+                    successForeign();
                 }
                 else {
                     successScore--;
                 }
                 break;
             case R.id.imageView_right_cave:
-                if(text.getText().equals(strings[8])){
+                if(text.getText().equals(strings[16])){
                     success();
+                }
+                else if(a.commandForeign.equals(strings[16])){
+                    successForeign();
                 }
                 else {
                     successScore--;
                 }
                 break;
             case R.id.button_backtrack:
-                if(text.getText().equals(strings[9])){
+                if(text.getText().equals(strings[17])){
                     success();
+                }
+                else if(a.commandForeign.equals(strings[17])){
+                    successForeign();
                 }
                 else {
                     successScore--;
                 }
                 break;
             case R.id.imageView_bat1:
-                if(text.getText().equals(stringsDark[11])
+                if(text.getText().equals(stringsDark[19])
                         && bat2.getVisibility() == View.INVISIBLE
                         && bat3.getVisibility() == View.INVISIBLE
                         && bat4.getVisibility() == View.INVISIBLE
                         && bat5.getVisibility() == View.INVISIBLE){ // will need to change later for 2 people -----------------------------------------------
                     success();
                 }
-                else if (!text.getText().equals(stringsDark[11])){
+                else if (a.commandForeign.equals(stringsDark[19])
+                        && bat2.getVisibility() == View.INVISIBLE
+                        && bat3.getVisibility() == View.INVISIBLE
+                        && bat4.getVisibility() == View.INVISIBLE
+                        && bat5.getVisibility() == View.INVISIBLE){
+                    successForeign();
+                }
+                else if (!text.getText().equals(stringsDark[19]) && !a.commandForeign.equals(stringsDark[19])){
                     successScore--;
                 }
                 bat1.setVisibility(View.INVISIBLE);
@@ -355,14 +471,21 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
                 }.start();
                 break;
             case R.id.imageView_bat2:
-                if(text.getText().equals(stringsDark[11])
+                if(text.getText().equals(stringsDark[19])
                         && bat1.getVisibility() == View.INVISIBLE
                         && bat3.getVisibility() == View.INVISIBLE
                         && bat4.getVisibility() == View.INVISIBLE
                         && bat5.getVisibility() == View.INVISIBLE){ // will need to change later for 2 people -----------------------------------------------
                     success();
                 }
-                else if (!text.getText().equals(stringsDark[11])){
+                else if (a.commandForeign.equals(stringsDark[19])
+                        && bat1.getVisibility() == View.INVISIBLE
+                        && bat3.getVisibility() == View.INVISIBLE
+                        && bat4.getVisibility() == View.INVISIBLE
+                        && bat5.getVisibility() == View.INVISIBLE){
+                    successForeign();
+                }
+                else if (!text.getText().equals(stringsDark[19]) && !a.commandForeign.equals(stringsDark[19])){
                     successScore--;
                 }
                 bat2.setVisibility(View.INVISIBLE);
@@ -381,14 +504,21 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
                 }.start();
                 break;
             case R.id.imageView_bat3:
-                if(text.getText().equals(stringsDark[11])
+                if(text.getText().equals(stringsDark[19])
                         && bat2.getVisibility() == View.INVISIBLE
                         && bat1.getVisibility() == View.INVISIBLE
                         && bat4.getVisibility() == View.INVISIBLE
                         && bat5.getVisibility() == View.INVISIBLE){ // will need to change later for 2 people -----------------------------------------------
                     success();
                 }
-                else if (!text.getText().equals(stringsDark[11])){
+                else if (a.commandForeign.equals(stringsDark[19])
+                        && bat2.getVisibility() == View.INVISIBLE
+                        && bat1.getVisibility() == View.INVISIBLE
+                        && bat4.getVisibility() == View.INVISIBLE
+                        && bat5.getVisibility() == View.INVISIBLE){
+                    successForeign();
+                }
+                else if (!text.getText().equals(stringsDark[19]) && !a.commandForeign.equals(stringsDark[19])){
                     successScore--;
                 }
                 bat3.setVisibility(View.INVISIBLE);
@@ -407,14 +537,21 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
                 }.start();
                 break;
             case R.id.imageView_bat4:
-                if(text.getText().equals(stringsDark[11])
+                if(text.getText().equals(stringsDark[19])
                         && bat2.getVisibility() == View.INVISIBLE
                         && bat3.getVisibility() == View.INVISIBLE
                         && bat1.getVisibility() == View.INVISIBLE
                         && bat5.getVisibility() == View.INVISIBLE){ // will need to change later for 2 people -----------------------------------------------
                     success();
                 }
-                else if (!text.getText().equals(stringsDark[11])){
+                else if (a.commandForeign.equals(stringsDark[19])
+                        && bat2.getVisibility() == View.INVISIBLE
+                        && bat3.getVisibility() == View.INVISIBLE
+                        && bat1.getVisibility() == View.INVISIBLE
+                        && bat5.getVisibility() == View.INVISIBLE){
+                    successForeign();
+                }
+                else if (!text.getText().equals(stringsDark[19]) && !a.commandForeign.equals(stringsDark[19])){
                     successScore--;
                 }
                 bat4.setVisibility(View.INVISIBLE);
@@ -433,14 +570,21 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
                 }.start();
                 break;
             case R.id.imageView_bat5:
-                if(text.getText().equals(stringsDark[11])
+                if(text.getText().equals(stringsDark[19])
                         && bat2.getVisibility() == View.INVISIBLE
                         && bat3.getVisibility() == View.INVISIBLE
                         && bat4.getVisibility() == View.INVISIBLE
                         && bat1.getVisibility() == View.INVISIBLE){ // will need to change later for 2 people -----------------------------------------------
                     success();
                 }
-                else if (!text.getText().equals(stringsDark[11])){
+                else if (a.commandForeign.equals(stringsDark[19])
+                        && bat2.getVisibility() == View.INVISIBLE
+                        && bat3.getVisibility() == View.INVISIBLE
+                        && bat4.getVisibility() == View.INVISIBLE
+                        && bat1.getVisibility() == View.INVISIBLE){
+                    successForeign();
+                }
+                else if (!text.getText().equals(stringsDark[19]) && !a.commandForeign.equals(stringsDark[19])){
                     successScore--;
                 }
                 bat5.setVisibility(View.INVISIBLE);
@@ -464,25 +608,21 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
     private void success(){
         t.cancel();
         successScore++;
+        a.sendReceive.write("domestic success".getBytes());
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
-            Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
+            a.resetSandF();
             editor.putInt("score", successScore*100);
             editor.commit();
-            //currentFragment = new FragmentLevel2A();//randomize?
-            //switchToNewScreen();
-            Toast.makeText(getContext(), "You Win!", Toast.LENGTH_SHORT).show();
+            currentFragment = new FragmentLevel2A2P();//randomize?
+            switchToNewScreen();
 
         }
         else{
-            if(lightOn){
-                text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
-                t.start();
-            }
-            else{
-                text.setText(stringsDark[(int)(Math.random()*NUMBER_OF_STRINGS_DARK)]);
-                t.start();
-            }
+            //send message-----------------------------------------------------------------------------------------
+            text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+            a.sendReceive.write(text.getText().toString().getBytes());
+            t.start();
         }
     }
 
@@ -500,5 +640,42 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
     public void onPause() {
         super.onPause();
         t.cancel();
+    }
+
+    private void successForeign(){
+        successScore++;
+        a.sendReceive.write("foreign success".getBytes());
+        if(successScore >= MOVE_ON_SUCCESSES){
+            //move to next level
+            a.resetSandF();
+            editor.putInt("score", successScore*100);
+            editor.commit();
+            currentFragment = new FragmentLevel2A2P();//randomize?
+            switchToNewScreen();
+        }
+    }
+
+    private void successDomestic(){
+        successScore++;
+        if(successScore >= MOVE_ON_SUCCESSES){
+            //move to next level
+            a.resetSandF();
+            editor.putInt("score", successScore*100);
+            editor.commit();
+            currentFragment = new FragmentLevel2A2P();//randomize?
+            switchToNewScreen();
+        }
+    }
+
+    private void successSilent(){
+        successScore++;
+        if(successScore >= MOVE_ON_SUCCESSES){
+            //move to next level
+            a.resetSandF();
+            editor.putInt("score", successScore*100);
+            editor.commit();
+            currentFragment = new FragmentLevel2A2P();//randomize?
+            switchToNewScreen();
+        }
     }
 }

@@ -9,8 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kaplanteam.cathy.dangerparty.Level1.FragmentLevel1A2P;
-import com.kaplanteam.cathy.dangerparty.Level1.FragmentLevel1B2P;
+import com.kaplanteam.cathy.dangerparty.Level3.FragmentLevel3A2P;
+import com.kaplanteam.cathy.dangerparty.Level3.FragmentLevel3B2P;
 
 /**
  * Created by Cole on 3/24/18.
@@ -50,10 +50,10 @@ public class FragmentBackground2P extends Fragment {
                 //ready.setVisibility(View.VISIBLE);
                 BluetoothActivity a = (BluetoothActivity) getActivity();
                 if (a.layoutA) {//change later----------------------------------------------------
-                    currentFragment = new FragmentLevel1A2P();
+                    currentFragment = new FragmentLevel3A2P();
                     switchToNewScreen();
                 } else {
-                    currentFragment = new FragmentLevel1B2P();
+                    currentFragment = new FragmentLevel3B2P();
                     switchToNewScreen();
 
                 }

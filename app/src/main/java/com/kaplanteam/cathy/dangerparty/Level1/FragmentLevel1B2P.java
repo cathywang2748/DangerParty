@@ -146,6 +146,7 @@ public class FragmentLevel1B2P extends android.support.v4.app.Fragment implement
                 }
                 if(a.swapReady){//swap
                     swapFromForeign(a.swapString, a.swapCurrent);
+                    a.swapNotReady();
                 }
             }
 
@@ -474,7 +475,7 @@ public class FragmentLevel1B2P extends android.support.v4.app.Fragment implement
 
     private void successForeign(){
         successScore++;
-        a.sendReceive.write("success".getBytes());
+        a.sendReceive.write("foreign success".getBytes());
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             a.resetSandF();
