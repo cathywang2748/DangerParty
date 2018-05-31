@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MotionEventCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,7 +39,7 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
     private double angle, initial, last, theta;
 
     private View timerView;
-    private final int MILLIS_IN_FUTURE = 7000;
+    private final int MILLIS_IN_FUTURE = 14000;
     private final int COUNT_DOWN_INTERVAL = 100;
     private final float SCREEN_WIDTH = Resources.getSystem().getDisplayMetrics().widthPixels;
     private CountDownTimer t;
@@ -138,6 +139,7 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
             public void onTick(long l) {
                 timerView.setX(l / (float) MILLIS_IN_FUTURE * SCREEN_WIDTH - SCREEN_WIDTH);
                 if(a.failures > failScore){ //failure
+                    Log.d("Fail from foreign", "Fired");
                     failScore++;
                     if(failScore >= END_GAME_FAILURES){
                         //End Game
@@ -148,13 +150,15 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
                     }
                     else{
                         img[END_GAME_FAILURES - failScore].setVisibility(View.INVISIBLE);
-                        text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
-                        a.sendReceive.write(text.getText().toString().getBytes());
+                        int index = (int) (Math.random()*NUMBER_OF_STRINGS);
+                        text.setText(strings[index]);
+                        a.sendReceive.write((index + "").getBytes());
                         t.start();
 
                     }
                 }
                 if(a.successes > successScore){ //success
+                    Log.d("Success from foreign", "Fired");
                     if(!a.domesticSuccess){
                         successDomestic();
                     }
@@ -163,6 +167,7 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
                     }
                 }
                 if(a.swapReady){//swap
+                    Log.d("Swap from foreign", "Fired");
                     swapFromForeign(a.swapString, a.swapCurrent);
                     a.swapNotReady();
                 }
@@ -171,16 +176,18 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
             @Override
             public void onFinish() {
                 if(firstTime){
-                    text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
-                    a.sendReceive.write(text.getText().toString().getBytes());
+                    int index = (int) (Math.random()*NUMBER_OF_STRINGS);
+                    text.setText(strings[index]);
+                    a.sendReceive.write((index + "").getBytes());
                     t.start();
                     firstTime = false;
                 }
                 else{
+                    Log.d("Fail", "deleted skull");
                     timerView.setX(0 - SCREEN_WIDTH);
                     //closer to death for both screens --------------------------------------------------------------------
                     failScore++;
-                    a.sendReceive.write("fail".toString().getBytes());
+                    a.sendReceive.write("x".getBytes());
                     if(failScore >= END_GAME_FAILURES){
                         //End Game
                         editor.putInt("score", successScore*100);
@@ -190,8 +197,9 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
                     }
                     else{
                         img[END_GAME_FAILURES - failScore].setVisibility(View.INVISIBLE);
-                        text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
-                        a.sendReceive.write(text.getText().toString().getBytes());
+                        int index = (int) (Math.random()*NUMBER_OF_STRINGS);
+                        text.setText(strings[index]);
+                        a.sendReceive.write((index + "").getBytes());
                         t.start();
 
                     }
@@ -244,13 +252,17 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
         switch(view.getId()){
             case R.id.imageView_bubble_small:
                 popS = true;
-                if(text.getText().equals(strings[0]) && popM && popL){
+                if(text.getText().equals(strings[0]) && popM && popL && strings[Integer.parseInt(a.commandForeign)].equals(strings[0])){
                     success();
-                }
-                else if (a.commandForeign.equals(strings[0]) && popM && popL){
                     successForeign();
                 }
-                else if (!text.getText().equals(strings[0]) && !a.commandForeign.equals(strings[0])){
+                else if(text.getText().equals(strings[0]) && popM && popL){
+                    success();
+                }
+                else if (strings[Integer.parseInt(a.commandForeign)].equals(strings[0]) && popM && popL){
+                    successForeign();
+                }
+                else if (!text.getText().equals(strings[0]) && !strings[Integer.parseInt(a.commandForeign)].equals(strings[0])){
                     successScore--;
                 }
                 final ImageView vs = (ImageView) view;
@@ -271,13 +283,17 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
                 break;
             case R.id.imageView_bubble_medium:
                 popM = true;
-                if(text.getText().equals(strings[0]) && popS && popL){
+                if(text.getText().equals(strings[0]) && popS && popL && strings[Integer.parseInt(a.commandForeign)].equals(strings[0])){
                     success();
-                }
-                else if (a.commandForeign.equals(strings[0]) && popS && popL){
                     successForeign();
                 }
-                else if (!text.getText().equals(strings[0]) && !a.commandForeign.equals(strings[0])){
+                else if(text.getText().equals(strings[0]) && popS && popL){
+                    success();
+                }
+                else if (strings[Integer.parseInt(a.commandForeign)].equals(strings[0]) && popS && popL){
+                    successForeign();
+                }
+                else if (!text.getText().equals(strings[0]) && !strings[Integer.parseInt(a.commandForeign)].equals(strings[0])){
                     successScore--;
                 }
                 final ImageView vm = (ImageView) view;
@@ -298,13 +314,17 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
                 break;
             case R.id.imageView_bubble_large:
                 popL = true;
-                if(text.getText().equals(strings[0]) && popM && popS){
+                if(text.getText().equals(strings[0]) && popM && popS && strings[Integer.parseInt(a.commandForeign)].equals(strings[0])){
                     success();
-                }
-                else if (a.commandForeign.equals(strings[0]) && popM && popS){
                     successForeign();
                 }
-                else if (!text.getText().equals(strings[0]) && !a.commandForeign.equals(strings[0])){
+                else if(text.getText().equals(strings[0]) && popM && popS){
+                    success();
+                }
+                else if (strings[Integer.parseInt(a.commandForeign)].equals(strings[0]) && popM && popS){
+                    successForeign();
+                }
+                else if (!text.getText().equals(strings[0]) && !strings[Integer.parseInt(a.commandForeign)].equals(strings[0])){
                     successScore--;
                 }
                 final ImageView vl = (ImageView) view;
@@ -325,10 +345,14 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
                 }.start();
                 break;
             case R.id.button_octopus:
-                if(text.getText().equals(strings[3])){
+                if(text.getText().equals(strings[3]) && strings[Integer.parseInt(a.commandForeign)].equals(strings[3])){
+                    successForeign();
                     success();
                 }
-                else if(a.commandForeign.equals(strings[3])){
+                else if(text.getText().equals(strings[3])){
+                    success();
+                }
+                else if(strings[Integer.parseInt(a.commandForeign)].equals(strings[3])){
                     successForeign();
                 }
                 else{
@@ -337,10 +361,14 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
 
                 break;
             case R.id.button_doggie_paddle:
-                if(text.getText().equals(strings[4])){
+                if(text.getText().equals(strings[4]) && strings[Integer.parseInt(a.commandForeign)].equals(strings[4])){
+                    successForeign();
                     success();
                 }
-                else if(a.commandForeign.equals(strings[4])){
+                else if(text.getText().equals(strings[4])){
+                    success();
+                }
+                else if(strings[Integer.parseInt(a.commandForeign)].equals(strings[4])){
                     successForeign();
                 }
                 else{
@@ -348,10 +376,14 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
                 }
                 break;
             case R.id.button_corkscrew:
-                if(text.getText().equals(strings[5])){
+                if(text.getText().equals(strings[5]) && strings[Integer.parseInt(a.commandForeign)].equals(strings[5])){
+                    successForeign();
                     success();
                 }
-                else if(a.commandForeign.equals(strings[5])){
+                else if(text.getText().equals(strings[5])){
+                    success();
+                }
+                else if(strings[Integer.parseInt(a.commandForeign)].equals(strings[5])){
                     successForeign();
                 }
                 else{
@@ -359,10 +391,14 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
                 }
                 break;
             case R.id.button_dolphin:
-                if(text.getText().equals(strings[6])){
+                if(text.getText().equals(strings[6]) && strings[Integer.parseInt(a.commandForeign)].equals(strings[6])){
+                    successForeign();
                     success();
                 }
-                else if(a.commandForeign.equals(strings[6])){
+                else if(text.getText().equals(strings[6])){
+                    success();
+                }
+                else if(strings[Integer.parseInt(a.commandForeign)].equals(strings[6])){
                     successForeign();
                 }
                 else{
@@ -370,10 +406,14 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
                 }
                 break;
             case R.id.button_elegant_undulations:
-                if(text.getText().equals(strings[7])){
+                if(text.getText().equals(strings[7]) && strings[Integer.parseInt(a.commandForeign)].equals(strings[7])){
+                    successForeign();
                     success();
                 }
-                else if(a.commandForeign.equals(strings[7])){
+                else if(text.getText().equals(strings[7])){
+                    success();
+                }
+                else if(strings[Integer.parseInt(a.commandForeign)].equals(strings[7])){
                     successForeign();
                 }
                 else{
@@ -387,10 +427,14 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         switch(compoundButton.getId()){
             case R.id.switch_drown:
-                if(text.getText().equals(strings[8])){
+                if(text.getText().equals(strings[8]) && strings[Integer.parseInt(a.commandForeign)].equals(strings[8])){
+                    successForeign();
                     success(8, 1);
                 }
-                else if(a.commandForeign.equals(strings[8])){
+                else if(text.getText().equals(strings[8])){
+                    success(8, 1);
+                }
+                else if(strings[Integer.parseInt(a.commandForeign)].equals(strings[8])){
                     successForeign();
                     swap(8, 1);
                 }
@@ -401,10 +445,14 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
                 //swap foreign --------------------------------------------------------------------------
                 break;
             case R.id.switch_pressbutton:
-                if(text.getText().equals(strings[9])){
+                if(text.getText().equals(strings[9]) && strings[Integer.parseInt(a.commandForeign)].equals(strings[9])){
+                    successForeign();
                     success(9, 2);
                 }
-                else if(a.commandForeign.equals(strings[9])){
+                else if(text.getText().equals(strings[9])){
+                    success(9, 2);
+                }
+                else if(strings[Integer.parseInt(a.commandForeign)].equals(strings[9])){
                     successForeign();
                     swap(9, 2);
                 }
@@ -460,7 +508,22 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
                 //"Swirl a clockwise vortex"
                 //"Swirl a counterclockwise vortex"
                 //"Still the vortex"
-                if(text.getText().equals("Swirl a clockwise vortex") && swirl == 1
+                if((text.getText().equals("Swirl a clockwise vortex") && swirl == 1
+                        || text.getText().equals("Swirl a counterclockwise vortex") && swirl == -1
+                        || text.getText().equals("Still the vortex") && swirl == 0)
+                        && (strings[Integer.parseInt(a.commandForeign)].equals("Swirl a clockwise vortex") && swirl == 1
+                        || strings[Integer.parseInt(a.commandForeign)].equals("Swirl a counterclockwise vortex") && swirl == -1
+                        || strings[Integer.parseInt(a.commandForeign)].equals("Still the vortex") && swirl == 0)){
+                    if(strings[1].equals(text.getText())){
+                        successForeign();
+                        success(1, 0); //swap foreign --------------------------------------------------------------------------
+                    }
+                    else{
+                        successForeign();
+                        success(2, 0); //swap foreign --------------------------------------------------------------------------
+                    }
+                }
+                else if(text.getText().equals("Swirl a clockwise vortex") && swirl == 1
                         || text.getText().equals("Swirl a counterclockwise vortex") && swirl == -1
                         || text.getText().equals("Still the vortex") && swirl == 0){
                     if(strings[1].equals(text.getText())){
@@ -470,10 +533,10 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
                         success(2, 0); //swap foreign --------------------------------------------------------------------------
                     }
                 }
-                else if(a.commandForeign.equals("Swirl a clockwise vortex") && swirl == 1
-                        || a.commandForeign.equals("Swirl a counterclockwise vortex") && swirl == -1
-                        || a.commandForeign.equals("Still the vortex") && swirl == 0){
-                    if(strings[1].equals(a.commandForeign)){
+                else if(strings[Integer.parseInt(a.commandForeign)].equals("Swirl a clockwise vortex") && swirl == 1
+                        || strings[Integer.parseInt(a.commandForeign)].equals("Swirl a counterclockwise vortex") && swirl == -1
+                        || strings[Integer.parseInt(a.commandForeign)].equals("Still the vortex") && swirl == 0){
+                    if(strings[1].equals(strings[Integer.parseInt(a.commandForeign)])){
                         successForeign(); //swap foreign --------------------------------------------------------------------------
                         swap(1, 0);
                     }
@@ -515,7 +578,7 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
     private void success(){
         t.cancel();
         successScore++;
-        a.sendReceive.write("domestic success".getBytes());
+        a.sendReceive.write("d".getBytes());
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             a.resetSandF();
@@ -527,8 +590,9 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
         }
         else{
             //send message-----------------------------------------------------------------------------------------
-            text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
-            a.sendReceive.write(text.getText().toString().getBytes());
+            int index = (int) (Math.random()*NUMBER_OF_STRINGS);
+            text.setText(strings[index]);
+            a.sendReceive.write((index + "").getBytes());
             t.start();
         }
     }
@@ -536,7 +600,7 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
     private void success(int string, int current){
         t.cancel();
         successScore++;
-        a.sendReceive.write("domestic success".getBytes());
+        a.sendReceive.write("d".getBytes());
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
             a.resetSandF();
@@ -548,14 +612,15 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
         else{
             //send message (other will need to swap)-------------------------------------------------------------------------------
             swap(string, current);
-            text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
-            a.sendReceive.write(text.getText().toString().getBytes());
+            int index = (int) (Math.random()*NUMBER_OF_STRINGS);
+            text.setText(strings[index]);
+            a.sendReceive.write((index + "").getBytes());
             t.start();
         }
     }
 
     private void swap(int string, int current){
-        a.sendReceive.write(("swap" + string + current).getBytes());
+        a.sendReceive.write(("w" + string + "*" + current).getBytes());
         String currentString = strings[string];
         strings[string] = currentStrings[current];
         currentStrings[current] = currentString;
@@ -584,10 +649,12 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
     }
 
     private void successForeign(){
+        Log.d("Success", "Foreign method to send message");
         successScore++;
-        a.sendReceive.write("foreign success".getBytes());
+        a.sendReceive.write("f".getBytes());
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
+            t.cancel();
             a.resetSandF();
             editor.putInt("score", successScore*100);
             editor.commit();
@@ -597,6 +664,7 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
     }
 
     private void successDomestic(){
+        t.cancel();
         successScore++;
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
@@ -606,12 +674,19 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
             currentFragment = new FragmentLevel2A2P();//randomize?
             switchToNewScreen();
         }
+        else{
+            int index = (int) (Math.random()*NUMBER_OF_STRINGS);
+            text.setText(strings[index]);
+            a.sendReceive.write((index + "").getBytes());
+            t.start();
+        }
     }
 
     private void successSilent(){
         successScore++;
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
+            t.cancel();
             a.resetSandF();
             editor.putInt("score", successScore*100);
             editor.commit();

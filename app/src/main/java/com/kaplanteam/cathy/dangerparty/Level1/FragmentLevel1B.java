@@ -69,6 +69,8 @@ public class FragmentLevel1B extends Fragment implements View.OnClickListener, V
 
         sailsOpen = false;
         spyglassOpen = true;
+        firstTime = true;
+
         wireWidgets(rootView);
         setListeners();
 

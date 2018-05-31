@@ -78,6 +78,8 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
 
 
         lightOn = true;
+        firstTime = true;
+
         wireWidgets(rootView);
         setListeners();
 

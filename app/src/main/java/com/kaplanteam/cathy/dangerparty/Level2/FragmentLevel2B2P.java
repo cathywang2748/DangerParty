@@ -62,6 +62,8 @@ public class FragmentLevel2B2P extends Fragment implements View.OnClickListener 
         View rootView = inflater.inflate(R.layout.level2b, container, false);
 
         full = false;
+        firstTime = true;
+
         wireWidgets(rootView);
         setListeners();
 

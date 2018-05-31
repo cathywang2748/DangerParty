@@ -73,6 +73,8 @@ public class FragmentLevel3A extends Fragment implements View.OnClickListener {
 
         //wire any widgets -- must use rootView.findViewById
         lightOn = true;
+        firstTime = true;
+
         wireWidgets(rootView);
         setListeners();
 

@@ -213,36 +213,41 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                     byte[] readBuffer = (byte[])message.obj;
                     String tempMessage = new String(readBuffer, 0, message.arg1);
                     //Toast.makeText(BluetoothActivity.this, "" + tempMessage, Toast.LENGTH_SHORT).show();
+                    Log.d("tempMessage", "" + tempMessage);
 
                     boolean noneOfTheAbove = true;
                     //check swap, success, fail
-                    if(tempMessage.substring(0,2).equals("0.")) {
+                    if(tempMessage.length() > 1 && tempMessage.substring(0,2).equals("0.")) {
                         layoutA = Double.parseDouble(tempMessage) > Double.parseDouble(localNum);
                         noneOfTheAbove = false;
                     }
-                    if(tempMessage.contains("foreign success")){ //listener of some sort?-------------------------------
+                    if(tempMessage.equals("f")){ //listener of some sort?-------------------------------
                         domesticSuccess = false;
                         successes++;
                         noneOfTheAbove = false;
                     }
-                    if(tempMessage.contains("domestic success")){
+                    if(tempMessage.equals("d")){
                         domesticSuccess = true;
                         successes++;
                         noneOfTheAbove = false;
                     }
-                    if(tempMessage.contains("fail")){ //listener of some sort?-------------------------------
+                    if(tempMessage.equals("x")){ //listener of some sort?-------------------------------
                         failures++;
                         noneOfTheAbove = false;
                     }
-                    if(tempMessage.contains("swap")){
-                        int i = tempMessage.indexOf("swap");
-                        swapString = Integer.parseInt(tempMessage.substring(i+4, i+5));
-                        swapCurrent = Integer.parseInt(tempMessage.substring(i+5, i+6));
-                        swapReady = true;
+                    if(tempMessage.substring(0, 1).equals("w")){
+                        if(tempMessage.length() > 3){
+                            int space = tempMessage.indexOf("*");
+                            swapString = Integer.parseInt(tempMessage.substring(1, space));
+                            swapCurrent = Integer.parseInt(tempMessage.substring(space + 1));
+                            swapReady = true;
+                        }
                         noneOfTheAbove = false;
                     }
                     if(noneOfTheAbove){
                         commandForeign = tempMessage;
+                        //Toast.makeText(BluetoothActivity.this, "" + commandForeign, Toast.LENGTH_SHORT).show();
+                        Log.d("Command Foreign", "" + commandForeign);
                     }
                     break;
             }
@@ -300,7 +305,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                     msg.what = STATE_CONNECTING;
                     handler.sendMessage(msg);
 
-                    socket = serverSocket.accept();
+                    socket = serverSocket.accept(); //repeated error when trying to connect but can't
                 } catch (IOException e) {
                     e.printStackTrace();
                     Message msg = Message.obtain();
