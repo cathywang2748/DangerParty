@@ -212,7 +212,7 @@ public class BluetoothActivity extends AppCompatActivity implements View.OnClick
                 case STATE_MESSAGE_RECIEVED: //-----------------------------------------------OOOOOOOOOOOOOOOO
                     byte[] readBuffer = (byte[])message.obj;
                     String tempMessage = new String(readBuffer, 0, message.arg1);
-                    //Toast.makeText(BluetoothActivity.this, "" + tempMessage, Toast.LENGTH_SHORT).show();
+
                     Log.d("tempMessage", "" + tempMessage);
 
                     boolean noneOfTheAbove = true;

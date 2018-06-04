@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/imageView_confetti2"
@@ -13,7 +12,8 @@
         android:layout_height="255dp"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/confetti" />
+        app:srcCompat="@drawable/confetti"
+        android:foreground="#90FFFFFF"/>
 
     <Button
         android:id="@+id/button_discoverable"
@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:text="Connection Status"
-        android:background="@color/colorPrimary"
+        android:background="#FFFFFF"
         android:textAppearance="@style/TextAppearance.AppCompat"
         app:layout_constraintBottom_toBottomOf="@+id/toggleButton_bluetooth"
         app:layout_constraintEnd_toEndOf="parent"

@@ -10,14 +10,12 @@ import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kaplanteam.cathy.dangerparty.EndGameActivity;
 import com.kaplanteam.cathy.dangerparty.R;
@@ -135,6 +133,8 @@ public class FragmentLevel3A extends Fragment implements View.OnClickListener {
                     failScore++;
                     if(failScore >= END_GAME_FAILURES){
                         //End Game
+                        editor.putInt("score", successScore*100);
+                        editor.commit();
                         Intent i = new Intent(getActivity(), EndGameActivity.class);
                         startActivity(i);
                     }
@@ -484,14 +484,12 @@ public class FragmentLevel3A extends Fragment implements View.OnClickListener {
         successScore++;
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
-            Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
             editor.putInt("score", successScore*100);
             editor.commit();
-            //currentFragment = new FragmentLevel2A();//randomize?
-            //switchToNewScreen();
-            Toast.makeText(getContext(), "You Win!", Toast.LENGTH_SHORT).show();
-
+            Intent i = new Intent(getActivity(), EndGameActivity.class);
+            startActivity(i);
         }
+
         else{
             if(lightOn){
                 text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
@@ -501,16 +499,6 @@ public class FragmentLevel3A extends Fragment implements View.OnClickListener {
                 text.setText(stringsDark[(int)(Math.random()*NUMBER_OF_STRINGS_DARK)]);
                 t.start();
             }
-        }
-    }
-
-    private void switchToNewScreen() {
-        //tell the fragment manager that if our current fragment isn't null, to replace whatever is there with it
-        FragmentManager fm = getFragmentManager();
-        if (currentFragment != null) {
-            fm.beginTransaction()
-                    .replace(R.id.fragment_container, currentFragment)
-                    .commit();
         }
     }
 

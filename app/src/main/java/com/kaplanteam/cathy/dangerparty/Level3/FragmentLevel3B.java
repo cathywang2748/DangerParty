@@ -4,20 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kaplanteam.cathy.dangerparty.EndGameActivity;
 import com.kaplanteam.cathy.dangerparty.R;
@@ -43,11 +40,7 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
     private final int NUMBER_OF_STRINGS = 8;
     private String[] strings;
     private final int NUMBER_OF_STRINGS_DARK = 8;
-    private String[] stringsDark;
     private TextView text;
-
-    private boolean popS, popM, popL;
-    private int swirl;
 
     private int successScore;
     private int failScore;
@@ -56,7 +49,6 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
     private ImageView liveOne, liveTwo, liveThree, liveFour, liveFive;
     private ImageView[] img;
 
-    private Fragment currentFragment;
     private boolean firstTime;
 
     private SharedPreferences counter;
@@ -97,16 +89,6 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
         strings[6] = "Lick the left fork";
         strings[7] = "Bite the right fork";
 
-        stringsDark = new String[NUMBER_OF_STRINGS_DARK];
-        stringsDark[0] = "Holler woolloomooloo";
-        stringsDark[1] = "Humm bumbadumbdum";
-        stringsDark[2] = "Sing banamanamum";
-        stringsDark[3] = "Screetch boomsicklepop";
-        stringsDark[4] = "Eat some glow worms";
-        stringsDark[5] = "Light the dynamite";
-        stringsDark[6] = "Lick the left fork";
-        stringsDark[7] = "Bite the right fork";
-
         text.setText("Level 3: Cave of Nightmares");// could make ready set go or other animation type thing
 
         //get any other initial set up done
@@ -129,6 +111,8 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
                     failScore++;
                     if(failScore >= END_GAME_FAILURES){
                         //End Game
+                        editor.putInt("score", successScore*100);
+                        editor.commit();
                         Intent i = new Intent(getActivity(), EndGameActivity.class);
                         startActivity(i);
                     }
@@ -246,7 +230,7 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
                 }.start();
                 break;
             case R.id.imageView_cave_drawings:
-                if(lightOn && text.getText().equals(strings[4]) || !lightOn && text.getText().equals(stringsDark[4])){
+                if(text.getText().equals(strings[4])){
                     success();
                 }
                 else{
@@ -272,50 +256,19 @@ public class FragmentLevel3B extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void lightChange(){
-        if(lightOn){
-            caveWall.setImageResource(R.drawable.cave_drawings);
-            background.setBackgroundColor(Color.WHITE);
-            scream.setTextColor(Color.BLACK);
-        }
-        else{
-            caveWall.setImageResource(R.drawable.glow_worms);
-            background.setBackgroundColor(Color.BLACK);
-            scream.setTextColor(Color.WHITE);
-        }
-    }
-
     private void success(){
         t.cancel();
         successScore++;
         if(successScore >= MOVE_ON_SUCCESSES){
             //move to next level
-            Toast.makeText(getContext(), "Move to Next Level", Toast.LENGTH_SHORT).show();
             editor.putInt("score", successScore*100);
             editor.commit();
-            //currentFragment = new FragmentLevel2A();//randomize?
-            //switchToNewScreen();
-            Toast.makeText(getContext(), "You Win!", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getActivity(), EndGameActivity.class);
+            startActivity(i);
         }
         else{
-            if(lightOn){
-                text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
-                t.start();
-            }
-            else{
-                text.setText(stringsDark[(int)(Math.random()*NUMBER_OF_STRINGS_DARK)]);
-                t.start();
-            }
-        }
-    }
-
-    private void switchToNewScreen() {
-        //tell the fragment manager that if our current fragment isn't null, to replace whatever is there with it
-        FragmentManager fm = getFragmentManager();
-        if (currentFragment != null) {
-            fm.beginTransaction()
-                    .replace(R.id.fragment_container, currentFragment)
-                    .commit();
+            text.setText(strings[(int)(Math.random()*NUMBER_OF_STRINGS)]);
+            t.start();
         }
     }
 

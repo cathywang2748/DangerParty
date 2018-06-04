@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.kaplanteam.cathy.dangerparty.BluetoothActivity;
 import com.kaplanteam.cathy.dangerparty.EndGameActivity;
-import com.kaplanteam.cathy.dangerparty.Level2.FragmentLevel2A2P;
 import com.kaplanteam.cathy.dangerparty.R;
 
 /**
@@ -616,8 +615,8 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
             a.resetSandF();
             editor.putInt("score", successScore*100);
             editor.commit();
-            currentFragment = new FragmentLevel2A2P();//randomize?
-            switchToNewScreen();
+            Intent i = new Intent(getActivity(), EndGameActivity.class);
+            startActivity(i);
 
         }
         else{
@@ -652,8 +651,8 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
             a.resetSandF();
             editor.putInt("score", successScore*100);
             editor.commit();
-            currentFragment = new FragmentLevel2A2P();//randomize?
-            switchToNewScreen();
+            Intent i = new Intent(getActivity(), EndGameActivity.class);
+            startActivity(i);
         }
     }
 
@@ -664,8 +663,8 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
             a.resetSandF();
             editor.putInt("score", successScore*100);
             editor.commit();
-            currentFragment = new FragmentLevel2A2P();//randomize?
-            switchToNewScreen();
+            Intent i = new Intent(getActivity(), EndGameActivity.class);
+            startActivity(i);
         }
     }
 
@@ -676,8 +675,8 @@ public class FragmentLevel3A2P extends Fragment implements View.OnClickListener 
             a.resetSandF();
             editor.putInt("score", successScore*100);
             editor.commit();
-            currentFragment = new FragmentLevel2A2P();//randomize?
-            switchToNewScreen();
+            Intent i = new Intent(getActivity(), EndGameActivity.class);
+            startActivity(i);
         }
     }
 }
