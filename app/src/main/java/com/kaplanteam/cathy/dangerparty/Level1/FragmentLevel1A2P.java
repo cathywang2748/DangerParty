@@ -39,7 +39,7 @@ public class FragmentLevel1A2P  extends Fragment implements View.OnTouchListener
     private double angle, initial, last, theta;
 
     private View timerView;
-    private final int MILLIS_IN_FUTURE = 14000;
+    private final int MILLIS_IN_FUTURE = 7000;
     private final int COUNT_DOWN_INTERVAL = 100;
     private final float SCREEN_WIDTH = Resources.getSystem().getDisplayMetrics().widthPixels;
     private CountDownTimer t;
